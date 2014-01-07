@@ -1,0 +1,11 @@
+{
+  "config": {
+    "vendor-dir": "app/vendor"
+  },
+  "require": {
+    "cartalyst/sentry": "2.0.*",
+    "illuminate/database": "4.0.*",
+    "ircmaxell/password-compat": "1.0.*"
+  },
+  "minimum-stability": "stable"
+}

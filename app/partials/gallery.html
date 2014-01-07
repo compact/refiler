@@ -1,0 +1,93 @@
+<!-- caption -->
+<h2 class="stack" ng-show="caption">{{caption}}</h2>
+
+<!-- related tags -->
+<div ng-if="tag" ng-show="tag.parents.length + tag.children.length > 0"
+    class="stack well well-sm">
+  <div ng-show="tag.parents.length > 0">
+    Parent tags
+    <span ng-repeat="tag in tag.parents">
+      | <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>
+    </span>
+  </div>
+  <div ng-show="tag.children.length > 0">
+    Child tags
+    <span ng-repeat="tag in tag.children">
+      | <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>
+    </span>
+  </div>
+</div>
+
+<!-- menu -->
+<div ng-include="'partials/menu.html'"></div>
+
+<!-- alerts -->
+<div alerts="alerts"></div>
+
+<!-- pagination of gallery -->
+<pagination page="page"
+    total-items="RefilerGalleryModel.files.length"
+    items-per-page="Prefs.filesPerPage"
+    previous-text="&lsaquo;"
+    next-text="&rsaquo;"
+    ng-show="RefilerGalleryModel.files.length > Prefs.filesPerPage"
+    class="unselectable">
+</pagination>
+
+<!-- gallery of files -->
+<ul id="gallery" class="horizontal clearfix">
+  <li ng-repeat="file in RefilerGalleryModel.files | limitTo: (page - 1) * Prefs.filesPerPage - RefilerGalleryModel.files.length | limitTo: Prefs.filesPerPage">
+    <div class="file-thumb" ng-class="file.isImage() ? 'image-thumb' : ''">
+      <a ng-href="{{file.getPath()}}" target="_blank"
+          ng-click="$event.which === 1 && file.isImage() ? openLightboxModal(file) : null">
+        <img ng-if="file.getThumbElement() === 'img'"
+          ng-src="{{file.getThumb()}}"
+          ng-class="{'selected': file.selected}"
+          class="img-thumbnail img-rounded">
+        <i ng-if="file.getThumbElement() === 'i'"
+          ng-class="{'selected': file.selected}"
+          class="{{file.getThumb()}} img-thumbnail img-rounded"></i>
+      </a>
+    </div>
+
+    <div class="details file-details" ng-show="Prefs.showFileDetails">
+      <div class="file-name">{{file.name}}</div>
+      <div class="inline-left">
+        <span ng-show="file.isImage()">
+          {{file.formatDimensions()}}
+        </span>
+      </div><!-- no space because these are inline-blocks stacked horizontally
+   --><div class="inline-right">
+        {{file.formatSize()}}
+      </div>
+      <div>{{file.formatDate()}}</div>
+
+      <div ng-if="Auth.permissions.edit" class="btn-group">
+        <!-- file edit features -->
+        <button class="btn btn-xs btn-primary" title="Edit"
+            ng-click="openModal('editFile', file)">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button class="btn btn-xs btn-danger" title="Delete"
+            ng-click="openModal('deleteFile', file)">
+          <i class="fa fa-trash-o"></i>
+        </button>
+        <button class="btn btn-xs btn-warning" title="Select"
+            ng-click="file.selected = !file.selected">
+          <i class="fa" ng-class="file.selected ? 'fa-check-circle' : 'fa-check-circle-o'">
+          </i>
+        </button>
+      </div>
+    </div>
+  </li>
+</ul>
+
+<!-- pagination of gallery -->
+<pagination page="page"
+    total-items="RefilerGalleryModel.files.length"
+    items-per-page="Prefs.filesPerPage"
+    previous-text="&lsaquo;"
+    next-text="&rsaquo;"
+    ng-show="RefilerGalleryModel.files.length > Prefs.filesPerPage"
+    class="unselectable">
+</pagination>

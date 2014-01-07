@@ -1,0 +1,40 @@
+<!--
+  the form wraps around every part of the modal in order to be able to
+    disable all the form elements inside
+-->
+<form class="form-horizontal" role="form" ng-submit="submit()">
+  <fieldset disable-form-elements="disabled">
+
+    <div class="modal-header">
+      <button class="close" aria-hidden="true" ng-click="$dismiss()">×</button>
+      <!-- title -->
+      <h2 class="modal-title">{{modal.title}}</h2>
+    </div>
+
+    <div class="modal-body">
+      <!-- alerts -->
+      <div alerts="alerts"></div>
+
+      <!-- form groups -->
+      <div class="form-group" ng-repeat="formGroup in modal.formGroups">
+        <label class="control-label"
+            ng-class="modal.class === 'modal-wide' ? 'col-sm-2' : 'col-sm-3'">
+          {{formGroup.label}}
+        </label>
+        <div compile="formGroup.control"
+            ng-class="modal.class === 'modal-wide' ? 'col-sm-10' : 'col-sm-9'">
+        </div>
+      </div>
+    </div>
+
+    <!-- optional buttons -->
+    <div class="modal-footer" ng-if="modal.buttonText"
+        disable-form-elements="disabled">
+      <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary" focus-on="focusButton">
+        {{modal.buttonText}}
+      </button>
+    </div>
+
+  </fieldset>
+</form>

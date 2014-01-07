@@ -1,0 +1,147 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>refiler</title>
+
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+
+  <!-- build:css({.tmp,app}) lib/select2/select2.css -->
+  <link rel="stylesheet" href="bower_components/select2/select2.css">
+  <link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">
+  <!-- endbuild -->
+
+  <!-- build:css({.tmp,app}) css/main.css -->
+  <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css">
+  <link rel="stylesheet" href="css/main.css">
+  <!-- endbuild -->
+
+</head>
+
+<body ng-app="app" ng-controller="AppCtrl">
+
+  <!--[if lt IE 7]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+  <![endif]-->
+
+
+
+  <!-- navigation -->
+  <div id="side-bar" ng-controller="NavCtrl">
+    <!-- search filter -->
+    <input type="text" placeholder="Filter tags and folders" ng-model="searchText" value="asdf">
+
+    <ul class="nav nav-list">
+      <!-- tags -->
+      <li><strong>Tags</strong></li>
+      <li ng-repeat="tag in tags | filter: tagFilter(searchText)">
+        <a href="#!/tag/{{tag.url}}" title="{{tag.caption}}"
+            ng-class="{'selected': isSelected('tag', tag.id)}">
+          {{tag.name}}
+          <span class="details">
+            {{tag.fileCount}}
+            {{tag.childCount > 0 ? '→ ' + tag.childCount : ''}}
+          </span>
+        </a>
+      </li>
+      <!-- dirs -->
+      <li><strong>Folders</strong></li>
+      <li ng-repeat="dir in dirs | filter: {'path': searchText}">
+        <a href="#!/dir/{{dir.path}}"
+            ng-class="{'selected': isSelected('dir', dir.id)}"
+            tooltip="{{dir.path}} [{{dir.fileCount}}]"
+            tooltip-placement="right"
+            tooltip-animation="false"
+            tooltip-append-to-body="true">
+          /{{dir.path}}
+          <span class="details">{{dir.fileCount}}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+
+  <!-- content -->
+  <div id="content">
+    <!-- title -->
+    <h1 class="stack" ng-class="{'text-danger': page.error}">
+      {{page.title}}
+    </h1>
+
+    <!-- ngRoute view; show only if there is no $routeChangeError -->
+    <div ng-show="!page.error">
+      <ng-view></ng-view>
+    </div>
+  </div>
+
+
+
+  <!-- scripts -->
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+  <!-- build:js js/modules.js -->
+  <script src="bower_components/lodash/dist/lodash.js"></script>
+  <script src="bower_components/select2/select2.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/angular-ui-select2/src/select2.js"></script>
+  <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+  <script src="bower_components/angular-file-upload/angular-file-upload.js"></script>
+  <!-- endbuild -->
+
+  <!-- build:js({.tmp,app}) js/scripts.js -->
+  <script src="js/app.js"></script>
+
+  <script src="js/services/Auth.js"></script>
+  <script src="js/services/Lightbox.js"></script>
+  <script src="js/services/Prefs.js"></script>
+  <script src="js/services/RefilerDir.js"></script>
+  <script src="js/services/RefilerFile.js"></script>
+  <script src="js/services/RefilerGalleryModel.js"></script>
+  <script src="js/services/RefilerModals.js"></script>
+  <script src="js/services/RefilerModel.js"></script>
+  <script src="js/services/Refiler.js"></script>
+
+  <script src="js/config.js"></script>
+
+  <script src="js/controllers/AppCtrl.js"></script>
+  <script src="js/controllers/HomeCtrl.js"></script>
+  <script src="js/controllers/LoginCtrl.js"></script>
+  <script src="js/controllers/NavCtrl.js"></script>
+  <script src="js/controllers/MenuCtrl.js"></script>
+  <script src="js/controllers/GalleryCtrl.js"></script>
+
+  <script src="js/directives/a.js"></script>
+  <script src="js/directives/alerts.js"></script>
+  <script src="js/directives/compile.js"></script>
+  <script src="js/directives/dirInput.js"></script>
+  <script src="js/directives/disableFormElements.js"></script>
+  <script src="js/directives/focusOn.js"></script>
+  <script src="js/directives/lightboxImg.js"></script>
+  <script src="js/directives/pref.js"></script>
+  <script src="js/directives/tagsInput.js"></script>
+  <!-- endbuild -->
+
+</body>
+
+</html>

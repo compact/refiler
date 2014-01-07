@@ -1,0 +1,314 @@
+/*!
+ * Refiler.
+ */
+body {
+  margin: 0;
+/*  font-size: 13px;
+  line-height: 15px;*/
+}
+
+a {
+  cursor: pointer;
+  /*color: #060;*/
+}
+h1 {
+  padding: 0;
+  font-size: 36px;
+  line-height: 36px;
+}
+
+::selection {
+  background-color: #000;
+  color: #fff;
+}
+::-moz-selection {
+  background-color: #000;
+  color: #fff;
+}
+
+/************************************************************ general classes */
+ul.horizontal {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ul.horizontal li {
+  float: left;
+}
+
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.stack { /* element stacked in the main layout */
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.selected {
+  background-color: #f0ad4e;
+}
+
+.details {
+  color: #888;
+  font-size: 10px;
+  line-height: 12px;
+  vertical-align: middle;
+}
+
+/***************************************************************** navigation */
+#side-bar {
+  position: fixed;
+  width: 176px;
+  height: 100%;
+}
+#side-bar input {
+  position: relative;
+  z-index: 9;
+
+  width: 176px;
+  height: 26px;
+}
+#side-bar .nav-list {
+  margin-top: -26px; /* temporary fix for 100% height with the input above */
+  padding-top: 26px;
+
+  width: 176px;
+  height: 100%;
+
+  overflow-x: hidden;
+  white-space: nowrap;
+
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background-color: #f0f2f6;
+
+  font-size: 14px;
+  line-height: 16px;
+}
+#side-bar .nav-list a {
+  padding: 0 0 0 8px;
+  height: 16px;
+  color: #000;
+}
+#side-bar .nav-list a:hover,
+#side-bar .nav-list a:focus,
+#side-bar .nav-list a:active {
+  background-color: #000;
+  color: #fff;
+}
+
+/******************************************************************** gallery */
+#content {
+  margin: 0 0 16px 207px;
+  padding: 16px 0 0; /* instead of margin-top to keep .nav at the top left */
+}
+#gallery li {
+  margin: 0 12px 12px 0;
+  width: 135px;
+}
+.file-thumb {
+  text-align: center;
+  height: 110px;
+  line-height: 100px;
+}
+.file-thumb img {
+  vertical-align: middle;
+}
+.file-details {
+  margin-top: 2px;
+}
+.file-name {
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+  color: #444;
+}
+
+.inline-left, .inline-right {
+  display: inline-block;
+  width: 50%;
+  vertical-align: top;
+}
+.inline-left {
+  text-align: left;
+}
+.inline-right {
+  text-align: right;
+}
+
+/******************************************************************* lightbox */
+.lightbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 70;
+}
+.lightbox-background { /* full screen */
+  background-color: #000;
+  opacity: .8;
+  filter: alpha(opacity=80);
+  z-index: 80;
+}
+.lightbox-foreground {
+  position: absolute;
+  margin: 16px; /* must have same margin on all 4 sides; see lightbox.js */
+  padding: 16px; /* must have same padding on all 4 sides */
+  -webkit-border-radius: 6px; /* .modal */
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  z-index: 90;
+}
+.lightbox-image-container {
+  position: relative;
+  margin-top: 8px;
+  text-align: center;
+  z-index: 110;
+}
+.lightbox-image-caption {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 30px;
+  text-align: left;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+}
+.lightbox-image-caption span {
+  padding: 2px 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.lightbox-image-details {
+  margin-top: 8px;
+  font-size: 10px;
+  line-height: 12px;
+}
+.lightbox-image-details .pull-right {
+  text-align: right;
+}
+.lightbox-loading {
+  position: absolute;
+  top: 128px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  color: rgb(20, 155, 223); /* Bootstrap .bar */
+  opacity: .8;
+  filter: alpha(opacity=80);
+  z-index: 120;
+/*  text-shadow: 3px 3px 9px #fff;
+  filter: dropshadow(color=#fff, offx=3, offy=3);*/
+}
+.lightbox-loading-label {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 36px;
+  line-height: 36px;
+  font-weight: bold;
+}
+.lightbox-loading .progress {
+  margin: 0 auto;
+  width: 250px;
+}
+.lightbox-loading .bar {
+  width: 100%;
+}
+.lightbox-nav {
+  margin: 0 auto;
+  width: 150px; /* arbitrary, used to center against .lightbox-remove */
+  text-align: center;
+}
+.lightbox-remove {
+  float: right;
+}
+
+/****************************************************************** Bootstrap */
+
+.uneditable-input {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/**
+ * http://stackoverflow.com/questions/18023493/bootstrap-3-dropdown-sub-menu-missing
+ */
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  -webkit-border-radius: 0 6px 6px 6px;
+  -moz-border-radius: 0 6px 6px 6px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover > .dropdown-menu {
+  display: block;
+}
+.dropdown-submenu > a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #ccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover > a:after {
+  border-left-color: #fff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left > .dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  -webkit-border-radius: 6px 0 6px 6px;
+  -moz-border-radius: 6px 0 6px 6px;
+  border-radius: 6px 0 6px 6px;
+}
+
+/********************************************************************* modals */
+
+@media (min-width: 768px) {
+  .modal-wide .modal-dialog {
+    width: 90%;
+  }
+}
+
+/*@media (min-width: 992px) and (max-width: 1199px) {
+  .modal-wide .modal-dialog {
+    width: 943px;
+  }
+}
+@media (min-width: 1200px) {
+  .modal-wide .modal-dialog {
+    width: 1151px;
+  }
+}*/
+
+.ng-file-over { /* angular-file-upload */
+  font-weight: bold;
+}
+
+#curl-files-urls { /* textarea */
+  height: 300px;
+  white-space: nowrap;
+}
+
+#edit-file-caption {
+  height: 100px;
+}

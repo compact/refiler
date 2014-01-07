@@ -1,0 +1,39 @@
+<!-- title -->
+<h1 class="stack">{{title}}</h1>
+
+
+
+<!-- alerts -->
+<div alerts="alerts"></div>
+
+
+
+<!-- login form -->
+<form ng-submit="login(credentials)" class="form-horizontal" role="form">
+
+  <!-- email -->
+  <div class="form-group">
+    <label for="login-email" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-6">
+      <input type="email" class="form-control" required id="login-email"
+          ng-model="credentials.email" ng-disabled="action === 'activate'">
+    </div>
+  </div>
+
+  <!-- password -->
+  <div class="form-group">
+    <label for="login-password" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-6">
+      <input type="password" class="form-control" required id="login-password"
+          ng-model="credentials.password">
+    </div>
+  </div>
+
+  <!-- submit -->
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-6">
+      <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+  </div>
+
+</form>

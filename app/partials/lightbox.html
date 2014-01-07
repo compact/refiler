@@ -1,0 +1,47 @@
+<div class="modal-body">
+  <!-- close button -->
+  <button class="close" aria-hidden="true" ng-click="$dismiss()">×</button>
+
+  <!-- navigation -->
+  <div class="lightbox-nav">
+    <div class="btn-group">
+      <button class="btn btn-xs btn-default" ng-click="Lightbox.prevImage()">← Prev</button>
+      <button class="btn btn-xs btn-default" ng-click="Lightbox.nextImage()">Next →</button>
+    </div>
+  </div>
+
+  <!-- image details -->
+  <div class="lightbox-image-details">
+    <div class="inline-left">
+      <div class="file-name">{{Lightbox.file.name}}</div>
+      <div>
+        {{Lightbox.file.formatDimensions()}},
+        {{Lightbox.file.formatSize()}},
+        {{Lightbox.file.formatDate()}}
+      </div>
+    </div><!--
+ --><div class="inline-right">
+      <a ng-href="{{Lightbox.file.getPath()}}" target="_blank">
+        Open in new tab<!--
+   --></a>
+
+      <div ng-if="Auth.permissions.edit" class="btn-group">
+        <!-- file edit features -->
+        <button class="btn btn-xs btn-primary" title="Edit"
+            ng-click="openModal('editFile', Lightbox.file)">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button class="btn btn-xs btn-danger" title="Delete"
+            ng-click="openModal('deleteFile', Lightbox.file)">
+          <i class="fa fa-trash-o"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- image -->
+  <div class="lightbox-image-container">
+    <div class="lightbox-image-caption">{{Lightbox.file.caption}}</div>
+    <img lightbox-img ng-src="{{Lightbox.file.getPath()}}" alt="">
+  </div>
+</div>

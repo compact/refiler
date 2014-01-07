@@ -1,0 +1,13 @@
+<div ng-repeat="alert in alerts" ng-hide="alert.hide"
+    class="alert" ng-class="alert.class || 'alert-danger'">
+
+  <!-- hide button -->
+  <button type="button" class="close" aria-hidden="true"
+      ng-click="alert.hide = true">
+    ×
+  </button>
+
+  <!-- message -->
+  <div ng-bind-html="alert.message"></div>
+
+</div>

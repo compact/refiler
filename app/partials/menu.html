@@ -1,0 +1,235 @@
+<div ng-controller="MenuCtrl" class="stack btn-toolbar unselectable">
+
+  <div class="btn-group">
+    <button class="btn btn-sm btn-default dropdown-toggle">
+      <i class="fa fa-fw fa-cog"></i>
+      Options
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <a ng-click="Prefs.toggle('showFileDetails')">
+          <i class="fa fa-fw" ng-class="{'fa-check': Prefs.showFileDetails}">
+          </i>
+          Show file details
+        </a>
+      </li>
+      <li class="divider"></li>
+      <li class="dropdown-submenu">
+        <a><i class="fa fa-fw"></i> Sort</a>
+        <ul class="dropdown-menu">
+          <li><a pref key="sort" value="name" label="A → Z"></a></li>
+          <li><a pref key="sort" value="-date" label="New → Old"></a></li>
+          <li><a pref key="sort" value="date" label="Old → New"></a></li>
+          <li><a pref key="sort" value="-size" label="Big → Small"></a></li>
+        </ul>
+      </li>
+      <li class="dropdown-submenu">
+        <a><i class="fa fa-fw"></i> Files per page</a>
+        <ul class="dropdown-menu">
+          <li><a pref key="filesPerPage" value="30"></a></li>
+          <li><a pref key="filesPerPage" value="60"></a></li>
+          <li><a pref key="filesPerPage" value="90"></a></li>
+          <li><a pref key="filesPerPage" value="120"></a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+
+
+  <!-- guest menu -->
+  <div class="btn-group" ng-if="!Auth.loggedIn">
+    <a class="btn btn-sm btn-default" href="#!/login">
+      <i class="fa fa-fw fa-user"></i>
+      Login
+    </a>
+  </div>
+
+
+
+  <!-- user menu -->
+  <div class="btn-group" ng-if="Auth.loggedIn">
+
+    <div class="btn-group">
+      <button class="btn btn-sm btn-default dropdown-toggle">
+        <i class="fa fa-fw fa-cloud-upload"></i>
+        Upload
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="openModal('uploadFiles')">
+            <i class="fa fa-fw fa-hdd-o"></i>
+            Computer
+          </a>
+        </li>
+        <li>
+          <a ng-click="openModal('curlFiles')">
+            <i class="fa fa-fw fa-globe"></i>
+            URLs
+          </a>
+        </li>
+        <!-- <li>
+          <a>
+            <i class="fa fa-fw fa-sitemap"></i>
+            All images from a URL
+          </a>
+        </li> -->
+      </ul>
+    </div>
+
+    <div class="btn-group" ng-if="tag">
+      <button class="btn btn-sm btn-default dropdown-toggle">
+        <i class="fa fa-fw fa-tag"></i>
+        Tag
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="openModal('editTag')">
+            <i class="fa fa-fw fa-edit"></i>
+            Edit
+          </a>
+        </li>
+        <li>
+          <a ng-click="openModal('deleteTag')">
+            <i class="fa fa-fw fa-trash-o"></i>
+            Delete
+          </a>
+        </li>
+        <li>
+          <a ng-click="reload()">
+            <i class="fa fa-fw fa-refresh"></i>
+            Reload
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group" ng-if="dir">
+      <button class="btn btn-sm btn-default dropdown-toggle">
+        <i class="fa fa-fw fa-folder-open"></i>
+        Folder
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="openModal('createDir')">
+            <i class="fa fa-fw fa-folder-open"></i>
+            Create
+          </a>
+        </li>
+        <li>
+          <a ng-click="openModal('moveDir')">
+            <i class="fa fa-fw fa-folder-open"></i>
+            Rename
+          </a>
+        </li>
+        <li>
+          <a ng-click="openModal('deleteDir')">
+            <i class="fa fa-fw fa-trash-o"></i>
+            Delete
+          </a>
+        </li>
+        <li>
+          <a ng-click="openModal('tagFilesByDir')">
+            <i class="fa fa-fw fa-tags"></i>
+            Tag all files
+          </a>
+        </li>
+        <li>
+          <a ng-click="updateDir()">
+            <i class="fa fa-fw fa-refresh"></i>
+            Reload data
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-sm btn-default dropdown-toggle">
+        <i class="fa fa-fw fa-check-circle"></i>
+        Selection
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="selectAll()">
+            <i class="fa fa-fw fa-square"></i>
+            Select all
+          </a>
+        </li>
+        <li>
+          <a ng-click="selectNone()">
+            <i class="fa fa-fw fa-square-o"></i>
+            Select none
+          </a>
+        </li>
+        <li>
+          <a ng-click="toggleSelection()">
+            <i class="fa fa-fw fa-minus-square"></i>
+            Toggle selection
+          </a>
+        </li>
+        <li>
+          <a ng-click="openModal('tagSelectedFiles')">
+            <i class="fa fa-fw fa-tags"></i>
+            Tag selected
+          </a>
+        </li>
+        <li>
+          <a ng-click="openModal('moveSelectedFiles')">
+            <i class="fa fa-fw fa-files-o"></i>
+            Move selected
+          </a>
+        </li>
+        <li>
+          <a ng-click="openModal('deleteSelectedFiles')">
+            <i class="fa fa-fw fa-trash-o"></i>
+            Delete selected
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-sm btn-default dropdown-toggle">
+        <i class="fa fa-fw fa-user"></i>
+        User
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="Auth.logout()">
+            <i class="fa fa-fw fa-sign-out"></i>
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+
+
+  <!-- admin menu -->
+  <div class="btn-group" ng-if="Auth.permissions.admin">
+    <button class="btn btn-sm btn-default dropdown-toggle">
+      <i class="fa fa-fw fa-wrench"></i>
+      Admin
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <a ng-click="openModal('manageUsers')">
+          <i class="fa fa-fw fa-users"></i>
+          Manage users
+        </a>
+      </li>
+      <li><a href="admin/sync-dirs.php" target="_blank">Sync folders</a></li>
+      <li><a href="admin/sync-files.php" target="_blank">Sync files</a></li>
+    </ul>
+  </div>
+
+</div>
