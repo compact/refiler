@@ -149,6 +149,17 @@ class Dir {
     return $path;
   }
 
+  /**
+   * To call this method, this dir must have a row in the database.
+   * @return array An array for outputting in JSON.
+   */
+  public function get_array() {
+    return array(
+      'id' => $this->get_id(),
+      'path' => $this->path
+    );
+  }
+
   public function exists_in_filesystem() {
     return is_dir($this->path);
   }

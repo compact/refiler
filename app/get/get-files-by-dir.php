@@ -48,10 +48,7 @@ $file_arrays = array_map(function ($row) use ($path) {
 echo json_encode(array(
   'success' => true,
   'files' => $file_arrays,
-  'dir' => array(
-    'id' => $dir->get_id(),
-    'path' => $path
-  )
+  'dir' => $dir->get_array()
 ));
 
 ?>
