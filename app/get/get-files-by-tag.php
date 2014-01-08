@@ -57,11 +57,10 @@ try {
 
     // get the tag fields from the first row
     $tag_json = array();
-    foreach ($rows[0] as $key => $value) {
-      if (substr($key, 0, 4) === 'tag_') {
-        $tag_json[substr($key, 4)] = $value;
-      }
-    }
+    $tag_json['id'] = (int)$rows[0]['tag_id'];
+    $tag_json['name'] = $rows[0]['tag_name'];
+    $tag_json['url'] = $rows[0]['tag_url'];
+    $tag_json['caption'] = $rows[0]['tag_caption'];
 
     // get tag relatives from the tag map table
     // the keys added are 'parents' and 'children'
