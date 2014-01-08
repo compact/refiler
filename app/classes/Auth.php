@@ -29,7 +29,7 @@ class Auth {
     // load Sentry
     $this->load_sentry();
 
-    // get user
+    // get user; Sentry::check() takes the longest time of the Sentry operations
     $this->user = Sentry::check() ? Sentry::getUser() : false;
   }
 
@@ -58,7 +58,8 @@ class Auth {
     );
     \Illuminate\Database\Eloquent\Model::setConnectionResolver($resolver);
 
-    // disable the throttling feature
+    // disable the throttling feature; doing this has a nice side effect of
+    // Sentry::check() taking a little less time
     Sentry::getThrottleProvider()->disable();
   }
 
