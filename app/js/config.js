@@ -153,8 +153,15 @@ angular.module('app').config(function ($routeProvider) {
   $routeProvider.when('/login', loginRoute);
   $routeProvider.when('/activate/:activationCode', loginRoute);
   $routeProvider.when('/', {
-    'templateUrl': 'partials/home.html',
-    'controller': 'HomeCtrl'
+    'templateUrl': 'partials/gallery.html',
+    'controller': 'GalleryCtrl',
+    'resolve': {
+      'data': ['Refiler', 'RefilerGalleryModel', function (Refiler,
+          RefilerGalleryModel) {
+        Refiler.page.title = 'Home';
+        RefilerGalleryModel.set({});
+      }]
+    }
   });
 });
 
