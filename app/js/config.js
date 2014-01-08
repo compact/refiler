@@ -111,18 +111,17 @@ angular.module('app').config(function ($routeProvider) {
     'controller': 'GalleryCtrl',
     'resolve': {
       'data': ['$http', '$route', 'RefilerGalleryModel', function ($http,
-            $route, RefilerGalleryModel) {
-          // we use $route.current.params instead of $routeParams because the
-          // latter gets updated only after the route resolves
-          return $http.get('get/get-files-by-dir.php', {
-            'params': {
-              'path': $route.current.params.dir || '.'
-            }
-          }).success(function (data) {
-            RefilerGalleryModel.set(data);
-          });
-        }
-      ]
+          $route, RefilerGalleryModel) {
+        // we use $route.current.params instead of $routeParams because the
+        // latter gets updated only after the route resolves
+        return $http.get('get/get-files-by-dir.php', {
+          'params': {
+            'path': $route.current.params.dir || '.'
+          }
+        }).success(function (data) {
+          RefilerGalleryModel.set(data);
+        });
+      }]
     }
   };
 
@@ -136,16 +135,15 @@ angular.module('app').config(function ($routeProvider) {
     'controller': 'GalleryCtrl',
     'resolve': {
       'data': ['$http', '$route', 'RefilerGalleryModel', function ($http,
-            $route, RefilerGalleryModel) {
-          return $http.get('get/get-files-by-tag.php', {
-            'params': {
-              'url': $route.current.params.tag
-            }
-          }).success(function (data) {
-            RefilerGalleryModel.set(data);
-          });
-        }
-      ]
+          $route, RefilerGalleryModel) {
+        return $http.get('get/get-files-by-tag.php', {
+          'params': {
+            'url': $route.current.params.tag
+          }
+        }).success(function (data) {
+          RefilerGalleryModel.set(data);
+        });
+      }]
     }
   });
   $routeProvider.when('/dir/:dir*', dirRoute);
