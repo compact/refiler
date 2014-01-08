@@ -11,6 +11,8 @@ angular.module('app').controller('LoginCtrl', function ($scope, $location,
   Refiler.page.title = $scope.action === 'activate' ? 'Activate' : 'Login';
 
   if ($scope.action === 'activate') {
+    $scope.disabled = true;
+
     Auth.getEmailByActivationCode(
       $routeParams.activationCode
     ).then(function (email) {
@@ -18,20 +20,25 @@ angular.module('app').controller('LoginCtrl', function ($scope, $location,
         'activationCode': $routeParams.activationCode,
         'email': email
       };
+      $scope.disabled = false;
     }, function (error) {
       $scope.alerts.push({'message': error});
     });
   }
 
   $scope.login = function (credentials) {
+    $scope.disabled = true;
+
     // clear old alerts
     $scope.alerts = [];
 
     // login
     Auth.login($scope.action, credentials).then(function () {
       $location.path($location.search().path || '/');
+      $scope.disabled = false;
     }, function (error) {
       $scope.alerts.push({'message': error});
+      $scope.disabled = false;
     });
   };
 });
