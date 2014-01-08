@@ -77,4 +77,10 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
     });
     return this;
   };
+
+  this.updateFile = function (file) {
+    var index = _.findIndex(this.files, {'id': file.id});
+    this.files[index] = new RefilerFile(file);
+    return this;
+  };
 });

@@ -288,6 +288,14 @@ class File {
     return $caption;
   }
 
+  public function get_caption() {
+    return $this->caption;
+  }
+
+  public function set_caption($caption) {
+    $this->caption = self::sanitize_caption($caption);
+  }
+
   /**
    * @return int
    */
@@ -362,6 +370,10 @@ class File {
     return in_array($this->thumb_type, array('gif', 'jpg', 'png'));
   }
 
+  public function get_dir() {
+    return $this->dir;
+  }
+
 
 
   /**
@@ -373,6 +385,7 @@ class File {
       'dirPath' => $this->dir->get_path(),
       'name' => $this->name,
       'type' => $this->type,
+      'caption' => $this->caption,
       'date' => $this->date,
       'size' => $this->size,
       'width' => $this->width,

@@ -131,11 +131,16 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         data.name = newName;
       }
 
-      $http.post('post/edit-file.php', data).success(function () {
+      $http.post('post/edit-file.php', data).success(function (data) {
         scope.$close();
 
-        // reload to show the new files TODO
-        $route.reload();
+        // update the gallery
+        if (RefilerGalleryModel.type === 'dir' &&
+            data.file.dirPath !== RefilerGalleryModel.dir.path) {
+          RefilerGalleryModel.removeFile(data.file.id);
+        } else { // TODO for tags
+          RefilerGalleryModel.updateFile(data.file);
+        }
       }).error(scope.$httpErrorHandler);
     }
   };
