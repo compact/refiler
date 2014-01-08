@@ -881,12 +881,14 @@ angular.module('app').service('RefilerModals', function ($http, $location,
               '</tr>' +
             '</tfoot>' +
           '</table>' +
-          '<span class="help-block">Note: Deletes are instant.</span>'
+          '<span class="help-block">Note: Deletes apply instantly.</span>'
       }
     ],
     'open': function (scope) {
+      scope.disabled = true;
       $http.get('get/get-users.php').success(function (data) {
         scope.users = data.users;
+        scope.disabled = false;
       });
 
       scope.createUser = function () {
