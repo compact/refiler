@@ -27,6 +27,7 @@ h1 {
 }
 
 /************************************************************ general classes */
+
 ul.horizontal {
   list-style-type: none;
   margin: 0;
@@ -59,6 +60,7 @@ ul.horizontal li {
 }
 
 /***************************************************************** navigation */
+
 #side-bar {
   position: fixed;
   width: 176px;
@@ -101,6 +103,7 @@ ul.horizontal li {
 }
 
 /******************************************************************** gallery */
+
 #content {
   margin: 0 0 16px 207px;
   padding: 16px 0 0; /* instead of margin-top to keep .nav at the top left */
@@ -141,31 +144,7 @@ ul.horizontal li {
 }
 
 /******************************************************************* lightbox */
-.lightbox {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 70;
-}
-.lightbox-background { /* full screen */
-  background-color: #000;
-  opacity: .8;
-  filter: alpha(opacity=80);
-  z-index: 80;
-}
-.lightbox-foreground {
-  position: absolute;
-  margin: 16px; /* must have same margin on all 4 sides; see lightbox.js */
-  padding: 16px; /* must have same padding on all 4 sides */
-  -webkit-border-radius: 6px; /* .modal */
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-  background-color: #fff;
-  z-index: 90;
-}
+
 .lightbox-image-container {
   position: relative;
   margin-top: 8px;
@@ -191,51 +170,13 @@ ul.horizontal li {
   font-size: 10px;
   line-height: 12px;
 }
-.lightbox-image-details .pull-right {
-  text-align: right;
-}
-.lightbox-loading {
-  position: absolute;
-  top: 128px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  color: rgb(20, 155, 223); /* Bootstrap .bar */
-  opacity: .8;
-  filter: alpha(opacity=80);
-  z-index: 120;
-/*  text-shadow: 3px 3px 9px #fff;
-  filter: dropshadow(color=#fff, offx=3, offy=3);*/
-}
-.lightbox-loading-label {
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 36px;
-  line-height: 36px;
-  font-weight: bold;
-}
-.lightbox-loading .progress {
-  margin: 0 auto;
-  width: 250px;
-}
-.lightbox-loading .bar {
-  width: 100%;
-}
 .lightbox-nav {
   margin: 0 auto;
   width: 150px; /* arbitrary, used to center against .lightbox-remove */
   text-align: center;
 }
-.lightbox-remove {
-  float: right;
-}
 
 /****************************************************************** Bootstrap */
-
-.uneditable-input {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 /**
  * http://stackoverflow.com/questions/18023493/bootstrap-3-dropdown-sub-menu-missing
