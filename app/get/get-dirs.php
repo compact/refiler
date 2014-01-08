@@ -10,14 +10,30 @@ header('Content-type: application/json');
 
 // init
 $db = new DB($config['db']);
-$refiler = new Refiler($config, $db);
 
 // get the dirs
-$rows = $refiler->get_dir_rows(); // with file counts
+$rows = $db->fetch_all('
+  SELECT
+    `DIRS`.*,
+    COUNT(`FILES`.`id`) AS `fileCount`
+  FROM `DIRS` LEFT JOIN `FILES`
+  ON `DIRS`.`id` = `FILES`.`dir_id`
+  GROUP BY `DIRS`.`id`
+  ORDER BY `DIRS`.`path`
+');
+
+// typecasting
+$arrays = array_map(function ($row) {
+  return array(
+    'id' => (int)$row['id'],
+    'path' => $row['path'],
+    'fileCount' => (int)$row['fileCount']
+  );
+}, $rows);
 
 echo json_encode(array(
   'success' => true,
-  'dirs' => $rows
+  'dirs' => $arrays
 ));
 
 ?>
