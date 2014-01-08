@@ -114,7 +114,8 @@ ul.horizontal li {
   height: 110px;
   line-height: 100px;
 }
-.file-thumb img {
+.file-thumb img,
+.file-thumb i {
   vertical-align: middle;
 }
 .file-details {
