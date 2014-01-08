@@ -24,8 +24,8 @@ class Dir {
 
 
   /**
-   * In a constructed object, $this->path is always set, but $this->id may not
-   *   be.
+   * $this->path is always set, but $this->id may not be. This constructor
+   *   throws exceptions.
    * @param Refiler          $refiler
    * @param int|string|array $path
    *   Case 1: Integer, an id in the `DIRS` table.
@@ -41,10 +41,17 @@ class Dir {
       $id = $param;
 
       $this->id = $id;
-      $this->path = $this->db->fetch_all('
+
+      $rows = $this->db->fetch_all('
         SELECT `path` FROM `DIRS`
         WHERE `id` = ?
-      ', array($id))[0]['path'];
+      ', array($id));
+
+      if (count($rows) === 0) {
+        throw new \Exception('Dir not found.');
+      }
+
+      $this->path = $rows[0]['path'];
     } elseif (is_string($param)) {
       $path = $param;
 
