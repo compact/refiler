@@ -39,12 +39,18 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
       this.type = 'dir';
       this.id = data.dir.id;
       this.path = data.dir.path;
+    } else {
+      this.type = '';
     }
 
-    // set files as RefilerFile objects
-    this.files = sortFiles(_.map(data.files, function (file) {
-      return new RefilerFile(file);
-    }));
+    if (typeof data.files === 'object') {
+      // set files as RefilerFile objects
+      this.files = sortFiles(_.map(data.files, function (file) {
+        return new RefilerFile(file);
+      }));
+    } else {
+      this.files = [];
+    }
 
     return this;
   };
