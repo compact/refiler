@@ -10,7 +10,7 @@ angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
   $scope.updateDir = function () {
     $http.get('get/update-dir.php', {
       'params': {
-        'id': RefilerGalleryModel.id
+        'id': RefilerGalleryModel.dir.id
       }
     }).then(function success() {
       $route.reload();

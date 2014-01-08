@@ -253,12 +253,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         // if the user is currently viewing a dir, default to that dir for
         // upload
         scope.model.dir = {
-          'id': RefilerGalleryModel.id,
-          'text': '/' + RefilerGalleryModel.path
+          'id': RefilerGalleryModel.dir.id,
+          'text': '/' + RefilerGalleryModel.dir.path
         };
       } else if (RefilerGalleryModel.type === 'tag') {
         // likewise for a tag
-        scope.model.tagNames = [RefilerGalleryModel.name];
+        scope.model.tagNames = [RefilerGalleryModel.tag.name];
       }
 
       // $fileUploader configuration. $fileUploader uses an XMLHttpRequest
@@ -391,12 +391,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         // if the user is currently viewing a dir, default to that dir for
         // upload
         scope.model.dir = {
-          'id': RefilerGalleryModel.id,
-          'text': '/' + RefilerGalleryModel.path
+          'id': RefilerGalleryModel.dir.id,
+          'text': '/' + RefilerGalleryModel.dir.path
         };
       } else if (RefilerGalleryModel.type === 'tag') {
         // likewise for a tag
-        scope.model.tagNames = [RefilerGalleryModel.name];
+        scope.model.tagNames = [RefilerGalleryModel.tag.name];
       }
 
       // focus the textarea
@@ -485,12 +485,13 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }
     ],
     'open': function (scope) {
-      scope.model.name = RefilerGalleryModel.name;
-      scope.model.url = RefilerGalleryModel.url;
-      scope.model.caption = RefilerGalleryModel.caption;
-      scope.model.parentNames = _.pluck(RefilerGalleryModel.parents, 'name');
-      scope.model.childNames = _.pluck(RefilerGalleryModel.children, 'name');
-      RefilerGalleryModel.name = 'asdfasdf';
+      var tag = RefilerGalleryModel.tag;
+
+      scope.model.name = tag.name;
+      scope.model.url = tag.url;
+      scope.model.caption = tag.caption;
+      scope.model.parentNames = _.pluck(tag.parents, 'name');
+      scope.model.childNames = _.pluck(tag.children, 'name');
 
       // focus the name input
       $timeout(function () {
@@ -499,7 +500,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     },
     'submit': function (scope) {
       $http.post('post/edit-tag.php', {
-        'id': RefilerGalleryModel.id,
+        'id': RefilerGalleryModel.tag.id,
         'name': scope.model.name,
         'url': scope.model.url,
         'caption': scope.model.caption,
@@ -508,13 +509,13 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }).success(function (data) {
         scope.$close(data);
 
-        if (scope.model.url !== RefilerGalleryModel.url) {
+        if (scope.model.url !== RefilerGalleryModel.tag.url) {
           // if the url has changed, route to the new url
-          $location.path('/tag/' + RefilerGalleryModel.url);
+          $location.path('/tag/' + RefilerGalleryModel.tag.url);
         } else {
           $route.reload();
           // TODO: can do this instead, though more complicated
-          // RefilerGalleryModel.name = scope.model.name;
+          // RefilerGalleryModel.tag.name = scope.model.name;
         }
         // TODO: reload (or update) the tag nav on url or name change
       }).error(scope.$httpErrorHandler);
@@ -532,7 +533,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }
     ],
     'open': function (scope) {
-      scope.name = RefilerGalleryModel.name;
+      scope.name = RefilerGalleryModel.tag.name;
 
       // focus the button
       $timeout(function () {
@@ -542,7 +543,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     'submit': function (scope) {
       $http.get('get/delete-tag.php', {
         'params': {
-          'id': RefilerGalleryModel.id
+          'id': RefilerGalleryModel.tag.id
         }
       }).success(function (data) {
         scope.$close(data);
@@ -569,8 +570,8 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     ],
     'open': function (scope) {
       scope.model.parent = {
-        'id': RefilerGalleryModel.id,
-        'text': '/' + RefilerGalleryModel.path
+        'id': RefilerGalleryModel.dir.id,
+        'text': '/' + RefilerGalleryModel.dir.path
       };
       scope.model.name = '';
 
@@ -621,18 +622,18 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       var parentPath, name, matches;
 
       // calculate the parent and name of the current dir
-      matches = RefilerGalleryModel.path.match(/^(.+)\/([^/]+)$/);
+      matches = RefilerGalleryModel.dir.path.match(/^(.+)\/([^/]+)$/);
       if (matches !== null) {
         parentPath = matches[1];
         name = matches[2];
       } else {
         // no '/' in path, so it's in the base dir
         parentPath = '.';
-        name = RefilerGalleryModel.path;
+        name = RefilerGalleryModel.dir.path;
       }
 
       // old path for display only
-      scope.path = '/' + RefilerGalleryModel.path;
+      scope.path = '/' + RefilerGalleryModel.dir.path;
 
       // model to set the new path
       scope.model.parent = {
@@ -650,12 +651,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       var newPath = scope.model.parent.text.substr(1) + '/' +
         scope.model.name;
 
-      if (RefilerGalleryModel.path === newPath) {
+      if (RefilerGalleryModel.dir.path === newPath) {
         scope.alerts.push({'message': 'No change.'});
       } else {
         $http.get('get/move-dir.php', {
           'params': {
-            'id': RefilerGalleryModel.id,
+            'id': RefilerGalleryModel.dir.id,
             'path': newPath
           }
         }).success(function (data) {
@@ -679,7 +680,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }
     ],
     'open': function (scope) {
-      scope.path = RefilerGalleryModel.path;
+      scope.path = RefilerGalleryModel.dir.path;
 
       // focus the button
       $timeout(function () {
@@ -689,7 +690,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     'submit': function (scope) {
       $http.get('get/delete-dir.php', {
         'params': {
-          'id': RefilerGalleryModel.id
+          'id': RefilerGalleryModel.dir.id
         }
       }).success(function (data) {
         scope.$close(data);
@@ -727,13 +728,13 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }
     ],
     'open': function (scope) {
-      scope.dirPath = RefilerGalleryModel.path;
+      scope.dirPath = RefilerGalleryModel.dir.path;
       scope.model.recursive = false;
       scope.model.overwrite = false;
     },
     'submit': function (scope) {
       $http.post('post/tag-files-by-dir.php', {
-        'dirId': RefilerGalleryModel.id,
+        'dirId': RefilerGalleryModel.dir.id,
         'tagNames': scope.model.tagNames,
         'recursive': scope.model.recursive ? 1 : 0,
         'overwrite': scope.model.overwrite ? 1 : 0
@@ -783,8 +784,8 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     'open': function (scope) {
       if (RefilerGalleryModel.type === 'dir') {
         scope.model.dir = {
-          'id': RefilerGalleryModel.id,
-          'text': '/' + RefilerGalleryModel.path
+          'id': RefilerGalleryModel.dir.id,
+          'text': '/' + RefilerGalleryModel.dir.path
         };
       }
     },

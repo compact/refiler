@@ -24,21 +24,15 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
     self.files = sortFiles(self.files);
   });
 
-  this.set = function (data) {
+  this.set = function (data) {console.log(data);
     if (typeof data.tag === 'object') {
       // set tag data
       this.type = 'tag';
-      this.id = data.tag.id;
-      this.name = data.tag.name;
-      this.url = data.tag.url;
-      this.caption = data.tag.caption;
-      this.parents = data.tag.parents;
-      this.children = data.tag.children;
+      this.tag = data.tag;
     } else if (typeof data.dir === 'object') {
       // set dir data
       this.type = 'dir';
-      this.id = data.dir.id;
-      this.path = data.dir.path;
+      this.dir = data.dir;
     } else {
       this.type = '';
     }

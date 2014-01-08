@@ -47,6 +47,7 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
   };
 
   $scope.isSelected = function (type, id) {
-    return type === RefilerGalleryModel.type && id === RefilerGalleryModel.id;
+    return type === RefilerGalleryModel.type &&
+      id === RefilerGalleryModel[type].id;
   };
 });

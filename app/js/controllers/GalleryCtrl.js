@@ -6,14 +6,14 @@ angular.module('app').controller('GalleryCtrl', function ($scope, $modal, Auth,
     // tag properties
     $scope.tag = {};
 
-    Refiler.page.title = RefilerGalleryModel.name;
-    $scope.tag.parents = RefilerGalleryModel.parents;
-    $scope.tag.children = RefilerGalleryModel.children;
+    Refiler.page.title = RefilerGalleryModel.tag.name;
+    $scope.tag.parents = RefilerGalleryModel.tag.parents;
+    $scope.tag.children = RefilerGalleryModel.tag.children;
   } else if (RefilerGalleryModel.type === 'dir') {
     // dir properties
     $scope.dir = {};
 
-    Refiler.page.title = '/' + RefilerGalleryModel.path;
+    Refiler.page.title = '/' + RefilerGalleryModel.dir.path;
   }
 
   // files
