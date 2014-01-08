@@ -12,7 +12,7 @@ $db = new DB($config['db']);
 
 // auth
 $auth = new Auth($config['auth'], $db);
-if (!$auth->has_permission('admin')) {
+if (!$auth->has_permission('edit')) {
   echo json_encode(array(
     'success' => false,
     'error' => 'Forbidden'

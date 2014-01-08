@@ -9,6 +9,18 @@ namespace Refiler;
 require '../require.php';
 header('Content-type: application/json');
 
+$db = new DB($config['db']);
+
+// auth
+$auth = new Auth($config['auth'], $db);
+if (!$auth->has_permission('edit')) {
+  echo json_encode(array(
+    'success' => false,
+    'error' => 'Forbidden'
+  ));
+  exit;
+}
+
 // POST data
 $name = isset_or($_POST['name']);
 $dir_id = isset_or($_POST['dirId']);
@@ -64,7 +76,6 @@ if (!is_uploaded_file($file['tmp_name'])) {
 
 
 // init
-$db = new DB($config['db']);
 $refiler = new Refiler($config, $db);
 
 // move the file

@@ -11,6 +11,18 @@ namespace Refiler;
 require '../require.php';
 header('Content-type: application/json');
 
+$db = new DB($config['db']);
+
+// auth
+$auth = new Auth($config['auth'], $db);
+if (!$auth->has_permission('edit')) {
+  echo json_encode(array(
+    'success' => false,
+    'error' => 'Forbidden'
+  ));
+  exit;
+}
+
 // POST data
 $file_id = isset_or($_POST['id']);
 $tag_names = isset_or($_POST['tagNames']);
@@ -36,11 +48,7 @@ if (empty($file_id)) {
 }
 
 // init
-$db = new DB($config['db']);
 $refiler = new Refiler($config, $db);
-
-
-
 $file = new File($refiler, $file_id);
 
 // params in the UPDATE query

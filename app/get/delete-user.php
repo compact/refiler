@@ -7,12 +7,6 @@ namespace Refiler;
 require '../require.php';
 header('Content-type: application/json');
 
-// GET params
-$id = isset_or($_GET['id']);
-
-// sanitize
-$id = (int)$id;
-
 $db = new DB($config['db']);
 
 // auth
@@ -24,6 +18,12 @@ if (!$auth->has_permission('admin')) {
   ));
   exit;
 }
+
+// GET params
+$id = isset_or($_GET['id']);
+
+// sanitize
+$id = (int)$id;
 
 try {
   // find the user
@@ -41,6 +41,5 @@ try {
     'error' => $e->getMessage()
   ));
 }
-
 
 ?>

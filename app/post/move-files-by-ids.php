@@ -8,6 +8,18 @@ namespace Refiler;
 require '../require.php';
 header('Content-type: application/json');
 
+$db = new DB($config['db']);
+
+// auth
+$auth = new Auth($config['auth'], $db);
+if (!$auth->has_permission('edit')) {
+  echo json_encode(array(
+    'success' => false,
+    'error' => 'Forbidden'
+  ));
+  exit;
+}
+
 // POST data
 $ids = isset_or($_POST['fileIds']);
 $dir_id = isset_or($_POST['dirId']);
@@ -25,9 +37,7 @@ if (empty($ids) || empty($dir_id)) {
 }
 
 // init
-$db = new DB($config['db']);
 $refiler = new Refiler($config, $db);
-
 $dir = new Dir($refiler, $dir_id);
 
 foreach ($ids as $id) {

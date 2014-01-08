@@ -8,6 +8,18 @@ namespace Refiler;
 require '../require.php';
 header('Content-type: application/json');
 
+$db = new DB($config['db']);
+
+// auth
+$auth = new Auth($config['auth'], $db);
+if (!$auth->has_permission('edit')) {
+  echo json_encode(array(
+    'success' => false,
+    'error' => 'Forbidden'
+  ));
+  exit;
+}
+
 // POST data
 $id = isset_or($_POST['id']);
 $name = isset_or($_POST['name']);
@@ -33,9 +45,7 @@ if (empty($id) || empty($name)) {
 }
 
 // init
-$db = new DB($config['db']);
 $refiler = new Refiler($config, $db);
-
 $tag = new Tag($refiler, $id);
 
 $db->begin_transaction();

@@ -8,6 +8,18 @@ namespace Refiler;
 require '../require.php';
 header('Content-type: application/json');
 
+$db = new DB($config['db']);
+
+// auth
+$auth = new Auth($config['auth'], $db);
+if (!$auth->has_permission('edit')) {
+  echo json_encode(array(
+    'success' => false,
+    'error' => 'Forbidden'
+  ));
+  exit;
+}
+
 // GET params
 $id = isset_or($_GET['id']);
 
@@ -22,8 +34,6 @@ if (empty($id)) {
   exit;
 }
 
-// init
-$db = new DB($config['db']);
 $refiler = new Refiler($config, $db);
 
 // get the file

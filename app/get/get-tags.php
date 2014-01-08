@@ -11,6 +11,16 @@ header('Content-type: application/json');
 // init
 $db = new DB($config['db']);
 
+// auth
+$auth = new Auth($config['auth'], $db);
+if (!$auth->has_permission('view')) {
+  echo json_encode(array(
+    'success' => false,
+    'error' => 'Forbidden'
+  ));
+  exit;
+}
+
 // get the tags
 $rows = $db->fetch_all("
   SELECT
