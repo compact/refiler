@@ -24,7 +24,7 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
     self.files = sortFiles(self.files);
   });
 
-  this.set = function (data) {console.log(data);
+  this.set = function (data) {
     if (typeof data.tag === 'object') {
       // set tag data
       this.type = 'tag';
