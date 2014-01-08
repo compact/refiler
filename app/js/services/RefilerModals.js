@@ -289,8 +289,11 @@ angular.module('app').service('RefilerModals', function ($http, $location,
               'name': data.file.name
             });
 
-            // add the file to the gallery immediately
-            RefilerGalleryModel.addFile(data.file);
+            // add the file to the model immediately, if it belong in the model
+            if (RefilerGalleryModel.type === 'dir' &&
+                data.file.dirPath === RefilerGalleryModel.dir.path) {
+              RefilerGalleryModel.addFile(data.file);
+            }
             return;
           } else if (typeof data.error === 'string') {
             failedFiles.push({
@@ -412,8 +415,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }).success(function (data) {
         var alerts, dir, dirLink;
 
-        // add the curled files to the model
-        RefilerGalleryModel.addFiles(data.files);
+        // add to the model any curled files that belong in it
+        if (RefilerGalleryModel.type === 'dir') {
+          RefilerGalleryModel.addFiles(_.where(data.files, {
+            'dirPath': RefilerGalleryModel.dir.path
+          }));
+        }
 
         alerts = [];
         dir = new RefilerDir({
