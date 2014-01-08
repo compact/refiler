@@ -73,6 +73,9 @@ angular.module('app').directive('lightboxImg', function ($window,
         });
       };
 
+      // initial resize for the first image
+      resize();
+
       // bind
       element.bind('load', function () {
         cfpLoadingBar.complete();
