@@ -63,7 +63,7 @@
       </li>
       <!-- dirs -->
       <li><strong>Folders</strong></li>
-      <li ng-repeat="dir in dirs | filter: {'path': searchText}">
+      <li ng-repeat="dir in dirs | filter: dirFilter(searchText)">
         <a href="#!/dir/{{dir.path}}"
             ng-class="{'selected': isSelected('dir', dir.id)}"
             tooltip="{{dir.path}} [{{dir.fileCount}}]"

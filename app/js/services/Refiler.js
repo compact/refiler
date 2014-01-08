@@ -6,7 +6,7 @@ angular.module('app').provider('Refiler', function () {
   this.constants.NO_THUMB_CORRUPT = 'corrupt';
   this.constants.SELF_THUMB = 'self';
 
-  // config options
+  // config
   this.config = {};
 
   // with trailing slash all file paths given are relative to this path
@@ -20,9 +20,10 @@ angular.module('app').provider('Refiler', function () {
   this.config.noThumbTooLarge = 'fa fa-file-o fa-5x';
   this.config.noThumbCorrupt = 'fa fa-file-o fa-5x';
 
-  // whether to show only parentless tags in the nav when the user has not
-  // typed in a filter
+  // whether to show only parentless tags or dirs in the nav when the user has
+  // not typed in a filter
   this.config.defaultParentlessTagsInNav = false;
+  this.config.defaultParentlessDirsInNav = false;
 
   // TODO: default upload dir
 

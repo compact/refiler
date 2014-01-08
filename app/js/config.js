@@ -179,4 +179,5 @@ angular.module('app').config(function (AuthProvider) {
 
 angular.module('app').config(function (RefilerProvider) {
   RefilerProvider.config.defaultParentlessTagsInNav = true;
+  RefilerProvider.config.defaultParentlessDirsInNav = true;
 });
