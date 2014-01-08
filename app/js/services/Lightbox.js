@@ -39,6 +39,7 @@ angular.module('app').factory('Lightbox', function service($document, $modal,
       }],
       'windowClass': 'lightbox-modal'
     }).result.finally(function () {
+      cfpLoadingBar.complete();
       opened = false;
     });
   };
