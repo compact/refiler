@@ -12,7 +12,7 @@ angular.module('app').factory('RefilerDir', function service() {
    * @return {string}
    */
   RefilerDir.prototype.formatLink = function (attrs) {
-    return '<a href="#!/' + this.path + '"' +
+    return '<a href="#!/dir/' + this.path + '"' +
       _.reduce(attrs, function (html, value, attr) {
         return html + ' ' + attr + '="' + value + '"';
       }, '') +
