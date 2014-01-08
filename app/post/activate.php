@@ -44,7 +44,9 @@ try {
 
   echo json_encode(array(
     'success' => true,
-    'permissions' => $auth->get_permissions()
+    'user' => array(
+      'permissions' => $auth->get_permissions()
+    )
   ));
 } catch (\Exception $e) {
   echo json_encode(array(
