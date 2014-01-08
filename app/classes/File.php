@@ -170,6 +170,14 @@ class File {
   }
 
   /**
+   * This method can be used when inserting this file without insert().
+   * @param int $id
+   */
+  public function set_id($id) {
+    $this->id = (int)$id;
+  }
+
+  /**
    * Sanitize the given filename at the given path.
    * @param string  $dir_path
    * @param string  $name

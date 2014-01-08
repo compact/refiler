@@ -48,7 +48,7 @@ $curl->set(CURLOPT_PROGRESSFUNCTION, function ($download_total, $download_progre
 */
 
 // each url will have a corresponding element in one of these two arrays
-$file_rows = array(); // rows to insert
+$uploaded_file_rows = array(); // rows to insert
 $failed_urls = array(); // urls that failed to be saved by curl
 
 // curl the files
@@ -75,31 +75,34 @@ foreach ($urls as $url) {
       $file->create_thumb();
     }
 
-    // get a row to insert for the file
-    $file_rows[] = $file->generate_row();
+    $uploaded_files[] = $file;
   } else {
     $failed_urls[] = $url;
   }
 }
 
 // insert rows
-$file_count = count($file_rows);
-$file_arrays = array();
+$uploaded_file_count = count($uploaded_files);
 
-if ($file_count > 0) {
+if ($uploaded_file_count > 0) {
   $db = $refiler->get_db();
   $db->begin_transaction();
 
   // insert the files
-  $db->insert('FILES', $file_rows);
+  $db->insert('FILES', array_map(function ($file) {
+    return $file->generate_row();
+  }, $uploaded_files));
 
-  // while MySQL's LAST_INSERT_ID() returns the first id of multiple inserts,
-  // the PDO function returns the last id
+  // this is the first id of the inserted rows, not the last
   $last_insert_id = $db->get_last_insert_id();
+
   // the inserted row ids are guaranteed sequential for innodb_autoinc_lock_mode
   // = 0 or 1, so we don't have to worry about determining the ids in a more
   // complicated manner than this
-  $file_ids = range($last_insert_id - $file_count + 1, $last_insert_id);
+  $uploaded_file_ids = range(
+    $last_insert_id,
+    $last_insert_id + $uploaded_file_count - 1
+  );
 
   // sanitize
   $tag_names = Refiler::sanitize_tag_names($tag_names);
@@ -114,25 +117,23 @@ if ($file_count > 0) {
       WHERE `TAGS`.`name` IN (%s)
       AND `FILES`.`id` IN (%s)
       ON DUPLICATE KEY UPDATE `FILE_TAG_MAP`.`id` = `FILE_TAG_MAP`.`id`
-    ", array($tag_names, $file_ids));
+    ", array($tag_names, $uploaded_file_ids));
   }
 
   $db->commit();
 
-  // build a file array for output
-  foreach ($file_rows as $key => $file_row) {
-    $file_array = $file_row;
-    unset($file_array['dir_id']);
-    $file_array['id'] = $file_ids[$key];
-    $file_array['dirPath'] = $dir_path;
-    $file_arrays[] = $file_array;
+  // set the file ids for output below
+  foreach ($uploaded_files as $key => $file) {
+    $file->set_id($uploaded_file_ids[$key]);
   }
 }
 
 // output the result
 echo json_encode(array(
   'success' => true,
-  'files' => $file_arrays,
+  'files' => array_map(function ($file) {
+    return $file->get_array();
+  }, $uploaded_files),
   'failedUrls' => $failed_urls
 ));
 
