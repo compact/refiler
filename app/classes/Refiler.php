@@ -60,41 +60,6 @@ class Refiler {
 
 
 
-  //////////////////////////////////////////////////////////////// dir functions
-
-  /**
-   * @return array[] The dir rows stored in the db, along with the file count
-   *   for each dir. 
-   */
-  public function get_dir_rows() {
-    $rows = $this->db->fetch_all('
-      SELECT `DIRS`.*, COUNT(`FILES`.`id`) AS `fileCount`
-      FROM `DIRS` LEFT JOIN `FILES`
-      ON `DIRS`.`id` = `FILES`.`dir_id`
-      GROUP BY `DIRS`.`id`
-      ORDER BY `DIRS`.`path`
-    ');
-    return $rows;
-  }
-
-  /**
-   * @return Dir[] Array mapped from get_dir_rows().
-   */
-  public function get_dirs() {
-    return array_map(function ($row) {
-      return new Dir($this, $row);
-    }, $this->get_dir_rows());
-  }
-
-  /**
-   * @return string[] Array mapped from get_dir_rows().
-   */
-  public function get_dir_paths() {
-    return array_map(function ($row) {
-      return $row['path'];
-    }, $this->get_dir_rows());
-  }
-
   /**
    * @param array $names Tag names. Keys do not matter.
    * @return array
