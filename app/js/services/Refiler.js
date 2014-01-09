@@ -37,11 +37,6 @@ angular.module('app').provider('Refiler', function () {
     // config
     Refiler.config = this.config;
 
-    // page
-    Refiler.page = {};
-    Refiler.page.title = 'Refiler'; // the current title displayed in <h1>
-    Refiler.page.error = false; // whether a $routeChangeError has occurred
-
     return Refiler;
   };
 });

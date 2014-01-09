@@ -3,16 +3,16 @@
  *   persist through those changes.
  */
 angular.module('app').controller('GalleryCtrl', function ($scope, $modal, Auth,
-    Lightbox, Prefs, Refiler, RefilerGalleryModel, RefilerModals) {
+    Lightbox, Prefs, RefilerModel, RefilerGalleryModel, RefilerModals) {
   if (RefilerGalleryModel.type === 'tag') {
     // shortcut to not pollute the HTML with "RefilerGalleryModel.tag"
     $scope.tag = RefilerGalleryModel.tag;
 
-    Refiler.page.title = RefilerGalleryModel.tag.name;
+    RefilerModel.page.title = RefilerGalleryModel.tag.name;
   } else if (RefilerGalleryModel.type === 'dir') {
     $scope.dir = RefilerGalleryModel.dir;
 
-    Refiler.page.title = RefilerGalleryModel.dir.formatNestedLink();
+    RefilerModel.page.title = RefilerGalleryModel.dir.formatNestedLink();
   }
 
   // services

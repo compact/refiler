@@ -1,13 +1,18 @@
 angular.module('app').service('RefilerModel', function ($http, $q) {
   var self = this, deferreds = {};
 
-  deferreds.user = $q.defer();
-  deferreds.tags = $q.defer();
-  deferreds.dirs = $q.defer();
+  // page
+  this.page = {};
+  this.page.title = ''; // the current title displayed in <h1>
+  this.page.error = false; // whether a $routeChangeError has occurred
 
   this.user = null;
   this.tags = null;
   this.dirs = null;
+
+  deferreds.user = $q.defer();
+  deferreds.tags = $q.defer();
+  deferreds.dirs = $q.defer();
 
   $http.get('get/get-user-tags-dirs.php').success(function (data) {
     deferreds.user.resolve(data.user);

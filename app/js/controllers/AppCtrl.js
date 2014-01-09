@@ -1,8 +1,8 @@
 angular.module('app').controller('AppCtrl', function ($scope, $rootScope,
-    $location, Auth, Refiler) {
+    $location, Auth, RefilerModel) {
   $scope.error = false;
 
-  $scope.page = Refiler.page;
+  $scope.page = RefilerModel.page;
 
   $rootScope.$on('$routeChangeError', function (e, c, p, rejection) {
     var errorMessage = '';
@@ -26,11 +26,11 @@ angular.module('app').controller('AppCtrl', function ($scope, $rootScope,
     }
 
     // display the error message to the user
-    Refiler.page.error = true;
-    Refiler.page.title = 'Error: ' + errorMessage;
+    RefilerModel.page.error = true;
+    RefilerModel.page.title = 'Error: ' + errorMessage;
   });
 
   $rootScope.$on('$routeChangeStart', function () {
-    Refiler.page.error = false;
+    RefilerModel.page.error = false;
   });
 });

@@ -154,9 +154,9 @@ angular.module('app').config(function ($routeProvider) {
     'templateUrl': 'partials/gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
-      'data': ['Refiler', 'RefilerGalleryModel', function (Refiler,
-          RefilerGalleryModel) {
-        Refiler.page.title = 'Home';
+      'data': ['RefilerGalleryModel', 'RefilerModel', function (
+          RefilerGalleryModel, RefilerModel) {
+        RefilerModel.page.title = 'Home';
         RefilerGalleryModel.set({});
       }]
     }

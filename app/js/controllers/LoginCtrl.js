@@ -2,13 +2,13 @@
  * Login or activate a user account.
  */
 angular.module('app').controller('LoginCtrl', function ($scope, $location,
-    $routeParams, Auth, Refiler) {
+    $routeParams, Auth, RefilerModel) {
   $scope.action = typeof $routeParams.activationCode === 'string' ?
     'activate' : 'login';
 
   $scope.alerts = [];
 
-  Refiler.page.title = $scope.action === 'activate' ? 'Activate' : 'Login';
+  RefilerModel.page.title = $scope.action === 'activate' ? 'Activate' : 'Login';
 
   if ($scope.action === 'activate') {
     $scope.disabled = true;
