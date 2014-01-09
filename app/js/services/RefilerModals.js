@@ -906,7 +906,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       scope.createUser = function () {
         scope.users.push({
           'email': '',
-          'permissions': _.clone(Auth.defaultPermissions)
+          'permissions': _.clone(Auth.guestPermissions)
         });
       };
 

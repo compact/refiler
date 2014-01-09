@@ -173,7 +173,7 @@ angular.module('app').config(function (cfpLoadingBarProvider) {
 
 
 angular.module('app').config(function (AuthProvider) {
-  AuthProvider.defaultPermissions = {
+  AuthProvider.guestPermissions = {
     'view': false,
     'edit': false,
     'admin': false

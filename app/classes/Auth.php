@@ -16,7 +16,7 @@ class Auth {
   /**
    * Load Sentry and set the current user (if logged in).
    * @param array $config Must contain keys 'sentry_table_prefix' and
-   *   'default_permissions'.
+   *   'guest_permissions'.
    * @param DB    $db
    */
   public function __construct($config, DB $db) {
@@ -86,7 +86,7 @@ class Auth {
     // hasAccess() is broader than hasPermission()
     return $this->user
       ? $this->user->hasAccess($permission)
-      : $this->config['default_permissions'][$permission];
+      : $this->config['guest_permissions'][$permission];
   }
 
   /**
@@ -116,7 +116,7 @@ class Auth {
   public function get_permissions() {
     return $this->user
       ? self::encode_permissions($this->user->getMergedPermissions())
-      : $this->config['default_permissions'];
+      : $this->config['guest_permissions'];
   }
 
   /**

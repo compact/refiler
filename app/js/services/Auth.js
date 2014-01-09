@@ -1,6 +1,6 @@
 angular.module('app').provider('Auth', function () {
   // configurable guest permissions; must match the values in config.php
-  this.defaultPermissions = {
+  this.guestPermissions = {
     'view': true,
     'edit': false,
     'admin': false
@@ -14,11 +14,11 @@ angular.module('app').provider('Auth', function () {
     Auth.loggedIn = false;
 
     // when setting a new var to this object, remember to clone it
-    Auth.defaultPermissions = this.defaultPermissions;
+    Auth.guestPermissions = this.guestPermissions;
 
     // permissions are set when this service is constructed, and when the user
     // logs in successfully
-    Auth.permissions = _.clone(Auth.defaultPermissions);
+    Auth.permissions = _.clone(Auth.guestPermissions);
 
     // get permissions right away
     RefilerModel.getUser().then(function (user) {

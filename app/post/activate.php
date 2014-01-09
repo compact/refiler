@@ -51,7 +51,7 @@ try {
   // permission, then output tags and dirs (for example, if the user has view
   // permission and guests do not, they can now view tags and dirs)
   $view_permission = $result['user']['permissions']['view'];
-  if ($config['auth']['default_permissions']['view'] !== $view_permission) {
+  if ($config['auth']['guest_permissions']['view'] !== $view_permission) {
     $result['tags'] = $view_permission ? $refiler->get_tags_array() : array();
     $result['dirs'] = $view_permission ? $refiler->get_dirs_array() : array();
   }

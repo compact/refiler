@@ -25,7 +25,7 @@ $result = array(
 // permission, then output tags and dirs (for example, if the user has view
 // permission but guests do not, then output empty arrays to clear the tag and
 // dir navigation)
-$guest_view_permission = $config['auth']['default_permissions']['view'];
+$guest_view_permission = $config['auth']['guest_permissions']['view'];
 $user_view_permission = $auth->has_permission('view');
 if ($guest_view_permission !== $user_view_permission) {
   $result['tags'] = $guest_view_permission
