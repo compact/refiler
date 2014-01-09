@@ -174,7 +174,7 @@ angular.module('app').config(function (cfpLoadingBarProvider) {
 
 angular.module('app').config(function (AuthProvider) {
   AuthProvider.defaultPermissions = {
-    'view': true,
+    'view': false,
     'edit': false,
     'admin': false
   };

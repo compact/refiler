@@ -32,7 +32,7 @@ $config['auth']['sentry_table_prefix'] = '';
 # guest permissions passed to Refiler\User; must match the values in
 # AuthProvider
 $config['auth']['default_permissions'] = array(
-  'view' => true,
+  'view' => false,
   'edit' => false,
   'admin' => false
 );
