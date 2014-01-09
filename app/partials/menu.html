@@ -80,7 +80,7 @@
       </ul>
     </div>
 
-    <div class="btn-group" ng-if="tag">
+    <div class="btn-group" ng-show="tag">
       <button class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-tag"></i>
         Tag
@@ -108,7 +108,7 @@
       </ul>
     </div>
 
-    <div class="btn-group" ng-if="dir">
+    <div class="btn-group" ng-show="dir">
       <button class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-folder-open"></i>
         Folder
@@ -154,7 +154,7 @@
       </ul>
     </div>
 
-    <div class="btn-group">
+    <div class="btn-group" ng-show="tag || dir">
       <button class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-check-circle"></i>
         Selection
