@@ -45,17 +45,17 @@
 
   <!-- navigation -->
   <div id="side-bar" ng-controller="NavCtrl"
-      ng-show="tags.length + dirs.length > 0">
+      ng-show="RefilerModel.tags.length + RefilerModel.dirs.length > 0">
     <!-- search filter -->
     <input type="text" placeholder="Filter tags and folders" ng-model="searchText" value="asdf">
 
     <!-- navigation list of tags and dirs -->
     <ul class="nav nav-list">
       <!-- tags -->
-      <li ng-show="tags.length > 0">
+      <li ng-show="RefilerModel.tags.length > 0">
         <strong>Tags</strong>
       </li>
-      <li ng-repeat="tag in tags | filter: tagFilter(searchText)">
+      <li ng-repeat="tag in RefilerModel.tags | filter: tagFilter(searchText)">
         <a href="#!/tag/{{tag.url}}" title="{{tag.caption}}"
             ng-class="{'selected': isSelected('tag', tag.id)}">
           {{tag.name}}
@@ -66,10 +66,10 @@
         </a>
       </li>
       <!-- dirs -->
-      <li ng-show="dirs.length > 0">
+      <li ng-show="RefilerModel.dirs.length > 0">
         <strong>Folders</strong>
       </li>
-      <li ng-repeat="dir in dirs | filter: dirFilter(searchText)">
+      <li ng-repeat="dir in RefilerModel.dirs | filter: dirFilter(searchText)">
         <a href="#!/dir/{{dir.path}}"
             ng-class="{'selected': isSelected('dir', dir.id)}"
             tooltip="{{dir.path}} [{{dir.fileCount}}]"

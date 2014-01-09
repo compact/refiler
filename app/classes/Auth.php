@@ -120,6 +120,17 @@ class Auth {
   }
 
   /**
+   * @return array Array of the current user's data, intended for JSON-encoded
+   *   output.
+   */
+  public function get_array() {
+    return array(
+      'loggedIn' => $this->logged_in(),
+      'permissions' => $this->get_permissions()
+    );
+  }
+
+  /**
    * Should be called only by admins.
    * @return array[] Data of all users.
    */

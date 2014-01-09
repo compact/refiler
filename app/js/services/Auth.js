@@ -40,6 +40,14 @@ angular.module('app').provider('Auth', function () {
         Auth.loggedIn = true;
         Auth.permissions = data.user.permissions;
 
+        // update RefilerModel if needed
+        if (typeof data.tags !== 'undefined') {
+          RefilerModel.tags = data.tags;
+        }
+        if (typeof data.dirs !== 'undefined') {
+          RefilerModel.dirs = data.dirs;
+        }
+
         deferred.resolve();
       }).error(function (data) {
         deferred.reject(data.error || 'Error.');
@@ -49,8 +57,17 @@ angular.module('app').provider('Auth', function () {
     };
 
     Auth.logout = function () {
-      $http.get('get/logout.php').success(function () {
+      $http.get('get/logout.php').success(function (data) {
         Auth.loggedIn = false;
+
+        // update RefilerModel if needed
+        if (typeof data.tags !== 'undefined') {
+          RefilerModel.tags = data.tags;
+        }
+        if (typeof data.dirs !== 'undefined') {
+          RefilerModel.dirs = data.dirs;
+        }
+
         $location.search({
           'path': $location.path() // path to set after login
         }).path('/login');

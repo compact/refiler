@@ -19,12 +19,10 @@ $auth = new Auth($config['auth'], $db);
 $refiler = new Refiler($config, $db);
 
 try {
-  // find user
-  $user = Sentry::getUserProvider()->findByActivationCode(
-    $activationCode
-  );
+  // get the user
+  $user = Sentry::getUserProvider()->findByActivationCode($activationCode);
 
-  // attempt activation
+  // activate
   $success = $user->attemptActivation($activationCode);
   if (!$success) {
     throw new \Exception('User activation failed.');
@@ -40,14 +38,26 @@ try {
   // login
   Sentry::login($user, true); // remember
 
+  // update our Auth object
   $auth->set_user($user);
 
-  echo json_encode(array(
+  // start building the result to output
+  $result = array(
     'success' => true,
-    'user' => array(
-      'permissions' => $auth->get_permissions()
-    )
-  ));
+    'user' => $auth->get_array()
+  );
+
+  // if the user's view permission is different from the default guest view
+  // permission, then output tags and dirs (for example, if the user has view
+  // permission and guests do not, they can now view tags and dirs)
+  $view_permission = $result['user']['permissions']['view'];
+  if ($config['auth']['default_permissions']['view'] !== $view_permission) {
+    $result['tags'] = $view_permission ? $refiler->get_tags_array() : array();
+    $result['dirs'] = $view_permission ? $refiler->get_dirs_array() : array();
+  }
+
+  // output the result
+  echo json_encode($result);
 } catch (\Exception $e) {
   echo json_encode(array(
     'success' => false,

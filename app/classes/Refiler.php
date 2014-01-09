@@ -91,5 +91,63 @@ class Refiler {
     }
     return $this->db->insert('TAGS', $rows, true);
   }
+
+
+
+  /**
+   * @return array Array of all tag data, intended for JSON-encoded output.
+   */
+  public function get_tags_array() {
+    $rows = $this->db->fetch_all("
+      SELECT
+        `TAGS`.*,
+        COUNT(DISTINCT `FILE_TAG_MAP`.`id`) AS `fileCount`,
+        COUNT(DISTINCT `parents`.`id`) AS `parentCount`,
+        COUNT(DISTINCT `children`.`id`) AS `childCount`
+      FROM `TAGS`
+      LEFT JOIN `FILE_TAG_MAP` ON `TAGS`.`id` = `FILE_TAG_MAP`.`tag_id`
+      LEFT JOIN `TAG_MAP` AS `parents` ON `TAGS`.`id` = `parents`.`child_id`
+      LEFT JOIN `TAG_MAP` AS `children` ON `TAGS`.`id` = `children`.`parent_id`
+      GROUP BY `TAGS`.`id`
+      ORDER BY `TAGS`.`name`
+    ");
+
+    // typecasting
+    return array_map(function ($row) {
+      return array(
+        'id' => (int)$row['id'],
+        'name' => $row['name'],
+        'url' => $row['url'],
+        'caption' => $row['caption'],
+        'fileCount' => (int)$row['fileCount'],
+        'parentCount' => (int)$row['parentCount'],
+        'childCount' => (int)$row['childCount']
+      );
+    }, $rows);
+  }
+
+  /**
+   * @return array Array of all dir data, intended for JSON-encoded output.
+   */
+  public function get_dirs_array() {
+    $rows = $this->db->fetch_all('
+      SELECT
+        `DIRS`.*,
+        COUNT(`FILES`.`id`) AS `fileCount`
+      FROM `DIRS` LEFT JOIN `FILES`
+      ON `DIRS`.`id` = `FILES`.`dir_id`
+      GROUP BY `DIRS`.`id`
+      ORDER BY `DIRS`.`path`
+    ');
+
+    // typecasting
+    return array_map(function ($row) {
+      return array(
+        'id' => (int)$row['id'],
+        'path' => $row['path'],
+        'fileCount' => (int)$row['fileCount']
+      );
+    }, $rows);
+  }
 }
 ?>

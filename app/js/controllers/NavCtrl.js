@@ -1,15 +1,7 @@
 angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
     RefilerGalleryModel, RefilerModel) {
-  // init
+  $scope.RefilerModel = RefilerModel;
   $scope.searchText = '';
-
-  // populate tab content
-  RefilerModel.getTags().then(function (tags) {
-    $scope.tags = tags;
-  });
-  RefilerModel.getDirs().then(function (dirs) {
-    $scope.dirs = dirs;
-  });
 
   /**
    * When the user has entered search text, filter the tags by name. If the
