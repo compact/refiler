@@ -7,7 +7,7 @@ angular.module('app').provider('Auth', function () {
   };
 
   // service
-  this.$get = function service($http, $location, $q) {
+  this.$get = function service($http, $location, $q, RefilerModel) {
     var Auth = {};
 
     // whether the user is currently logged in
@@ -21,9 +21,9 @@ angular.module('app').provider('Auth', function () {
     Auth.permissions = _.clone(Auth.defaultPermissions);
 
     // get permissions right away
-    $http.get('get/get-user.php').success(function (data) {
-      Auth.loggedIn = data.user.loggedIn;
-      Auth.permissions = data.user.permissions;
+    RefilerModel.getUser().then(function (user) {
+      Auth.loggedIn = user.loggedIn;
+      Auth.permissions = user.permissions;
     });
 
     /**

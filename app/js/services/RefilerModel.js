@@ -1,40 +1,43 @@
 angular.module('app').service('RefilerModel', function ($http, $q) {
+  var self = this, deferreds = {};
+
+  deferreds.user = $q.defer();
+  deferreds.tags = $q.defer();
+  deferreds.dirs = $q.defer();
+
+  this.user = null;
   this.tags = null;
   this.dirs = null;
+
+  $http.get('get/get-user-tags-dirs.php').success(function (data) {
+    deferreds.user.resolve(data.user);
+    deferreds.tags.resolve(data.tags);
+    deferreds.dirs.resolve(data.dirs);
+
+    // these can be used when it's clear the promises must have resolved
+    self.user = data.user;
+    self.tags = data.tags;
+    self.dirs = data.dirs;
+  });
+
+  /**
+   * @return Promise
+   */
+  this.getUser = function () {
+    return deferreds.user.promise;
+  };
 
   /**
    * @return Promise
    */
   this.getTags = function () {
-    if (this.tags !== null) {
-      return $q.when(this.tags);
-    } else {
-      var self = this, deferred = $q.defer();
-
-      $http.get('get/get-tags.php').success(function (data) {
-        self.tags = data.tags;
-        deferred.resolve(self.tags);
-      });
-
-      return deferred.promise;
-    }
+    return deferreds.tags.promise;
   };
 
   /**
    * @return Promise
    */
   this.getDirs = function () {
-    if (this.dirs !== null) {
-      return $q.when(this.dirs);
-    } else {
-      var self = this, deferred = $q.defer();
-
-      $http.get('get/get-dirs.php').success(function (data) {
-        self.dirs = data.dirs;
-        deferred.resolve(self.dirs);
-      });
-
-      return deferred.promise;
-    }
+    return deferreds.dirs.promise;
   };
 });
