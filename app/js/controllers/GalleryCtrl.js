@@ -1,30 +1,27 @@
+/**
+ * Remember the route changes for each tag or dir, so this controller does not
+ *   persist through those changes.
+ */
 angular.module('app').controller('GalleryCtrl', function ($scope, $modal, Auth,
     Lightbox, Prefs, Refiler, RefilerGalleryModel, RefilerModals) {
-  // the following properties are set only once, when the tag or dir is loaded,
-  // since the route changes for each tag or dir
   if (RefilerGalleryModel.type === 'tag') {
-    // tag properties
-    $scope.tag = {};
+    // shortcut to not pollute the HTML with "RefilerGalleryModel.tag"
+    $scope.tag = RefilerGalleryModel.tag;
 
     Refiler.page.title = RefilerGalleryModel.tag.name;
-    $scope.tag.parents = RefilerGalleryModel.tag.parents;
-    $scope.tag.children = RefilerGalleryModel.tag.children;
   } else if (RefilerGalleryModel.type === 'dir') {
-    // dir properties
-    $scope.dir = {};
+    $scope.dir = RefilerGalleryModel.dir;
 
     Refiler.page.title = '/' + RefilerGalleryModel.dir.path;
   }
 
-  // files
+  // services
+  $scope.Auth = Auth;
+  $scope.Prefs = Prefs;
   $scope.RefilerGalleryModel = RefilerGalleryModel;
 
   // pagination
-  $scope.Prefs = Prefs;
   $scope.page = 1;
-
-  // Auth
-  $scope.Auth = Auth;
 
   // alerts
   $scope.alerts = [];
