@@ -1,5 +1,5 @@
 /**
- * Login or activate.
+ * Login or activate a user account.
  */
 angular.module('app').controller('LoginCtrl', function ($scope, $location,
     $routeParams, Auth, Refiler) {
@@ -35,7 +35,6 @@ angular.module('app').controller('LoginCtrl', function ($scope, $location,
     // login
     Auth.login($scope.action, credentials).then(function () {
       $location.path($location.search().path || '/');
-      $scope.disabled = false;
     }, function (error) {
       $scope.alerts.push({'message': error});
       $scope.disabled = false;
