@@ -1,6 +1,7 @@
 <div ng-controller="MenuCtrl" class="stack btn-toolbar unselectable">
 
-  <div class="btn-group">
+  <!-- view options -->
+  <div class="btn-group" ng-if="Auth.permissions.view">
     <button class="btn btn-sm btn-default dropdown-toggle">
       <i class="fa fa-fw fa-cog"></i>
       Options
@@ -49,7 +50,7 @@
 
 
   <!-- user menu -->
-  <div class="btn-group" ng-if="Auth.loggedIn">
+  <div class="btn-group" ng-if="Auth.permissions.edit">
 
     <div class="btn-group">
       <button class="btn btn-sm btn-default dropdown-toggle">
