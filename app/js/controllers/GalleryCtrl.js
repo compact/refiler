@@ -12,7 +12,7 @@ angular.module('app').controller('GalleryCtrl', function ($scope, $modal, Auth,
   } else if (RefilerGalleryModel.type === 'dir') {
     $scope.dir = RefilerGalleryModel.dir;
 
-    Refiler.page.title = '/' + RefilerGalleryModel.dir.path;
+    Refiler.page.title = RefilerGalleryModel.dir.formatNestedLink();
   }
 
   // services

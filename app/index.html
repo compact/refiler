@@ -92,8 +92,8 @@
   <!-- content -->
   <div id="content">
     <!-- title -->
-    <h1 class="stack" ng-class="{'text-danger': page.error}">
-      {{page.title}}
+    <h1 class="stack" ng-class="{'text-danger': page.error}"
+        ng-bind-html="page.title">
     </h1>
 
     <!-- ngRoute view; show only if there is no $routeChangeError -->
