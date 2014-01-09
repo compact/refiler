@@ -42,4 +42,11 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
     return type === RefilerGalleryModel.type &&
       id === RefilerGalleryModel[type].id;
   };
+
+  $scope.perfectScrollbarOptions = {
+    'wheelSpeed': 60,
+    'wheelPropagation': true,
+    'minScrollbarLength': 100,
+    'suppressScrollX': true
+  };
 });

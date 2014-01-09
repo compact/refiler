@@ -66,38 +66,35 @@ ul.horizontal li {
   width: 176px;
   height: 100%;
 }
-#side-bar input {
-  position: relative;
-  z-index: 9;
-
+#nav-list-filter {
   width: 176px;
   height: 26px;
 }
-#side-bar .nav-list {
-  margin-top: -26px; /* temporary fix for 100% height with the input above */
-  padding-top: 26px;
-
+#nav-list-container {
+  position: fixed;
+  top: 26px;
+  bottom: 0;
+  width: 187px;
+  overflow: hidden;
+}
+#nav-list-container ul {
+  overflow: hidden;
   width: 176px;
-  height: 100%;
-
-  overflow-x: hidden;
   white-space: nowrap;
-
   border-right: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   background-color: #f0f2f6;
-
   font-size: 14px;
   line-height: 16px;
 }
-#side-bar .nav-list a {
+#nav-list-container ul a {
   padding: 0 0 0 8px;
   height: 16px;
   color: #000;
 }
-#side-bar .nav-list a:hover,
-#side-bar .nav-list a:focus,
-#side-bar .nav-list a:active {
+#nav-list-container ul a:hover,
+#nav-list-container ul a:focus,
+#nav-list-container ul a:active {
   background-color: #000;
   color: #fff;
 }
@@ -253,4 +250,10 @@ ul.horizontal li {
 
 #edit-file-caption {
   height: 100px;
+}
+
+/********************************************************** perfect-scrollbar */
+
+.ps-container .ps-scrollbar-y-rail {
+  opacity: 0.4;
 }
