@@ -57,8 +57,9 @@
         <!-- tags -->
         <li ng-show="RefilerModel.tags.length > 0">
           <strong>Tags</strong>
+          ({{filteredTags.length}} of {{RefilerModel.tags.length}})
         </li>
-        <li ng-repeat="tag in RefilerModel.tags | filter: tagFilter(searchText)">
+        <li ng-repeat="tag in filteredTags = (RefilerModel.tags | filter: tagFilter(searchText))">
           <a href="#!/tag/{{tag.url}}" title="{{tag.caption}}"
               ng-class="{'selected': isSelected('tag', tag.id)}">
             {{tag.name}}
@@ -71,8 +72,9 @@
         <!-- dirs -->
         <li ng-show="RefilerModel.dirs.length > 0">
           <strong>Folders</strong>
+          ({{filteredDirs.length}} of {{RefilerModel.dirs.length}})
         </li>
-        <li ng-repeat="dir in RefilerModel.dirs | filter: dirFilter(searchText)">
+        <li ng-repeat="dir in filteredDirs = (RefilerModel.dirs | filter: dirFilter(searchText))">
           <a href="#!/dir/{{dir.path}}"
               ng-class="{'selected': isSelected('dir', dir.id)}"
               tooltip="{{dir.path}} [{{dir.fileCount}}]"
