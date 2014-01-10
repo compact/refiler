@@ -60,15 +60,15 @@ try {
       ));
     }
   }
+
+  echo json_encode(array(
+    'success' => true,
+    'users' => $auth->get_user_arrays()
+  ));
 } catch (\Exception $e) {
   echo json_encode(array(
     'success' => false,
     'error' => $e->getMessage()
   ));
 }
-
-echo json_encode(array(
-  'success' => true
-));
-
 ?>

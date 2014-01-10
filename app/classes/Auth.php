@@ -145,7 +145,10 @@ class Auth {
         'permissions' => self::encode_permissions($user->getMergedPermissions())
       );
       if (!$user->isActivated()) {
-        $user_array['activationCode'] = $user->getActivationCode();
+        // getActivationCode() generates a new activation code; an existing
+        // activation code is stored in $user->activation_code
+        $user_array['activationCode'] = !empty($user->activation_code)
+          ? $user->activation_code : $user->getActivationCode();
       }
 
       $user_arrays[] = $user_array;

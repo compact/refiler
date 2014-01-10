@@ -923,10 +923,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       };
     },
     'submit': function (scope) {
+      scope.disabled = true;
       $http.post('post/edit-users.php', {
         'users': scope.users
-      }).success(function () {
-        scope.$close();
+      }).success(function (data) {
+        scope.users = data.users;
+        scope.disabled = false;
       }).error(scope.$httpErrorHandler);
     }
   };
