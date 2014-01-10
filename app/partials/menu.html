@@ -117,13 +117,13 @@
       <ul class="dropdown-menu">
         <li>
           <a ng-click="openModal('createDir')">
-            <i class="fa fa-fw fa-folder-open"></i>
+            <i class="fa fa-fw fa-folder-open-o"></i>
             Create
           </a>
         </li>
         <li>
           <a ng-click="openModal('moveDir')">
-            <i class="fa fa-fw fa-folder-open"></i>
+            <i class="fa fa-fw fa-folder-open-o"></i>
             Rename
           </a>
         </li>
@@ -149,6 +149,22 @@
           <a ng-click="updateDir()">
             <i class="fa fa-fw fa-refresh"></i>
             Reload data
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-group" ng-show="subdirs.length > 0">
+      <button class="btn btn-sm btn-default dropdown-toggle">
+        <i class="fa fa-fw fa-folder"></i>
+        Subfolders ({{subdirs.length}})
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li ng-repeat="dir in subdirs = dir.getSubdirs()">
+          <a href="#!/dir/{{dir.path}}">
+            <i class="fa fa-fw fa-folder-o"></i>
+            /{{dir.path}}
           </a>
         </li>
       </ul>
