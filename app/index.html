@@ -48,8 +48,8 @@
   <div id="side-bar" ng-controller="NavCtrl"
       ng-show="RefilerModel.tags.length + RefilerModel.dirs.length > 0">
     <!-- search filter -->
-    <input id="nav-list-filter" type="text" ng-model="searchText" value="asdf"
-      placeholder="Filter tags and folders">
+    <input id="nav-list-filter" type="search" ng-model="searchText" value="asdf"
+      placeholder="Filter tags and folders" class="form-control">
 
     <!-- navigation list of tags and dirs -->
     <div id="nav-list-container" perfect-scrollbar="perfectScrollbarOptions">
