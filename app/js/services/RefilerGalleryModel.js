@@ -53,6 +53,13 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
     return _.pluck(_.where(this.files, {'selected': true}), 'id');
   };
 
+  /**
+   * @return boolean True if at least one file is selected.
+   */
+  this.hasSelectedFiles = function () {
+    return _.some(this.files, {'selected': true});
+  };
+
   this.addFile = function (file) {
     this.files.push(new RefilerFile(file));
     this.files = sortFiles(this.files);

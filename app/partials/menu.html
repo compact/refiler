@@ -171,7 +171,8 @@
     </div>
 
     <div class="btn-group" ng-show="tag || dir">
-      <button class="btn btn-sm btn-default dropdown-toggle">
+      <button class="btn btn-sm dropdown-toggle"
+          ng-class="RefilerGalleryModel.hasSelectedFiles() ? 'btn-warning' : 'btn-default'">
         <i class="fa fa-fw fa-check-circle"></i>
         Selection
         <span class="caret"></span>

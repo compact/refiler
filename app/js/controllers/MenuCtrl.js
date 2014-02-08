@@ -3,6 +3,7 @@ angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
   $scope.Prefs = Prefs;
   $scope.reload = $route.reload;
   $scope.Auth = Auth;
+  $scope.RefilerGalleryModel = RefilerGalleryModel;
 
 
 
