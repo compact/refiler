@@ -6,6 +6,9 @@
 @import "compass/css3";
 @import "compass/css3/user-interface";
 
+$small-gutter-width: 8px;
+$large-gutter-width: 20px;
+
 $side-bar-width: 176px;
 $perfect-scrollbar-width: 8px;
 
@@ -65,8 +68,6 @@ a {
 
 h1 {
   padding: 0;
-  font-size: 36px;
-  line-height: 36px;
 }
 
 ::selection {
@@ -81,23 +82,13 @@ h1 {
 
 //////////////////////////////////////////////////////////////// general classes
 
-ul.horizontal {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-
-  li {
-    float: left;
-  }
-}
-
 .unselectable {
   @include user-select(none);
 }
 
 .stack { // element stacked in the main layout
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: $large-gutter-width;
 }
 
 .selected {
@@ -107,7 +98,7 @@ ul.horizontal {
 .details {
   color: #888;
   font-size: 10px;
-  line-height: 12px;
+  line-height: 1.3;
   vertical-align: middle;
 }
 
@@ -144,12 +135,10 @@ ul.horizontal {
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     background-color: #f0f2f6;
-    font-size: 14px;
-    line-height: 16px;
+    line-height: 1.25;
 
     a {
-      padding: 0 0 0 8px;
-      height: 16px;
+      padding: 0 0 0 $small-gutter-width;
       color: #000;
 
       &:hover, &:focus, &:active {
@@ -163,17 +152,32 @@ ul.horizontal {
 //////////////////////////////////////////////////////////////////////// gallery
 
 #content {
-  margin: 0 0 16px 207px;
-  padding: 16px 0 0; // instead of margin-top to keep .nav at the top left
+  // offset by #side-nav
+  margin-left: ($side-bar-width + $perfect-scrollbar-width);
+  // 0 right padding to have the thumbs in #gallery wrap closer to the edge
+  padding: $large-gutter-width 0 $large-gutter-width $large-gutter-width;
 
   @include xxs-xs {
-    margin-left: 20px;
+    margin-left: 0;
+  }
+
+  // all children except #gallery get margin
+  .stack:not(#gallery) {
+    margin-right: $large-gutter-width;
   }
 }
 
-#gallery li {
-  margin: 0 12px 12px 0;
-  width: 135px;
+#gallery {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  list-style-type: none;
+
+  li {
+    display: inline-block;
+    margin: 0 $small-gutter-width $small-gutter-width 0;
+    width: 135px;
+  }
 }
 
 .file-thumb {
@@ -214,25 +218,24 @@ ul.horizontal {
 /////////////////////////////////////////////////////////////////////////// menu
 
 #menu > .btn-group {
-  margin-bottom: 5px;
+  margin-bottom: $small-gutter-width;
 }
 
 /////////////////////////////////////////////////////////////////////// lightbox
 
 .lightbox-image-container {
   position: relative;
-  margin-top: 8px;
   text-align: center;
   z-index: 110;
 }
 
 .lightbox-image-caption {
   position: absolute;
-  top: 4px;
-  left: 4px;
-  font-size: 20px;
+  top: 0;
+  left: 0;
+  margin: $small-gutter-width;
+  font-size: 1.5em;
   font-weight: bold;
-  line-height: 30px;
   text-align: left;
   text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
 
@@ -243,13 +246,18 @@ ul.horizontal {
 }
 
 .lightbox-image-details {
-  margin-top: 8px;
-  font-size: 10px;
-  line-height: 12px;
+  margin-bottom: $small-gutter-width;
+  text-align: center;
+
+  span {
+    display: inline-block;
+    margin: 0 $small-gutter-width / 2;
+    white-space: nowrap;
+  }
 }
 
 .lightbox-nav {
-  margin: 0 auto;
+  margin: 0 auto $small-gutter-width;
   width: 250px; // arbitrary, used to center against .lightbox-remove
   text-align: center;
 }

@@ -31,11 +31,11 @@
     previous-text="&lsaquo;"
     next-text="&rsaquo;"
     ng-show="RefilerGalleryModel.files.length > Prefs.filesPerPage"
-    class="unselectable">
+    class="stack unselectable">
 </pagination>
 
 <!-- gallery of files -->
-<ul id="gallery" class="horizontal clearfix">
+<ul id="gallery" class="stack clearfix">
   <li ng-repeat="file in RefilerGalleryModel.files | limitTo: (page - 1) * Prefs.filesPerPage - RefilerGalleryModel.files.length | limitTo: Prefs.filesPerPage">
     <div class="file-thumb" ng-class="file.isImage() ? 'image-thumb' : ''">
       <a ng-href="{{file.getPath()}}" target="_blank"
@@ -74,5 +74,5 @@
     previous-text="&lsaquo;"
     next-text="&rsaquo;"
     ng-show="RefilerGalleryModel.files.length > Prefs.filesPerPage"
-    class="unselectable">
+    class="stack unselectable">
 </pagination>
