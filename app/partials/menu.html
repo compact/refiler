@@ -7,39 +7,42 @@
       <i class="fa fa-fw fa-bars"></i>
       Navigation
     </a>
-    <button class="btn btn-sm btn-default dropdown-toggle">
-      <i class="fa fa-fw fa-cog"></i>
-      Options
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a ng-click="Prefs.toggle('showFileDetails')">
-          <i class="fa fa-fw" ng-class="{'fa-check': Prefs.showFileDetails}">
-          </i>
-          Show file details
-        </a>
-      </li>
-      <li class="divider"></li>
-      <li class="dropdown-submenu">
-        <a><i class="fa fa-fw"></i> Sort</a>
-        <ul class="dropdown-menu">
-          <li><a pref key="sort" value="name" label="A → Z"></a></li>
-          <li><a pref key="sort" value="-date" label="New → Old"></a></li>
-          <li><a pref key="sort" value="date" label="Old → New"></a></li>
-          <li><a pref key="sort" value="-size" label="Big → Small"></a></li>
-        </ul>
-      </li>
-      <li class="dropdown-submenu">
-        <a><i class="fa fa-fw"></i> Files per page</a>
-        <ul class="dropdown-menu">
-          <li><a pref key="filesPerPage" value="30"></a></li>
-          <li><a pref key="filesPerPage" value="60"></a></li>
-          <li><a pref key="filesPerPage" value="90"></a></li>
-          <li><a pref key="filesPerPage" value="120"></a></li>
-        </ul>
-      </li>
-    </ul>
+
+    <div class="btn-group">
+      <button class="btn btn-sm btn-default dropdown-toggle">
+        <i class="fa fa-fw fa-cog"></i>
+        Options
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="Prefs.toggle('showFileDetails')">
+            <i class="fa fa-fw" ng-class="{'fa-check': Prefs.showFileDetails}">
+            </i>
+            Show file details
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li class="dropdown-submenu">
+          <a><i class="fa fa-fw"></i> Sort</a>
+          <ul class="dropdown-menu">
+            <li><a pref key="sort" value="name" label="A → Z"></a></li>
+            <li><a pref key="sort" value="-date" label="New → Old"></a></li>
+            <li><a pref key="sort" value="date" label="Old → New"></a></li>
+            <li><a pref key="sort" value="-size" label="Big → Small"></a></li>
+          </ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a><i class="fa fa-fw"></i> Files per page</a>
+          <ul class="dropdown-menu">
+            <li><a pref key="filesPerPage" value="30"></a></li>
+            <li><a pref key="filesPerPage" value="60"></a></li>
+            <li><a pref key="filesPerPage" value="90"></a></li>
+            <li><a pref key="filesPerPage" value="120"></a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 
 
