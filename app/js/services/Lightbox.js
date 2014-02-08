@@ -39,10 +39,14 @@ angular.module('app').provider('Lightbox', function () {
       $modal.open({
         'templateUrl': 'partials/lightbox.html',
         'controller': ['$scope', function ($scope) {
-          // modal scope, a child of $rootScope
+          // $scope is the modal scope, a child of $rootScope
+
           $scope.Lightbox = Lightbox;
           $scope.Auth = Auth;
+
+          // modals can be opened on top of the lightbox
           $scope.openModal = RefilerModals.open;
+
           opened = true;
         }],
         'windowClass': 'lightbox-modal'
