@@ -15,7 +15,8 @@
     "font-awesome": "~4.0.3",
     "angular-file-upload": "v0.2.9.6",
     "angular-loading-bar": "~0.2.0",
-    "perfect-scrollbar": "~0.4.6"
+    "perfect-scrollbar": "~0.4.6",
+    "bootstrap-sass": "git://github.com/twbs/bootstrap-sass.git#~3.1.0+2"
   },
   "devDependencies": {
     "angular-mocks": "~1.2",
