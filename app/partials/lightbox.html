@@ -2,42 +2,41 @@
   <!-- close button -->
   <button class="close" aria-hidden="true" ng-click="$dismiss()">×</button>
 
-  <!-- navigation -->
+  <!-- buttons -->
   <div class="lightbox-nav">
     <div class="btn-group">
-      <button class="btn btn-xs btn-default" ng-click="Lightbox.prevImage()">← Prev</button>
-      <button class="btn btn-xs btn-default" ng-click="Lightbox.nextImage()">Next →</button>
+      <button class="btn btn-sm btn-default" ng-click="Lightbox.prevImage()">
+        <i class="fa fa-fw fa-long-arrow-left"></i>
+      </button>
+      <button class="btn btn-sm btn-default" ng-click="Lightbox.nextImage()">
+        <i class="fa fa-fw fa-long-arrow-right"></i>
+      </button>
+    </div>
+
+    <a ng-href="{{Lightbox.file.getPath()}}" target="_blank"
+        class="btn btn-sm btn-default" title="Open in new tab">
+      <i class="fa fa-fw fa-search-plus"></i>
+    </a>
+
+    <div ng-if="Auth.permissions.edit" class="btn-group">
+      <!-- file edit features -->
+      <button class="btn btn-sm btn-primary" title="Edit"
+          ng-click="openModal('editFile', Lightbox.file)">
+        <i class="fa fa-fw fa-edit"></i>
+      </button>
+      <button class="btn btn-sm btn-danger" title="Delete"
+          ng-click="openModal('deleteFile', Lightbox.file)">
+        <i class="fa fa-fw fa-trash-o"></i>
+      </button>
     </div>
   </div>
 
   <!-- image details -->
   <div class="lightbox-image-details">
-    <div class="inline-left">
-      <div class="file-name">{{Lightbox.file.name}}</div>
-      <div>
-        {{Lightbox.file.formatDimensions()}},
-        {{Lightbox.file.formatSize()}},
-        {{Lightbox.file.formatDate()}}
-      </div>
-    </div><!--
- --><div class="inline-right">
-      <a ng-href="{{Lightbox.file.getPath()}}" target="_blank"
-          class="btn btn-xs btn-success" title="Open in new tab">
-        <i class="fa fa-fw fa-search-plus"></i>
-      </a>
-
-      <div ng-if="Auth.permissions.edit" class="btn-group">
-        <!-- file edit features -->
-        <button class="btn btn-xs btn-primary" title="Edit"
-            ng-click="openModal('editFile', Lightbox.file)">
-          <i class="fa fa-fw fa-edit"></i>
-        </button>
-        <button class="btn btn-xs btn-danger" title="Delete"
-            ng-click="openModal('deleteFile', Lightbox.file)">
-          <i class="fa fa-fw fa-trash-o"></i>
-        </button>
-      </div>
-    </div>
+    {{Lightbox.file.name}},
+    {{Lightbox.file.formatDimensions()}},
+    {{Lightbox.file.formatSize()}},
+    {{Lightbox.file.formatDate()}}
   </div>
 
   <!-- image -->
