@@ -241,7 +241,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
                 '<td style="white-space: nowrap;">' +
                   '<button type="button" class="btn btn-xs btn-danger"' +
                       ' ng-click="item.remove()">' +
-                    '<i class="fa fa-trash-o"></i>' +
+                    '<i class="fa fa-fw fa-trash-o"></i>' +
                   '</button>' +
                 '</td>' +
               '</tr>' +
@@ -879,7 +879,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
                   '<div ng-if="user.id">' +
                     '<button class="btn btn-xs btn-danger" title="Delete"' +
                         ' ng-click="deleteUser(user)">' +
-                      '<i class="fa fa-trash-o"></i>' +
+                      '<i class="fa fa-fw fa-trash-o"></i>' +
                     '</button>' +
                   '</div>' +
                 '</td>' +

@@ -23,18 +23,18 @@
  --><div class="inline-right">
       <a ng-href="{{Lightbox.file.getPath()}}" target="_blank"
           class="btn btn-xs btn-success" title="Open in new tab">
-        <i class="fa fa-search-plus"></i>
+        <i class="fa fa-fw fa-search-plus"></i>
       </a>
 
       <div ng-if="Auth.permissions.edit" class="btn-group">
         <!-- file edit features -->
         <button class="btn btn-xs btn-primary" title="Edit"
             ng-click="openModal('editFile', Lightbox.file)">
-          <i class="fa fa-edit"></i>
+          <i class="fa fa-fw fa-edit"></i>
         </button>
         <button class="btn btn-xs btn-danger" title="Delete"
             ng-click="openModal('deleteFile', Lightbox.file)">
-          <i class="fa fa-trash-o"></i>
+          <i class="fa fa-fw fa-trash-o"></i>
         </button>
       </div>
     </div>
