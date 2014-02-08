@@ -3,6 +3,8 @@
  */
 
 @import "../../bower_components/bootstrap-sass/vendor/assets/stylesheets/bootstrap/_variables.scss";
+@import "compass/css3";
+@import "compass/css3/user-interface";
 
 $side-bar-width: 176px;
 $perfect-scrollbar-width: 8px;
@@ -46,9 +48,7 @@ ul.horizontal {
 }
 
 .unselectable {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
+  @include user-select(none);
 }
 
 .stack { // element stacked in the main layout
@@ -233,9 +233,7 @@ input[type="search"]::-webkit-search-cancel-button {
     left: 100%;
     margin-top: -6px;
     margin-left: -1px;
-    -webkit-border-radius: 0 6px 6px 6px;
-    -moz-border-radius: 0 6px 6px 6px;
-    border-radius: 0 6px 6px 6px;
+    @include border-radius(4px);
   }
 
   &:hover > .dropdown-menu {
@@ -266,9 +264,7 @@ input[type="search"]::-webkit-search-cancel-button {
     & > .dropdown-menu {
       left: -100%;
       margin-left: 10px;
-      -webkit-border-radius: 6px 0 6px 6px;
-      -moz-border-radius: 6px 0 6px 6px;
-      border-radius: 6px 0 6px 6px;
+      @include border-radius(4px);
     }
   }
 }
