@@ -76,10 +76,11 @@ angular.module('app').directive('lightboxImg', function ($window, cfpLoadingBar,
           imageDisplayWidth + 42,
           Lightbox.minModalWidth
         );
-        // the modal width cannot be larger than the window width
+        // first case: the modal width cannot be larger than the window width
         // 20px = arbitrary value larger than the vertical scrollbar width in
         //        order to avoid having a horizontal scrollbar
-        if (modalWidth >= windowWidth - 20) {
+        // second case: Bootstrap modals are not centered below 768px
+        if (modalWidth >= windowWidth - 20 || windowWidth < 768) {
           modalWidth = 'auto';
         }
 
