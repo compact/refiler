@@ -63,9 +63,17 @@ ul.horizontal li {
 
 #side-bar {
   position: fixed;
+  display: inline-block;
   width: 176px;
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  #side-bar {
+    display: none;
+  }
+}
+
 #nav-list-filter {
   width: 176px;
   height: 26px;
@@ -105,6 +113,13 @@ ul.horizontal li {
   margin: 0 0 16px 207px;
   padding: 16px 0 0; /* instead of margin-top to keep .nav at the top left */
 }
+
+@media (max-width: 768px) {
+  #content {
+    margin-left: 20px;
+  }
+}
+
 #gallery li {
   margin: 0 12px 12px 0;
   width: 135px;
