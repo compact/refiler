@@ -8,10 +8,15 @@ angular.module('app').directive('lightboxImg', function ($window, cfpLoadingBar,
 
       // handler for resizing the image and the containing modal
       resize = function () {
-        var imageWidth, imageHeight,
+        var windowWidth, windowHeight,
+          imageWidth, imageHeight,
           imageDisplayWidth, imageDisplayHeight,
           imageMaxWidth, imageMaxHeight,
           modalWidth, modalHeight;
+
+        // get the window dimensions
+        windowWidth = $windowElement.width();
+        windowHeight = $windowElement.height();
 
         imageWidth = scope.Lightbox.file.width;
         imageHeight = scope.Lightbox.file.height;
@@ -26,13 +31,13 @@ angular.module('app').directive('lightboxImg', function ($window, cfpLoadingBar,
         //              + 20px padding of .modal-body)
         // with the goal of 30px side margins; however, the actual side margins
         // will be slightly less (at 22.5px) due to the vertical scrollbar
-        imageMaxWidth = $windowElement.width() - 102;
+        imageMaxWidth = windowWidth - 102;
         // 156px = 102px as above
         //         + 22px height of .lightbox-nav
         //         + 8px margin-top of .lightbox-image-details
         //         + 24px height of .lightbox-image-details
         //         + 8px margin-top of .lightbox-image-container
-        imageMaxHeight = $windowElement.height() - 164;
+        imageMaxHeight = windowHeight - 164;
 
         // resize the image if it is too wide or tall
         if (imageWidth > imageMaxWidth && imageHeight > imageMaxHeight) {
@@ -64,12 +69,20 @@ angular.module('app').directive('lightboxImg', function ($window, cfpLoadingBar,
         }
 
         // calculate the dimensions of the modal container
+
         // 42px = 2 * (1px border of .modal-content
         //        + 20px padding of .modal-body)
         modalWidth = Math.max(
           imageDisplayWidth + 42,
-          Lightbox.minModalWidth || 0
+          Lightbox.minModalWidth
         );
+        // the modal width cannot be larger than the window width
+        // 20px = arbitrary value larger than the vertical scrollbar width in
+        //        order to avoid having a horizontal scrollbar
+        if (modalWidth >= windowWidth - 20) {
+          modalWidth = 'auto';
+        }
+
         // 104px = 42px as above
         //         + 22px height of .lightbox-nav
         //         + 8px margin-top of .lightbox-image-details
@@ -77,8 +90,12 @@ angular.module('app').directive('lightboxImg', function ($window, cfpLoadingBar,
         //         + 8px margin-top of .lightbox-image-container
         modalHeight = Math.max(
           imageDisplayHeight + 104,
-          Lightbox.minModalHeight || 0
+          Lightbox.minModalHeight
         );
+        // the modal height cannot be larger than the window height
+        if (modalHeight >= windowHeight) {
+          modalHeight = 'auto';
+        }
 
         // resize the image
         element.css({
