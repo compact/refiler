@@ -1,6 +1,7 @@
 /*!
  * Refiler.
  */
+
 body {
   margin: 0;
 /*  font-size: 13px;
@@ -11,6 +12,7 @@ a {
   cursor: pointer;
   /*color: #060;*/
 }
+
 h1 {
   padding: 0;
   font-size: 36px;
@@ -26,15 +28,16 @@ h1 {
   color: #fff;
 }
 
-/************************************************************ general classes */
+//////////////////////////////////////////////////////////////// general classes
 
 ul.horizontal {
   list-style-type: none;
   margin: 0;
   padding: 0;
-}
-ul.horizontal li {
-  float: left;
+
+  li {
+    float: left;
+  }
 }
 
 .unselectable {
@@ -43,7 +46,7 @@ ul.horizontal li {
   -ms-user-select: none;
 }
 
-.stack { /* element stacked in the main layout */
+.stack { // element stacked in the main layout
   margin-top: 0;
   margin-bottom: 20px;
 }
@@ -59,17 +62,15 @@ ul.horizontal li {
   vertical-align: middle;
 }
 
-/***************************************************************** navigation */
+///////////////////////////////////////////////////////////////////// navigation
 
 #side-bar {
   position: fixed;
   display: inline-block;
   width: 176px;
   height: 100%;
-}
 
-@media (max-width: 768px) {
-  #side-bar {
+  @media (max-width: 768px) {
     display: none;
   }
 }
@@ -78,44 +79,44 @@ ul.horizontal li {
   width: 176px;
   height: 26px;
 }
+
 #nav-list-container {
   position: fixed;
   top: 26px;
   bottom: 0;
   width: 187px;
   overflow: hidden;
-}
-#nav-list-container ul {
-  overflow: hidden;
-  width: 176px;
-  white-space: nowrap;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background-color: #f0f2f6;
-  font-size: 14px;
-  line-height: 16px;
-}
-#nav-list-container ul a {
-  padding: 0 0 0 8px;
-  height: 16px;
-  color: #000;
-}
-#nav-list-container ul a:hover,
-#nav-list-container ul a:focus,
-#nav-list-container ul a:active {
-  background-color: #000;
-  color: #fff;
+
+  ul {
+    overflow: hidden;
+    width: 176px;
+    white-space: nowrap;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #f0f2f6;
+    font-size: 14px;
+    line-height: 16px;
+
+    a {
+      padding: 0 0 0 8px;
+      height: 16px;
+      color: #000;
+
+      &:hover, &:focus, &:active {
+        background-color: #000;
+        color: #fff;
+      }
+    }
+  }
 }
 
-/******************************************************************** gallery */
+//////////////////////////////////////////////////////////////////////// gallery
 
 #content {
   margin: 0 0 16px 207px;
-  padding: 16px 0 0; /* instead of margin-top to keep .nav at the top left */
-}
+  padding: 16px 0 0; // instead of margin-top to keep .nav at the top left
 
-@media (max-width: 768px) {
-  #content {
+  @media (max-width: 768px) {
     margin-left: 20px;
   }
 }
@@ -124,18 +125,21 @@ ul.horizontal li {
   margin: 0 12px 12px 0;
   width: 135px;
 }
+
 .file-thumb {
   text-align: center;
   height: 110px;
   line-height: 100px;
+
+  img, i {
+    vertical-align: middle;
+  }
 }
-.file-thumb img,
-.file-thumb i {
-  vertical-align: middle;
-}
+
 .file-details {
   margin-top: 2px;
 }
+
 .file-name {
   overflow: hidden;
   white-space: nowrap;
@@ -148,14 +152,16 @@ ul.horizontal li {
   width: 50%;
   vertical-align: top;
 }
+
 .inline-left {
   text-align: left;
 }
+
 .inline-right {
   text-align: right;
 }
 
-/******************************************************************* lightbox */
+/////////////////////////////////////////////////////////////////////// lightbox
 
 .lightbox-image-container {
   position: relative;
@@ -163,6 +169,7 @@ ul.horizontal li {
   text-align: center;
   z-index: 110;
 }
+
 .lightbox-image-caption {
   position: absolute;
   top: 4px;
@@ -172,82 +179,89 @@ ul.horizontal li {
   line-height: 30px;
   text-align: left;
   text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+
+  span {
+    padding: 2px 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
 }
-.lightbox-image-caption span {
-  padding: 2px 4px;
-  background-color: rgba(255, 255, 255, 0.5);
-}
+
 .lightbox-image-details {
   margin-top: 8px;
   font-size: 10px;
   line-height: 12px;
 }
+
 .lightbox-nav {
   margin: 0 auto;
-  width: 150px; /* arbitrary, used to center against .lightbox-remove */
+  width: 150px; // arbitrary, used to center against .lightbox-remove
   text-align: center;
 }
 
-/********************************************************************** HTML5 */
+////////////////////////////////////////////////////////////////////////// HTML5
 
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: searchfield-cancel-button;
 }
 
-/****************************************************************** AngularJS */
+////////////////////////////////////////////////////////////////////// AngularJS
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
 
-/****************************************************************** Bootstrap */
+////////////////////////////////////////////////////////////////////// Bootstrap
 
-/**
- * http://stackoverflow.com/questions/18023493/bootstrap-3-dropdown-sub-menu-missing
- */
+// http://stackoverflow.com/questions/18023493/bootstrap-3-dropdown-sub-menu-missing
 .dropdown-submenu {
   position: relative;
-}
-.dropdown-submenu > .dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  -webkit-border-radius: 0 6px 6px 6px;
-  -moz-border-radius: 0 6px 6px 6px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover > .dropdown-menu {
-  display: block;
-}
-.dropdown-submenu > a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #ccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover > a:after {
-  border-left-color: #fff;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left > .dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  -webkit-border-radius: 6px 0 6px 6px;
-  -moz-border-radius: 6px 0 6px 6px;
-  border-radius: 6px 0 6px 6px;
+
+  & > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px 6px;
+    border-radius: 0 6px 6px 6px;
+  }
+
+  &:hover > .dropdown-menu {
+    display: block;
+  }
+
+  & > a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+  }
+
+  &:hover > a:after {
+    border-left-color: #fff;
+  }
+
+  &.pull-left {
+    float: none;
+
+    & > .dropdown-menu {
+      left: -100%;
+      margin-left: 10px;
+      -webkit-border-radius: 6px 0 6px 6px;
+      -moz-border-radius: 6px 0 6px 6px;
+      border-radius: 6px 0 6px 6px;
+    }
+  }
 }
 
-/********************************************************************* modals */
+///////////////////////////////////////////////////////////////////////// modals
 
 @media (min-width: 768px) {
   .modal-wide .modal-dialog {
@@ -266,11 +280,11 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 }*/
 
-.ng-file-over { /* angular-file-upload */
+.ng-file-over { // angular-file-upload
   font-weight: bold;
 }
 
-#curl-files-urls { /* textarea */
+#curl-files-urls { // textarea
   height: 300px;
   white-space: nowrap;
 }
@@ -279,7 +293,7 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 100px;
 }
 
-/********************************************************** perfect-scrollbar */
+////////////////////////////////////////////////////////////// perfect-scrollbar
 
 .ps-container .ps-scrollbar-y-rail {
   opacity: 0.4;
