@@ -21,9 +21,10 @@
       </div>
     </div><!--
  --><div class="inline-right">
-      <a ng-href="{{Lightbox.file.getPath()}}" target="_blank">
-        Open in new tab<!--
-   --></a>
+      <a ng-href="{{Lightbox.file.getPath()}}" target="_blank"
+          class="btn btn-xs btn-success" title="Open in new tab">
+        <i class="fa fa-search-plus"></i>
+      </a>
 
       <div ng-if="Auth.permissions.edit" class="btn-group">
         <!-- file edit features -->
