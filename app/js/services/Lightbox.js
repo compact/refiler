@@ -47,6 +47,13 @@ angular.module('app').provider('Lightbox', function () {
           // modals can be opened on top of the lightbox
           $scope.openModal = RefilerModals.open;
 
+          // update the file whenever the model updates
+          $scope.$watch(function () {
+            return RefilerGalleryModel.files[imageIndex];
+          }, function (file) {
+            Lightbox.file = file;
+          });
+
           opened = true;
         }],
         'windowClass': 'lightbox-modal'
