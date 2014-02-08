@@ -42,7 +42,7 @@ angular.module('app').factory('RefilerDir', function service(RefilerModel) {
   RefilerDir.prototype.getSubdirs = function () {
     var segment = this.path + '/';
     return _.where(RefilerModel.dirs, function (dir) {
-      return dir.path.indexOf(segment) !== -1;
+      return dir.path.indexOf(segment) === 0;
     });
   };
 
