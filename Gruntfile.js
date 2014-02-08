@@ -54,6 +54,10 @@ module.exports = function (grunt) {
           '.tmp/css/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
+      },
+      sass: {
+        files: ['<%= yeoman.app %>/css/sass/*.{scss,sass}'],
+        tasks: ['compass:compile']
       }
     },
 
@@ -342,6 +346,22 @@ module.exports = function (grunt) {
       }
     },
 
+    compass: {
+      watch: {
+        options: {
+          sassDir: '<%= yeoman.app %>/css/sass',
+          cssDir: '<%= yeoman.app %>/css',
+          watch: true // use the native compass watch command
+        }
+      },
+      compile: {
+        options: {
+          sassDir: '<%= yeoman.app %>/css/sass',
+          cssDir: '<%= yeoman.app %>/css'
+        }
+      }
+    },
+
     // since cdnify (grunt-google-cdn) replaces from the Google CDN only, we
     // replace the other scripts and stylesheets manually; see
     // https://npmjs.org/package/grunt-text-replace
@@ -401,6 +421,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'compass:compile',
     'clean:dist',
     'useminPrepare',
     'concurrent:dist',

@@ -3,3 +3,7 @@
 /app/vendor/
 /dist/
 /.tmp/
+
+# css
+/.sass-cache/
+/app/css/main.css
