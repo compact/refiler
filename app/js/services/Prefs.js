@@ -29,5 +29,5 @@ angular.module('app').provider('Prefs', function () {
     };
 
     return Prefs;
-  }
+  };
 });
