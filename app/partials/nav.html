@@ -1,0 +1,43 @@
+<div ng-controller="NavCtrl"
+    ng-show="RefilerModel.tags.length + RefilerModel.dirs.length > 0">
+  <!-- search filter -->
+  <input id="nav-list-filter" type="search" ng-model="searchText" value="asdf"
+    placeholder="Filter tags and folders" class="form-control">
+
+  <!-- navigation list of tags and dirs -->
+  <div id="nav-list-container" perfect-scrollbar="perfectScrollbarOptions">
+    <ul class="nav">
+      <!-- tags -->
+      <li ng-show="RefilerModel.tags.length > 0">
+        <strong>Tags</strong>
+        ({{filteredTags.length}} of {{RefilerModel.tags.length}})
+      </li>
+      <li ng-repeat="tag in filteredTags = (RefilerModel.tags | filter: tagFilter(searchText))">
+        <a href="#!/tag/{{tag.url}}" title="{{tag.caption}}"
+            ng-class="{'selected': isSelected('tag', tag.id)}">
+          {{tag.name}}
+          <span class="details">
+            {{tag.fileCount}}
+            {{tag.childCount > 0 ? '→ ' + tag.childCount : ''}}
+          </span>
+        </a>
+      </li>
+      <!-- dirs -->
+      <li ng-show="RefilerModel.dirs.length > 0">
+        <strong>Folders</strong>
+        ({{filteredDirs.length}} of {{RefilerModel.dirs.length}})
+      </li>
+      <li ng-repeat="dir in filteredDirs = (RefilerModel.dirs | filter: dirFilter(searchText))">
+        <a href="#!/dir/{{dir.path}}"
+            ng-class="{'selected': isSelected('dir', dir.id)}"
+            tooltip="{{dir.path}} [{{dir.fileCount}}]"
+            tooltip-placement="right"
+            tooltip-animation="false"
+            tooltip-append-to-body="true">
+          /{{dir.path}}
+          <span class="details">{{dir.fileCount}}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

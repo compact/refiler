@@ -148,6 +148,14 @@ angular.module('app').config(function ($routeProvider) {
   });
   $routeProvider.when('/dir/:dir*', dirRoute);
   $routeProvider.when('/dir/', dirRoute);
+  $routeProvider.when('/nav', {
+    'templateUrl': 'partials/nav.html',
+    'resolve': {
+      'data': ['RefilerModel', function (RefilerModel) {
+        RefilerModel.page.title = 'Navigation';
+      }]
+    }
+  });
   $routeProvider.when('/login', loginRoute);
   $routeProvider.when('/activate/:activationCode', loginRoute);
   $routeProvider.when('/', {
