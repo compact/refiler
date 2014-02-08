@@ -2,15 +2,17 @@
  * Refiler.
  */
 
+$side-bar-width: 176px;
+$perfect-scrollbar-width: 8px;
+
+///////////////////////////////////////////////////////////////////////// layout
+
 body {
-  margin: 0;
-/*  font-size: 13px;
-  line-height: 15px;*/
+  font-size: $font-size-base;
 }
 
 a {
   cursor: pointer;
-  /*color: #060;*/
 }
 
 h1 {
@@ -23,6 +25,7 @@ h1 {
   background-color: #000;
   color: #fff;
 }
+
 ::-moz-selection {
   background-color: #000;
   color: #fff;
@@ -67,7 +70,7 @@ ul.horizontal {
 #side-bar {
   position: fixed;
   display: inline-block;
-  width: 176px;
+  width: $side-bar-width;
   height: 100%;
 
   @media (max-width: 768px) {
@@ -76,7 +79,7 @@ ul.horizontal {
 }
 
 #nav-list-filter {
-  width: 176px;
+  width: 100%;
   height: 26px;
 }
 
@@ -84,12 +87,13 @@ ul.horizontal {
   position: fixed;
   top: 26px;
   bottom: 0;
-  width: 187px;
+  // perfect-scrollbar is placed outside #side-bar
+  width: $side-bar-width + $perfect-scrollbar-width;
   overflow: hidden;
 
   ul {
     overflow: hidden;
-    width: 176px;
+    width: $side-bar-width;
     white-space: nowrap;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
@@ -296,5 +300,6 @@ input[type="search"]::-webkit-search-cancel-button {
 ////////////////////////////////////////////////////////////// perfect-scrollbar
 
 .ps-container .ps-scrollbar-y-rail {
+  right: 0;
   opacity: 0.4;
 }
