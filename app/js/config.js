@@ -182,6 +182,13 @@ angular.module('app').config(function (AuthProvider) {
 
 
 
+angular.module('app').config(function (LightboxProvider) {
+  LightboxProvider.minModalWidth = 400;
+  LightboxProvider.minModalHeight = 200;
+});
+
+
+
 angular.module('app').config(function (RefilerProvider) {
   RefilerProvider.config.defaultParentlessTagsInNav = true;
   RefilerProvider.config.defaultParentlessDirsInNav = true;
