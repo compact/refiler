@@ -243,28 +243,6 @@ h1 {
 
 /////////////////////////////////////////////////////////////////////// lightbox
 
-.lightbox-image-container {
-  position: relative;
-  text-align: center;
-  z-index: 110;
-}
-
-.lightbox-image-caption {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: $small-gutter-width;
-  font-size: 1.5em;
-  font-weight: bold;
-  text-align: left;
-  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
-
-  span {
-    padding: 2px 4px;
-    background-color: rgba(255, 255, 255, 0.5);
-  }
-}
-
 .lightbox-image-details {
   margin-bottom: $small-gutter-width;
   text-align: center;
@@ -274,12 +252,6 @@ h1 {
     margin: 0 $small-gutter-width / 2;
     white-space: nowrap;
   }
-}
-
-.lightbox-nav {
-  margin: 0 auto $small-gutter-width;
-  width: 250px; // arbitrary, used to center against .lightbox-remove
-  text-align: center;
 }
 
 ////////////////////////////////////////////////////////////////////////// HTML5

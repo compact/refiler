@@ -15,6 +15,9 @@ angular.module('app').factory('RefilerFile', function service(Refiler) {
     this.height = parseInt(file.height, 10);
     this.thumbType = file.thumb_type;
 
+    // for Lightbox
+    this.url = this.getPath();
+
     // whether the file is currently selected by the user (for actions such as
     // tag and move)
     this.selected = false;

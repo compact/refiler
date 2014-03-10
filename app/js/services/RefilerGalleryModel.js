@@ -46,6 +46,7 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
       this.files = [];
     }
 
+    $rootScope.$broadcast('RefilerGalleryModelChange', this);
     return this;
   };
 
@@ -63,6 +64,8 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
   this.addFile = function (file) {
     this.files.push(new RefilerFile(file));
     this.files = sortFiles(this.files);
+
+    $rootScope.$broadcast('RefilerGalleryModelChange', this);
     return this;
   };
 
@@ -70,11 +73,15 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
     this.files = sortFiles(_.map(files, function (file) {
       return new RefilerFile(file);
     }).concat(this.files));
+
+    $rootScope.$broadcast('RefilerGalleryModelChange', this);
     return this;
   };
 
   this.removeFile = function (id) {
     _.remove(this.files, {'id': id});
+
+    $rootScope.$broadcast('RefilerGalleryModelChange', this);
     return this;
   };
 
@@ -82,12 +89,26 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
     this.files = _.reject(this.files, function (file) {
       return _.contains(ids, file.id);
     });
+
+    $rootScope.$broadcast('RefilerGalleryModelChange', this);
     return this;
   };
 
   this.updateFile = function (file) {
     var index = _.findIndex(this.files, {'id': file.id});
     this.files[index] = new RefilerFile(file);
+
+    $rootScope.$broadcast('RefilerGalleryModelChange', this);
     return this;
   };
+
+  this.filterImages = function () {
+    return _.filter(this.files, function (file) {
+      return file.isImage();
+    });
+  };
+
+  this.getImageIndex = function (file) {
+    return _.findIndex(this.filterImages(), {'id': file.id});
+  }
 });

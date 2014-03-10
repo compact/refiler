@@ -1,9 +1,9 @@
-<div class="modal-body">
-  <!-- close button -->
-  <button class="close" aria-hidden="true" ng-click="$dismiss()">×</button>
-
+<div class="modal-body" ng-controller="LightboxCtrl">
   <!-- buttons -->
   <div class="lightbox-nav">
+    <!-- close button -->
+    <button class="close" aria-hidden="true" ng-click="$dismiss()">×</button>
+
     <div class="btn-group">
       <button class="btn btn-xs btn-default" ng-click="Lightbox.prevImage()">
         <i class="fa fa-fw fa-long-arrow-left"></i>
@@ -13,26 +13,28 @@
       </button>
     </div>
 
-    <a ng-href="{{Lightbox.file.getPath()}}" target="_blank"
+    <a ng-href="{{Lightbox.image.getPath()}}" target="_blank"
         class="btn btn-xs btn-default" title="Open in new tab">
       <i class="fa fa-fw fa-search-plus"></i>
     </a>
 
-    <div ng-if="Auth.permissions.edit" file-edit-btn-group="Lightbox.file">
+    <div ng-if="Auth.permissions.edit" file-edit-btn-group="Lightbox.image">
     </div>
   </div>
 
   <!-- image details -->
   <div class="lightbox-image-details details">
-    <span>{{Lightbox.file.name}}</span>
-    <span>{{Lightbox.file.formatDimensions()}}</span>
-    <span>{{Lightbox.file.formatSize()}}</span>
-    <span>{{Lightbox.file.formatDate()}}</span>
+    <span>{{Lightbox.image.name}}</span>
+    <span>{{Lightbox.image.formatDimensions()}}</span>
+    <span>{{Lightbox.image.formatSize()}}</span>
+    <span>{{Lightbox.image.formatDate()}}</span>
   </div>
 
   <!-- image -->
   <div class="lightbox-image-container">
-    <div class="lightbox-image-caption">{{Lightbox.file.caption}}</div>
-    <img lightbox-img ng-src="{{Lightbox.file.getPath()}}" alt="">
+    <div class="lightbox-image-caption">
+      <span>{{Lightbox.image.caption}}</span>
+    </div>
+    <img lightbox-img ng-src="{{Lightbox.image.getPath()}}" alt="">
   </div>
 </div>

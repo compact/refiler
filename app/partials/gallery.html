@@ -39,7 +39,7 @@
   <li ng-repeat="file in RefilerGalleryModel.files | limitTo: (page - 1) * Prefs.filesPerPage - RefilerGalleryModel.files.length | limitTo: Prefs.filesPerPage">
     <div class="file-thumb" ng-class="file.isImage() ? 'image-thumb' : ''">
       <a ng-href="{{file.getPath()}}" target="_blank"
-          ng-click="$event.which === 1 && file.isImage() ? openLightboxModal(file) : null">
+          ng-click="$event.which === 1 && file.isImage() ? openLightboxModal(RefilerGalleryModel.filterImages(), RefilerGalleryModel.getImageIndex(file)) : null">
         <img ng-if="file.getThumbElement() === 'img'"
           ng-src="{{file.getThumb()}}"
           ng-class="{'selected': file.selected}"

@@ -191,8 +191,46 @@ angular.module('app').config(function (AuthProvider) {
 
 
 angular.module('app').config(function (LightboxProvider) {
-  LightboxProvider.minModalWidth = 400;
-  LightboxProvider.minModalHeight = 200;
+  LightboxProvider.templateUrl = 'partials/lightbox.html';
+
+  // see the default method in the Lightbox provider
+  LightboxProvider.calculateImageDimensionLimits = function (dimensions) {
+    return {
+      'maxWidth': dimensions.windowWidth - 102,
+      // 156px = 102px as above
+      //         + 22px height of .lightbox-nav
+      //         + 8px margin-top of .lightbox-image-details
+      //         + 24px height of .lightbox-image-details
+      //         + 8px margin-top of .lightbox-image-container
+      'maxHeight': dimensions.windowHeight - 164
+    };
+  };
+
+  // see the default method in the Lightbox provider
+  LightboxProvider.calculateModalDimensions = function (dimensions) {
+    var width = Math.max(400, dimensions.imageDisplayWidth + 42);
+
+    // 104px = 42px as above
+    //         + 22px height of .lightbox-nav
+    //         + 8px margin-top of .lightbox-image-details
+    //         + 24px height of .lightbox-image-details
+    //         + 8px margin-top of .lightbox-image-container
+    var height = Math.max(200, dimensions.imageDisplayHeight + 104);
+
+    if (width >= dimensions.windowWidth - 20 || dimensions.windowWidth < 768) {
+      width = 'auto';
+    }
+
+    // the modal height cannot be larger than the window height
+    if (height >= dimensions.windowHeight) {
+      height = 'auto';
+    }
+
+    return {
+      'width': width,
+      'height': height
+    };
+  };
 });
 
 

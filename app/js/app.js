@@ -7,5 +7,6 @@ angular.module('app', [
   'ui.bootstrap',
   'ui.select2',
   'chieffancypants.loadingBar',
-  'angularFileUpload'
+  'angularFileUpload',
+  'angular-bootstrap-lightbox'
 ]);
