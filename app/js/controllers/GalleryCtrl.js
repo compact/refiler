@@ -41,5 +41,10 @@ angular.module('app').controller('GalleryCtrl', function ($scope, $modal, Auth,
   };
 
   // Lightbox modal
-  $scope.openLightboxModal = Lightbox.openModal;
+  $scope.openLightboxModal = function (file) {
+    Lightbox.openModal(
+      RefilerGalleryModel.filterImages(),
+      RefilerGalleryModel.getImageIndex(file)
+    );
+  };
 });
