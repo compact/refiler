@@ -5,7 +5,7 @@
 angular.module('app').directive('alerts', function ($parse) {
   return {
     'scope': true, // new child scope that inherits from the parent scope
-    'templateUrl': 'partials/alerts.html',
+    'templateUrl': 'alerts.html',
     'link': function (scope, element, attrs) {
       // in the case alerts="alerts", scope.alerts is inherited from the parent
       // scope and no watching is necessary

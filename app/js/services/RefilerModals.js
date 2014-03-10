@@ -19,7 +19,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     var modal = modals[key]; // modal-specific data
 
     return $modal.open({
-      'templateUrl': 'partials/modal.html',
+      'templateUrl': 'modal.html',
       'controller': ['$scope', function ($scope) {
         // modal scope, a child of $rootScope
         $scope.model = {}; // populated by child form elements with ng-model

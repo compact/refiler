@@ -107,7 +107,7 @@ angular.module('app').config(function ($routeProvider) {
   var dirRoute, loginRoute;
 
   dirRoute = {
-    'templateUrl': 'partials/gallery.html',
+    'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
       'data': ['$http', '$route', 'RefilerGalleryModel', function ($http,
@@ -126,12 +126,12 @@ angular.module('app').config(function ($routeProvider) {
   };
 
   loginRoute = {
-    'templateUrl': 'partials/login.html',
+    'templateUrl': 'login.html',
     'controller': 'LoginCtrl'
   };
 
   $routeProvider.when('/tag/:tag', {
-    'templateUrl': 'partials/gallery.html',
+    'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
       'data': ['$http', '$route', 'RefilerGalleryModel', function ($http,
@@ -149,7 +149,7 @@ angular.module('app').config(function ($routeProvider) {
   $routeProvider.when('/dir/:dir*', dirRoute);
   $routeProvider.when('/dir/', dirRoute);
   $routeProvider.when('/nav', {
-    'templateUrl': 'partials/nav.html',
+    'templateUrl': 'nav.html',
     'resolve': {
       'data': ['RefilerModel', function (RefilerModel) {
         RefilerModel.page.title = 'Navigation';
@@ -159,7 +159,7 @@ angular.module('app').config(function ($routeProvider) {
   $routeProvider.when('/login', loginRoute);
   $routeProvider.when('/activate/:activationCode', loginRoute);
   $routeProvider.when('/', {
-    'templateUrl': 'partials/gallery.html',
+    'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
       'data': ['RefilerGalleryModel', 'RefilerModel', function (
@@ -191,7 +191,7 @@ angular.module('app').config(function (AuthProvider) {
 
 
 angular.module('app').config(function (LightboxProvider) {
-  LightboxProvider.templateUrl = 'partials/lightbox.html';
+  LightboxProvider.templateUrl = 'lightbox.html';
 
   // see the default method in the Lightbox provider
   LightboxProvider.calculateImageDimensionLimits = function (dimensions) {

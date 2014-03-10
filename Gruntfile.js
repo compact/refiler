@@ -359,6 +359,24 @@ module.exports = function (grunt) {
       }
     },
 
+    ngtemplates: {
+      app: {
+        cwd: 'app/partials',
+        src: '*.html',
+        dest: '.tmp/templates.js',
+        options: {
+          htmlmin: {
+            collapseBooleanAttributes: true,
+            collapseWhitespace: false,
+            removeAttributeQuotes: true,
+            removeComments: true,
+            removeEmptyAttributes: false,
+            removeRedundantAttributes: true
+          }
+        }
+      }
+    },
+
     // since cdnify (grunt-google-cdn) replaces from the Google CDN only, we
     // replace the other scripts and stylesheets manually; see
     // https://npmjs.org/package/grunt-text-replace
@@ -386,7 +404,7 @@ module.exports = function (grunt) {
           to: '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'
         }]
       }
-    }
+    },
   });
 
 
@@ -418,8 +436,9 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'compass:compile',
     'clean:dist',
+    'ngtemplates',
+    'compass:compile',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
