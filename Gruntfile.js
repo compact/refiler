@@ -251,7 +251,8 @@ module.exports = function (grunt) {
             '**',
             '!bower_components/**',
             '!css/**',
-            '!js/**'
+            '!js/**',
+            '!partials/**'
           ]
         }, {
           // Select2 files; the CSS file is built into lib/select2 with usemin
