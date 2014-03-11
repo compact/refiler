@@ -386,19 +386,19 @@ module.exports = function (grunt) {
         overwrite: true,
         replacements: [{
           from: 'bower_components/angular/angular.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js'
+          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js'
         }, {
           from: 'bower_components/angular-route/angular-route.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js'
+          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js'
         }, {
           from: 'bower_components/angular-sanitize/angular-sanitize.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-sanitize.min.js'
+          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-sanitize.min.js'
         }, {
           from: 'bower_components/bootstrap/dist/css/bootstrap.css',
-          to: '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'
+          to: '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'
         }, {
           from: 'bower_components/bootstrap/dist/css/bootstrap-theme.css',
-          to: '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css'
+          to: '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css'
         }, {
           from: 'bower_components/font-awesome/css/font-awesome.css',
           to: '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'
