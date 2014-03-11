@@ -254,6 +254,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       // completeall event below
       var uploadedFiles = [], failedFiles = [];
 
+      // init
+      scope.model.dir = {
+        'id': 0,
+        'text': 'Select a folder'
+      };
+
       if (RefilerGalleryModel.type === 'dir') {
         // if the user is currently viewing a dir, default to that dir for
         // upload
@@ -360,17 +366,21 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       scope.formatSize = RefilerFile.formatSize;
     },
     'submit': function (scope) {
-      // add dir and tag data for each file
-      _.each(scope.uploader.queue, function (item) {
-        // item.formData is an array of plain objects, not a FormData object
-        item.formData.push({
-          'dirId': scope.model.dir.id,
-          'tagNames': JSON.stringify(scope.model.tagNames)
+      if (scope.uploader.queue.length === 0) {
+        scope.disabled = false;
+      } else {
+        // add dir and tag data for each file
+        _.each(scope.uploader.queue, function (item) {
+          // item.formData is an array of plain objects, not a FormData object
+          item.formData.push({
+            'dirId': scope.model.dir.id,
+            'tagNames': JSON.stringify(scope.model.tagNames)
+          });
         });
-      });
 
-      // upload all files; the event handlers were bound in .open above
-      scope.uploader.uploadAll();
+        // upload all files; the event handlers were bound in .open above
+        scope.uploader.uploadAll();
+      }
     }
   };
 
@@ -395,6 +405,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }
     ],
     'open': function (scope) {
+      // init
+      scope.model.dir = {
+        'id': 0,
+        'text': 'Select a folder'
+      };
+
       if (RefilerGalleryModel.type === 'dir') {
         // if the user is currently viewing a dir, default to that dir for
         // upload
@@ -794,6 +810,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }
     ],
     'open': function (scope) {
+      // init
+      scope.model.dir = {
+        'id': 0,
+        'text': 'Select a folder'
+      };
+
       if (RefilerGalleryModel.type === 'dir') {
         scope.model.dir = {
           'id': RefilerGalleryModel.dir.id,
