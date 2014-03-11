@@ -257,7 +257,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       // init
       scope.model.dir = {
         'id': 0,
-        'text': 'Select a folder'
+        'text': ''
       };
 
       if (RefilerGalleryModel.type === 'dir') {
@@ -305,18 +305,19 @@ angular.module('app').service('RefilerModals', function ($http, $location,
                 data.file.dirPath === RefilerGalleryModel.dir.path) {
               RefilerGalleryModel.addFile(data.file);
             }
-            return;
           } else if (typeof data.error === 'string') {
+            // if data.file doesn't exist, there is a general error such as dir
+            // not found
             failedFiles.push({
-              'name': data.file.name,
+              'name': typeof data.file === 'object' ? data.file.name : '',
               'error': data.error
             });
-            return;
           }
+        } else {
+          // should never get to this point; probably an uncaught exception or a
+          // printed error
+          console.warn('reached unexpected case', data);
         }
-
-        // should never get to this point
-        console.warn('reached unexpected case', data);
       });
 
       scope.uploader.bind('completeall', function () {
@@ -408,7 +409,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       // init
       scope.model.dir = {
         'id': 0,
-        'text': 'Select a folder'
+        'text': ''
       };
 
       if (RefilerGalleryModel.type === 'dir') {
@@ -813,7 +814,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       // init
       scope.model.dir = {
         'id': 0,
-        'text': 'Select a folder'
+        'text': ''
       };
 
       if (RefilerGalleryModel.type === 'dir') {

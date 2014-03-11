@@ -79,7 +79,15 @@ if (!is_uploaded_file($file['tmp_name'])) {
 $refiler = new Refiler($config, $db);
 
 // move the file
-$dir = new Dir($refiler, $dir_id);
+try {
+  $dir = new Dir($refiler, $dir_id);
+} catch (\Exception $e) {
+  echo json_encode(array(
+    'success' => false,
+    'error' => $e->getMessage()
+  ));
+  exit;
+}
 $dir_path = $dir->get_path();
 $name = File::sanitize_name($dir_path, $name);
 $path = "$dir_path/$name";
