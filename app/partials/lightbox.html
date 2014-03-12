@@ -13,10 +13,12 @@
       </button>
     </div>
 
-    <a ng-href="{{Lightbox.image.getPath()}}" target="_blank"
-        class="btn btn-xs btn-default" title="Open in new tab">
-      <i class="fa fa-fw fa-search-plus"></i>
-    </a>
+    <div class="btn-group">
+      <a ng-href="{{Lightbox.image.getPath()}}" target="_blank"
+          class="btn btn-xs btn-default" title="Open in new tab">
+        <i class="fa fa-fw fa-search-plus"></i>
+      </a>
+    </div>
 
     <div ng-if="Auth.permissions.edit" file-edit-btn-group="Lightbox.image">
     </div>
