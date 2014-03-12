@@ -1,0 +1,10 @@
+.lightbox-image-details {
+  margin-bottom: $small-gutter-width;
+  text-align: center;
+
+  span {
+    display: inline-block;
+    margin: 0 $small-gutter-width / 2;
+    white-space: nowrap;
+  }
+}
