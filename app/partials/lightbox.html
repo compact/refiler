@@ -1,4 +1,6 @@
-<div class="modal-body" ng-controller="LightboxCtrl">
+<div class="modal-body" ng-controller="LightboxCtrl"
+    ng-swipe-left="Lightbox.prevImage()"
+    ng-swipe-right="Lightbox.nextImage()">
   <!-- buttons -->
   <div class="lightbox-nav">
     <!-- close button -->

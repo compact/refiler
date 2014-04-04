@@ -387,13 +387,16 @@ module.exports = function (grunt) {
         overwrite: true,
         replacements: [{
           from: 'bower_components/angular/angular.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js'
+          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js'
         }, {
           from: 'bower_components/angular-route/angular-route.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.min.js'
+          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js'
         }, {
           from: 'bower_components/angular-sanitize/angular-sanitize.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-sanitize.min.js'
+          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.min.js'
+        }, {
+          from: 'bower_components/angular-touch/angular-touch.js',
+          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-touch.min.js'
         }, {
           from: 'bower_components/bootstrap/dist/css/bootstrap.css',
           to: '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'

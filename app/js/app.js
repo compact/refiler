@@ -8,5 +8,5 @@ angular.module('app', [
   'ui.select2',
   'chieffancypants.loadingBar',
   'angularFileUpload',
-  'angular-bootstrap-lightbox'
+  'bootstrapLightbox'
 ]);
