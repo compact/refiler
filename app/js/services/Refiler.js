@@ -16,9 +16,9 @@ angular.module('app').provider('Refiler', function () {
 
   // either a path to an image relative to basePath, or classes for a Font
   // Awesome icon
-  this.config.noThumb = 'fa fa-file-o fa-5x';
-  this.config.noThumbTooLarge = 'fa fa-file-o fa-5x';
-  this.config.noThumbCorrupt = 'fa fa-file-o fa-5x';
+  this.config.noThumb = 'fa fa-file fa-5x';
+  this.config.noThumbTooLarge = 'fa fa-camera fa-5x';
+  this.config.noThumbCorrupt = 'fa fa-exclamation-triangle fa-5x';
 
   // whether to show only parentless tags or dirs in the nav when the user has
   // not typed in a filter
