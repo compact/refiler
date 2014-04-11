@@ -56,9 +56,9 @@ class Image extends File {
       return $this->thumb_type;
     }
 
-    // 1024 * 1024 / 4 / 4 = 65536 bytes
-    // for ~4 bytes per pixel and 25% of memory_limit
-    $pixel_limit = (int)ini_get('memory_limit') * 65536;
+    // 1024 * 1024 / 4 / 2 = 131072 bytes
+    // for ~4 bytes per pixel and 50% of memory_limit
+    $pixel_limit = (int)ini_get('memory_limit') * 131072;
     if ($this->width * $this->height > $pixel_limit) {
       $this->thumb_type = NO_THUMB_TOO_LARGE;
       return $this->thumb_type;
