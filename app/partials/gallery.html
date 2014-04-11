@@ -40,13 +40,7 @@
     <div class="file-thumb" ng-class="file.isImage() ? 'image-thumb' : ''">
       <a ng-href="{{file.getPath()}}" target="_blank"
           ng-click="$event.which === 1 && file.isImage() ? openLightboxModal(file) : null">
-        <img ng-if="file.getThumbElement() === 'img'"
-          ng-src="{{file.getThumb()}}"
-          ng-class="{'selected': file.selected}"
-          class="img-thumbnail img-rounded">
-        <i ng-if="file.getThumbElement() === 'i'"
-          ng-class="{'selected': file.selected}"
-          class="{{file.getThumb()}} img-thumbnail img-rounded"></i>
+        <file-thumb file="file"></file-thumb>
       </a>
     </div>
 

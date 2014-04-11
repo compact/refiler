@@ -61,6 +61,10 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
     return _.some(this.files, {'selected': true});
   };
 
+  this.getFile = function (id) {
+    return _.where(this.files, {'id': id})[0];
+  };
+
   this.addFile = function (file) {
     this.files.push(new RefilerFile(file));
     this.files = sortFiles(this.files);
@@ -110,5 +114,5 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
 
   this.getImageIndex = function (file) {
     return _.findIndex(this.filterImages(), {'id': file.id});
-  }
+  };
 });

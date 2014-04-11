@@ -1,0 +1,7 @@
+<img ng-if="file.getThumbElement() === 'img'"
+  ng-src="{{file.getThumb()}}"
+  ng-class="{'selected': file.selected}"
+  class="img-thumbnail img-rounded">
+<i ng-if="file.getThumbElement() === 'i'"
+  ng-class="{'selected': file.selected}"
+  class="{{file.getThumb()}}"></i>

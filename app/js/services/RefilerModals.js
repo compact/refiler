@@ -91,6 +91,11 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       {
         'label': 'Tags',
         'control': '<tags-input ng-model="model.tagNames"></tags-input>'
+      },
+      {
+        'label': 'Thumbnail',
+        'control': '<file-thumb file="file"></file-thumb><br>' +
+          '<a ng-if="file.isImage()" ng-click="updateThumb()">Regenerate</a>'
       }
     ],
     'open': function (scope, file) {
@@ -113,6 +118,26 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'text': '/' + file.dirPath
       };
       scope.model.name = file.name;
+
+      // used for showing the thumb
+      scope.file = file;
+
+      scope.updateThumb = function () {
+        $http.get('get/update-thumb.php', {
+          'params': {
+            'id': file.id
+          }
+        }).success(function (data) {
+          // update the model
+          RefilerGalleryModel.updateFile(data.file);
+
+          // add alert (the modal isn't closed)
+          scope.alerts.push({
+            'class': 'alert-success',
+            'message': 'Thumbnail updated.'
+          });
+        });
+      };
     },
     'submit': function (scope, file) {
       var data, newDirPath, newName;
