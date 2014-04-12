@@ -210,6 +210,10 @@ input[type="search"]::-webkit-search-cancel-button {
   img, i {
     vertical-align: middle;
   }
+
+  i {
+    padding: 5px; // to match the 1px border + 4px padding of .img-thumbnail
+  }
 }
 
 .file-details {
