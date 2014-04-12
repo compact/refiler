@@ -137,28 +137,6 @@ class Image extends File {
     return $this->thumb_type;
   }
 
-  // not used 2013-04-27
-  // save a scaled version of $source at $target; do nothing if dimensions are too large
-  // imagecreatefromjpeg error on corrupt files: gd-jpeg, libjpeg: recoverable error: Premature end of JPEG file
-  public function scale($source, $target, $scale) {
-    $old_width = $this->width;
-    $old_height = $this->height;
-
-    $new_width = round($old_width * $scale);
-    $new_height = round($old_height * $scale);
-
-    if ($new_width == 0 || $new_height == 0
-      || (defined('MAX_PIXELS') && (
-        $old_width * $old_height > MAX_PIXELS
-        || $old_width * $old_height * $scale * $scale > MAX_PIXELS
-    ))) {
-      return false;
-    }
-
-    return $this->resize($this->get_path(), $new_width, $new_height, 0, 0,
-      $old_width, $old_height);
-  }
-
   /**
    * Resize this image and save the result at $target. Corrupt images can
    * cause warnings, which are suppressed by the error handler:
