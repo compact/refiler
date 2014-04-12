@@ -5,6 +5,11 @@ namespace Refiler;
 class Image extends File {
   protected $image_type;
 
+  // set on the first call of either has_exif_thumb() or get_exif_thumb()
+  protected $exif_thumb = null;
+  protected $exif_thumb_width = null;
+  protected $exif_thumb_height = null;
+
   public function __construct(Refiler $refiler, $param, $getimagesize) {
     parent::__construct($refiler, $param);
 
@@ -59,7 +64,8 @@ class Image extends File {
     // 1024 * 1024 / 4 / 2 = 131072 bytes
     // for ~4 bytes per pixel and 50% of memory_limit
     $pixel_limit = (int)ini_get('memory_limit') * 131072;
-    if ($this->width * $this->height > $pixel_limit) {
+    if ($this->width * $this->height > $pixel_limit
+        && !$this->has_exif_thumb()) {
       $this->thumb_type = NO_THUMB_TOO_LARGE;
       return $this->thumb_type;
     }
@@ -218,18 +224,14 @@ class Image extends File {
         break;
 
       case IMAGETYPE_JPEG:
-        // if exif thumb exists and is large enough, use it
-        $exif_thumb = @exif_thumbnail($path, $exif_thumb_width,
-          $exif_thumb_height);
-        if ($exif_thumb && $exif_thumb_width >= $new_width
-            && $exif_thumb_height >= $new_height) {
-          $old_image = imagecreatefromstring($exif_thumb);
-          // recalculate dimensions, x, y
-          $old_width = $exif_thumb_width * $old_width / $this->width;
-          $old_height = $exif_thumb_height * $old_height
-            / $this->height;
-          $old_x = round(($exif_thumb_width - $old_width) / 2);
-          $old_y = round(($exif_thumb_height - $old_height) / 4);
+        // if there is an embedded thumb, use it instead of the original image
+        if ($this->has_exif_thumb()) {
+          $old_image = imagecreatefromstring($this->exif_thumb);
+          // recalculate dimensions, x, and y
+          $old_width = round($old_width * $this->exif_thumb_width / $this->width);
+          $old_height = round($old_height * $this->exif_thumb_height / $this->height);
+          $old_x = round(($this->exif_thumb_width - $old_width) / 2);
+          $old_y = round(($this->exif_thumb_height - $old_height) / 4);
         } else {
           $old_image = imagecreatefromjpeg($path);
         }
@@ -269,7 +271,7 @@ class Image extends File {
         $new_image, $old_image, 0, 0, $old_x, $old_y,
         $new_width, $new_height, $old_width, $old_height
       );
-      $success = self::save_image($new_image, $target, $target_type);
+      $success = $this->save_image($new_image, $target, $target_type);
 
       if ($success) {
         imagedestroy($old_image);
@@ -315,5 +317,21 @@ class Image extends File {
         // PNG_NO_FILTER gives the smallest filesize
         return imagepng($image, $target, 9, PNG_NO_FILTER);
     }
+  }
+
+  protected function has_exif_thumb() {
+    return $this->get_exif_thumb() !== false;
+  }
+
+  protected function get_exif_thumb() {
+    if ($this->exif_thumb === null) {
+      $this->exif_thumb = @exif_thumbnail(
+        $this->get_path(),
+        $this->exif_thumb_width,
+        $this->exif_thumb_height
+      );
+    }
+
+    return $this->exif_thumb;
   }
 }
