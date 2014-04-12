@@ -39,20 +39,18 @@ class Image extends File {
   }
 
   /**
-   * @return false|string
-   *   False on failure.
-   *   Thumb type on success.
-   *   SELF_THUMB if the image dimensions are smaller than the default
-   *     thumbnail dimensions.
-   *   NO_THUMB
-   *   NO_THUMB_TOO_LARGE if the image will use up ~25% of memory_limit.
+   * Create a thumbnail for this image and save it at the default thumb path.
+   *   The row doesn't get updated. If the image is a JPEG and has an Exif
+   *   thumb, use that instead of the original image.
+   * @return string
+   *   Thumb type (extension).
+   *   SELF_THUMB if the image is smaller than the max thumb dimensions.
+   *   NO_THUMB_TOO_LARGE if opening the image requires too much memory.
+   *   NO_THUMB_CORRUPT on failure.
    */
   public function create_thumb($optimal_type = true) {
     $thumb_max_width = $this->config['max_thumb_width'];
     $thumb_max_height = $this->config['max_thumb_height'];
-
-    $old_ratio = $this->width / $this->height;
-    $max_ratio = $thumb_max_width / $thumb_max_height; // not necessarily the new ratio
 
     // special case: SELF_THUMB
     if (($this->width <= $thumb_max_width
@@ -70,8 +68,19 @@ class Image extends File {
       return $this->thumb_type;
     }
 
+    // if there is an embedded thumb, use it instead of the original image
+    $old_width = $this->width;
+    $old_height = $this->height;
+    if ($this->has_exif_thumb()) {
+      $old_width = $this->exif_thumb_width;
+      $old_height = $this->exif_thumb_height;
+    }
+
     // 1. new ratio
-    if ($old_ratio / $max_ratio > 1.25 || $max_ratio / $old_ratio > 1.25) { // elongated
+    $old_ratio = $old_width / $old_height;
+    $max_ratio = $thumb_max_width / $thumb_max_height;
+    if ($old_ratio / $max_ratio > 1.25 || $max_ratio / $old_ratio > 1.25) {
+      // elongated
       $new_ratio = ($old_ratio + $max_ratio) / 2;
       $shrink_factor = .95;
     } else { // squarish
@@ -91,14 +100,14 @@ class Image extends File {
       $new_height = $thumb_max_height;
     }
     // shrink if image is tall but too thin, or fat but too short
-    if ($new_width > $this->width) {
+    if ($new_width > $old_width) {
       $shrink_factor = 1;
-      $new_width = $this->width;
+      $new_width = $old_width;
       $new_height = $new_width / $new_ratio;
     }
-    if ($new_height > $this->height) {
+    if ($new_height > $old_height) {
       $shrink_factor = 1;
-      $new_height = $this->height;
+      $new_height = $old_height;
       $new_width = $new_height * $new_ratio;
     }
     $new_width = round($new_width);
@@ -106,22 +115,22 @@ class Image extends File {
 
     // 3. crop border
     if ($old_ratio > $max_ratio) { // old image is fatter, so start with height
-      $height_crop = $shrink_factor * $this->height;
-      $width_crop = round($height_crop * $max_ratio);
+      $height_crop = $shrink_factor * $old_height;
+      $width_crop = round($height_crop * $new_ratio);
       $height_crop = round($height_crop);
     } else {
-      $width_crop = $shrink_factor * $this->width;
-      $height_crop = round($width_crop / $max_ratio);
+      $width_crop = $shrink_factor * $old_width;
+      $height_crop = round($width_crop / $new_ratio);
       $width_crop = round($width_crop);
     }
 
     // 4. coordinates
-    $old_x = round(($this->width - $width_crop) / 2);
-    $old_y = round(($this->height - $height_crop) / 4); // elevate since many images have faces near the top
+    $old_x = round(($old_width - $width_crop) / 2);
+    $old_y = round(($old_height - $height_crop) / 4); // elevate since many images have faces near the top
 
     // 5. resize
     $success = $this->resize($this->get_default_thumb_path(),
-      $thumb_max_width, $thumb_max_height,
+      $new_width, $new_height,
       $old_x, $old_y, $width_crop, $height_crop,
       $optimal_type);
     $this->thumb_type = $success ? after($success, '.') : NO_THUMB_CORRUPT;
@@ -225,13 +234,9 @@ class Image extends File {
 
       case IMAGETYPE_JPEG:
         // if there is an embedded thumb, use it instead of the original image
+        // create_thumb() provides the correct
         if ($this->has_exif_thumb()) {
           $old_image = imagecreatefromstring($this->exif_thumb);
-          // recalculate dimensions, x, and y
-          $old_width = round($old_width * $this->exif_thumb_width / $this->width);
-          $old_height = round($old_height * $this->exif_thumb_height / $this->height);
-          $old_x = round(($this->exif_thumb_width - $old_width) / 2);
-          $old_y = round(($this->exif_thumb_height - $old_height) / 4);
         } else {
           $old_image = imagecreatefromjpeg($path);
         }
@@ -330,6 +335,17 @@ class Image extends File {
         $this->exif_thumb_width,
         $this->exif_thumb_height
       );
+
+      // if the thumb's orientation doesn't match the image's orientation,
+      // assume the dimensions are reversed
+      if (($this->width < $this->height
+          && $this->exif_thumb_width > $this->exif_thumb_height)
+          || ($this->width > $this->height
+          && $this->exif_thumb_width < $this->exif_thumb_height)) {
+        $width = $this->exif_thumb_width;
+        $this->exif_thumb_width = $this->exif_thumb_height;
+        $this->exif_thumb_height = $width;
+      }
     }
 
     return $this->exif_thumb;
