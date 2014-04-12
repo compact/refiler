@@ -27,5 +27,16 @@ angular.module('app').directive('perfectScrollbar', function($timeout,
     }, function () {
       element.perfectScrollbar('update');
     }, true);
+
+    // scroll to the top whenever the ul height changes, so the list doesn't
+    // appear to disappear when the user scrolls down and filters it
+    // TODO: the child selector should be specified in an attr
+    var ul = element.find('ul');
+    scope.$watch(function () {
+      return ul.height();
+    }, function () {
+      element.scrollTop(0);
+      element.perfectScrollbar('update');
+    });
   };
 });
