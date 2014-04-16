@@ -303,7 +303,8 @@ class Image extends File {
   }
 
   protected function has_exif_thumb() {
-    return $this->get_exif_thumb() !== false;
+    return $this->image_type === IMAGETYPE_JPEG
+      && $this->get_exif_thumb() !== false;
   }
 
   protected function get_exif_thumb() {
