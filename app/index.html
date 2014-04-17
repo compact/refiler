@@ -24,12 +24,12 @@
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
   <!-- endref -->
 
-  <!-- build:css({.tmp,app}) lib/select2/select2.css -->
+  <!-- build:css lib/select2/select2.css -->
   <link rel="stylesheet" href="bower_components/select2/select2.css">
   <link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">
   <!-- endbuild -->
 
-  <!-- build:css({.tmp,app}) css/main.css -->
+  <!-- build:css css/main.css -->
   <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css">
   <link rel="stylesheet" href="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.css">
   <link rel="stylesheet" href="bower_components/perfect-scrollbar/src/perfect-scrollbar.css">
@@ -44,10 +44,12 @@
     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.min.js"></script>
-  <![endif]-->
+  <!-- build:js js/ie-shim.js -->
+    <!--[if lt IE 9]>
+      <script src="bower_components/es5-shim/es5-shim.js"></script>
+      <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+  <!-- endbuild -->
 
 
 
