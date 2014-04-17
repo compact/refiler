@@ -378,35 +378,10 @@ module.exports = function (grunt) {
       }
     },
 
-    // since cdnify (grunt-google-cdn) replaces from the Google CDN only, we
-    // replace the other scripts and stylesheets manually; see
-    // https://npmjs.org/package/grunt-text-replace
-    replace: {
-      manualcdnify: {
-        src: ['<%= yeoman.dist %>/index.html'],
-        overwrite: true,
-        replacements: [{
-          from: 'bower_components/angular/angular.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js'
-        }, {
-          from: 'bower_components/angular-route/angular-route.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.min.js'
-        }, {
-          from: 'bower_components/angular-sanitize/angular-sanitize.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.min.js'
-        }, {
-          from: 'bower_components/angular-touch/angular-touch.js',
-          to: '//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-touch.min.js'
-        }, {
-          from: 'bower_components/bootstrap/dist/css/bootstrap.css',
-          to: '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'
-        }, {
-          from: 'bower_components/bootstrap/dist/css/bootstrap-theme.css',
-          to: '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css'
-        }, {
-          from: 'bower_components/font-awesome/css/font-awesome.css',
-          to: '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'
-        }]
+    htmlrefs: {
+      dist: {
+        src: '<%= yeoman.dist %>/index.html',
+        dest: '<%= yeoman.dist %>/index.html'
       }
     },
   });
@@ -454,7 +429,7 @@ module.exports = function (grunt) {
     'uglify',
     'rev',
     'usemin',
-    'replace'
+    'htmlrefs',
   ]);
 
   grunt.registerTask('default', [
