@@ -18,6 +18,14 @@
   </div>
 </div>
 
+<!-- subdirs -->
+<div ng-if="dir" ng-show="subdirs.length > 0" class="stack well well-sm">
+  Subfolders
+  <span ng-repeat="dir in subdirs">
+    | <a href="#!/dir/{{dir.path}}">{{dir.getName()}}</a>
+  </span>
+</div>
+
 <!-- menu -->
 <div ng-include="'menu.html'"></div>
 

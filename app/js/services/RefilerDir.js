@@ -1,4 +1,4 @@
-angular.module('app').factory('RefilerDir', function service(RefilerModel) {
+angular.module('app').factory('RefilerDir', function service() {
   /**
    * Constructor for a dir. Not every plain object containing dir data has to
    *   be passed into this constructor; do it when the methods are helpful.
@@ -34,16 +34,10 @@ angular.module('app').factory('RefilerDir', function service(RefilerModel) {
   };
 
   /**
-   * The subdirs are found by searching through RefilerModel.dirs instead of
-   *   being returned from an AJAX request for the dir. Idiosyncratic: If
-   *   this.path is '.', no dirs are returned (rather than all dirs).
-   * @return {Object[]} Plain objects, not RefilerDir objects.
+   * @return {string} The base name of this dir.
    */
-  RefilerDir.prototype.getSubdirs = function () {
-    var segment = this.path + '/';
-    return _.where(RefilerModel.dirs, function (dir) {
-      return dir.path.indexOf(segment) === 0;
-    });
+  RefilerDir.prototype.getName = function () {
+    return this.path.match(/[^\/]+$/)[0];
   };
 
   return RefilerDir;

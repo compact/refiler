@@ -162,22 +162,6 @@
       </ul>
     </div>
 
-    <div class="btn-group" ng-show="subdirs.length > 0">
-      <button class="btn btn-sm btn-default dropdown-toggle">
-        <i class="fa fa-fw fa-folder"></i>
-        Subfolders ({{subdirs.length}})
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li ng-repeat="dir in subdirs = dir.getSubdirs()">
-          <a href="#!/dir/{{dir.path}}">
-            <i class="fa fa-fw fa-folder-o"></i>
-            /{{dir.path}}
-          </a>
-        </li>
-      </ul>
-    </div>
-
     <div class="btn-group" ng-show="tag || dir">
       <button class="btn btn-sm dropdown-toggle"
           ng-class="RefilerGalleryModel.hasSelectedFiles() ? 'btn-warning' : 'btn-default'">
