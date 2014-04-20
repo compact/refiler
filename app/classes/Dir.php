@@ -416,7 +416,12 @@ class Dir {
     }
 
     // move thumbs dir
-    if (is_dir($old_thumbs_path) && !file_exists($new_thumbs_path)) {
+    if (is_dir($old_thumbs_path)) {
+      // remove the new thumbs dir if it already exists for whatever reason
+      if (is_dir($new_thumbs_path)) {
+        recursive_rmdir($new_thumbs_path);
+      }
+
       rename($old_thumbs_path, $new_thumbs_path);
     }
 
