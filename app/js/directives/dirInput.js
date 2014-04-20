@@ -15,7 +15,7 @@ angular.module('app').directive('dirInput', function () {
           // format required by Select2
           return {
             'id': dir.id,
-            'text': '/' + dir.path
+            'text': dir.displayPath
           };
         }),
         'matcher': function (search, dir) {

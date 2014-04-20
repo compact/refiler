@@ -290,7 +290,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         // upload
         scope.model.dir = {
           'id': RefilerGalleryModel.dir.id,
-          'text': '/' + RefilerGalleryModel.dir.path
+          'text': RefilerGalleryModel.dir.displayPath
         };
       } else if (RefilerGalleryModel.type === 'tag') {
         // likewise for a tag
@@ -442,7 +442,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         // upload
         scope.model.dir = {
           'id': RefilerGalleryModel.dir.id,
-          'text': '/' + RefilerGalleryModel.dir.path
+          'text': RefilerGalleryModel.dir.displayPath
         };
       } else if (RefilerGalleryModel.type === 'tag') {
         // likewise for a tag
@@ -625,7 +625,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     'open': function (scope) {
       scope.model.parent = {
         'id': RefilerGalleryModel.dir.id,
-        'text': '/' + RefilerGalleryModel.dir.path
+        'text': RefilerGalleryModel.dir.displayPath
       };
       scope.model.name = '';
 
@@ -687,7 +687,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }
 
       // old path for display only
-      scope.path = '/' + RefilerGalleryModel.dir.path;
+      scope.path = RefilerGalleryModel.dir.displayPath;
 
       // model to set the new path
       scope.model.parent = {
@@ -845,7 +845,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       if (RefilerGalleryModel.type === 'dir') {
         scope.model.dir = {
           'id': RefilerGalleryModel.dir.id,
-          'text': '/' + RefilerGalleryModel.dir.path
+          'text': RefilerGalleryModel.dir.displayPath
         };
       }
     },
