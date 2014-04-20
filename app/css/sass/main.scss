@@ -255,6 +255,7 @@ input[type="search"]::-webkit-search-cancel-button {
 ////////////////////////////////////////////////////////////// library overrides
 
 @import "angular.scss";
+@import "ui-utils.scss";
 @import "angular-file-upload.scss";
 @import "angular-loading-bar.scss";
 @import "bootstrap.scss";

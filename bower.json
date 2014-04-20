@@ -17,7 +17,8 @@
     "angular-loading-bar": "~0.3.0",
     "angular-bootstrap-lightbox": "~0.2",
     "perfect-scrollbar": "~0.4",
-    "bootstrap-sass": "twbs/bootstrap-sass#~3.1.1"
+    "bootstrap-sass": "twbs/bootstrap-sass#~3.1.1",
+    "angular-ui-utils": "bower-highlight"
   },
   "devDependencies": {
     "angular-mocks": "~1.2",
