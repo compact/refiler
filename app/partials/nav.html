@@ -32,11 +32,11 @@
       <li ng-repeat="dir in filteredDirs = (RefilerModel.dirs | filter: dirFilter(searchText))">
         <a href="#!/dir/{{dir.path}}"
             ng-class="{'selected': isSelected('dir', dir.id)}"
-            tooltip="{{dir.path}}"
+            tooltip="{{dir.displayPath}}"
             tooltip-placement="right"
             tooltip-animation="false"
             tooltip-append-to-body="true">
-          /<span ng-bind-html="dir.path | highlight: searchText"></span>
+          <span ng-bind-html="dir.displayPath | highlight: searchText"></span>
           <span class="details">{{dirDetails(dir)}}</span>
         </a>
       </li>

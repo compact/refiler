@@ -24,17 +24,12 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
    * @return {Function} Function passed into ng.filter:filter.
    */
   $scope.dirFilter = function (searchText) {
-    var pattern;
-
     if (Refiler.config.defaultParentlessDirsInNav && searchText === '') {
       return function (dir) {
         return dir.path.indexOf('/') === -1;
       };
     } else {
-      pattern = new RegExp('(^|\/)' + searchText, 'i');
-      return function (dir) {
-        return pattern.test(dir.path);
-      };
+      return {'displayPath': searchText};
     }
   };
 
