@@ -6,27 +6,53 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   this.page.title = ''; // the current title displayed in <h1>
   this.page.error = false; // whether a $routeChangeError has occurred
 
+  // these properties can be used directly when it's known the corresponding
+  // promises must have resolved
   this.user = null;
   this.tags = null;
   this.dirs = null;
+  this.dirTree = null;
 
   deferreds.user = $q.defer();
   deferreds.tags = $q.defer();
   deferreds.dirs = $q.defer();
 
   $http.get('get/get-user-tags-dirs.php').success(function (data) {
-    var dirs = _.map(data.dirs, function (dir) {
-      return new RefilerDir(dir);
-    });
-
-    deferreds.user.resolve(data.user);
-    deferreds.tags.resolve(data.tags);
-    deferreds.dirs.resolve(dirs);
-
-    // these can be used when it's clear the promises must have resolved
     self.user = data.user;
     self.tags = data.tags;
-    self.dirs = dirs;
+
+    self.dirTree = (function (dirs) {
+      var convert = function (dirs) {
+        return _.map(dirs, function (dir) {
+          dir.subdirs = convert(dir.subdirs);
+          return new RefilerDir(dir);
+        });
+      };
+
+      return convert(dirs);
+    }(data.dirs));
+
+    self.dirs = (function (dirs) {
+      var flatten = function (dirs) {
+        var result = [];
+
+        _.each(dirs, function (dir, i) {
+          result.push(dir);
+
+          if (dir.subdirs.length > 0) {
+            result = result.concat(flatten(dir.subdirs));
+          }
+        });
+
+        return result;
+      };
+
+      return flatten(dirs);
+    }(self.dirTree));
+
+    deferreds.user.resolve(self.user);
+    deferreds.tags.resolve(self.tags);
+    deferreds.dirs.resolve(self.dirs);
   });
 
   /**
@@ -51,32 +77,9 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   };
 
   /**
-   * @param  {Object}  dir          Only the path property is used in this
-   *   method.
-   * @param  {boolean} [deep=false] Whether to return all deep subdirs.
-   * @return {Array}   RefilerDir objects.
+   * @return {RefilerDir|undefined}
    */
-  this.getSubdirs = function (dir, deep) {
-    if (typeof deep === 'undefined') {
-      deep = false;
-    }
-
-    var subdirs;
-    var segment = dir.path + '/';
-
-    if (deep) {
-      subdirs = _.where(this.dirs, function (dir) {
-        return dir.path.indexOf(segment) === 0;
-      });
-    } else {
-      var regExp = new RegExp(
-        '^' + segment.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1') + '[^\/]+$'
-      );
-      subdirs = _.where(this.dirs, function (dir) {
-        return dir.path.match(regExp);
-      });
-    }
-
-    return subdirs;
+  this.getDir = function (id) {
+    return _.where(this.dirs, {'id': id})[0];
   };
 });

@@ -11,7 +11,6 @@ angular.module('app').controller('GalleryCtrl', function ($scope, $modal, Auth,
     RefilerModel.page.title = RefilerGalleryModel.tag.name;
   } else if (RefilerGalleryModel.type === 'dir') {
     $scope.dir = RefilerGalleryModel.dir;
-    $scope.subdirs = RefilerModel.getSubdirs($scope.dir);
 
     RefilerModel.page.title = RefilerGalleryModel.dir.formatNestedLink();
   }

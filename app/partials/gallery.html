@@ -19,10 +19,10 @@
 </div>
 
 <!-- subdirs -->
-<div ng-if="dir" ng-show="subdirs.length > 0" class="stack well well-sm">
+<div ng-if="dir" ng-show="dir.subdirs.length > 0" class="stack well well-sm">
   Subfolders
-  <span ng-repeat="dir in subdirs">
-    | <a href="#!/dir/{{dir.path}}">{{dir.getName()}}</a>
+  <span ng-repeat="subdir in dir.subdirs">
+    | <a href="#!/dir/{{subdir.path}}">{{subdir.getName()}}</a>
   </span>
 </div>
 

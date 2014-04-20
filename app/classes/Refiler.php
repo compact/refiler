@@ -127,7 +127,7 @@ class Refiler {
   }
 
   /**
-   * @return array Array of all dir data, intended for JSON-encoded output.
+   * @return array Tree of all dir data, intended for JSON-encoded output.
    */
   public function get_dirs_array() {
     $rows = $this->db->fetch_all('
@@ -141,13 +141,35 @@ class Refiler {
     ');
 
     // typecasting
-    return array_map(function ($row) {
+    $rows = array_map(function ($row) {
       return array(
         'id' => (int)$row['id'],
         'path' => $row['path'],
         'fileCount' => (int)$row['fileCount']
       );
     }, $rows);
+
+    // convert to a tree with path components as keys; for example, the row for
+    // a/b/c is stored in $tree['a']['subdirs']['b']['subdirs']['c']
+    $tree = array();
+    foreach ($rows as $row) {
+      $components = explode('/', $row['path']);
+
+      $branch = array(
+        array_pop($components) => $row
+      );
+
+      while ($component = array_pop($components)) {
+        $branch = array(
+          $component => array(
+            'subdirs' => $branch
+          )
+        );
+      }
+
+      $tree = array_replace_recursive($tree, $branch);
+    }
+    return $tree;
   }
 }
 ?>

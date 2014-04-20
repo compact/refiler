@@ -49,4 +49,14 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
     'minScrollbarLength': 100,
     'suppressScrollX': true
   };
+
+  $scope.dirDetails = function (dir) {
+    if (dir.subdirs.length > 0) {
+      return dir.fileCount + ' ~ ' + dir.subdirs.length;
+    } else if (dir.fileCount > 0) {
+      return dir.fileCount;
+    } else {
+      return '';
+    }
+  };
 });

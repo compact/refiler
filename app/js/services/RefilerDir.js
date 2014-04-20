@@ -7,6 +7,8 @@ angular.module('app').factory('RefilerDir', function service() {
   var RefilerDir = function (dir) {
     this.id = parseInt(dir.id, 10);
     this.path = dir.path;
+    this.fileCount = parseInt(dir.fileCount, 10);
+    this.subdirs = dir.subdirs;
   };
 
   /**
