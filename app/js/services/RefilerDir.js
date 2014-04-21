@@ -43,5 +43,13 @@ angular.module('app').factory('RefilerDir', function service() {
     return this.path.match(/[^\/]+$/)[0];
   };
 
+  /**
+   * @return {string} The path of the parent dir to this dir.
+   */
+  RefilerDir.prototype.getParentPath = function () {
+    var matches = this.path.match(/^(.*)\/[^\/]+$/);
+    return matches === null ? '.' : matches[1];
+  };
+
   return RefilerDir;
 });

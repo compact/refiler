@@ -63,4 +63,23 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   this.getDir = function (id) {
     return _.where(this.dirs, {'id': id})[0];
   };
+
+  /**
+   * Add the given dir to the model.
+   * @param {Object} dir
+   */
+  this.addDir = function (dir) {
+    dir = new RefilerDir(dir);
+
+    // add to this.dirs and sort it
+    this.dirs.push(dir);
+    this.dirs = _.sortBy(this.dirs, 'path');
+
+    // add as a subdir to the parent dir
+    var parentPath = dir.getParentPath();
+    if (parentPath !== '.') {
+      var parent = _.where(this.dirs, {'path': parentPath})[0];
+      parent.subdirs.push(dir);
+    }
+  };
 });

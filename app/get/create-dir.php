@@ -33,9 +33,12 @@ $path = $dir->get_path();
 $success = $dir->create_and_insert();
 
 if ($success) {
+  $dir_array = $dir->get_array();
+  $dir_array['subdirs'] = array();
+
   echo json_encode(array(
     'success' => true,
-    'path' => $path
+    'dir' => $dir_array
   ));
 } else {
   echo json_encode(array(

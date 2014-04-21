@@ -645,8 +645,10 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }).success(function (data) {
         scope.$close(data);
 
+        RefilerModel.addDir(data.dir);
+
         // route to the new dir
-        $location.path('/dir/' + data.path);
+        $location.path('/dir/' + data.dir.path);
       }).error(scope.$httpErrorHandler);
     }
   };
