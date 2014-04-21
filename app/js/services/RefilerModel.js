@@ -58,6 +58,7 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   };
 
   /**
+   * @param  {number} id
    * @return {RefilerDir|undefined}
    */
   this.getDir = function (id) {
@@ -81,5 +82,13 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
       var parent = _.where(this.dirs, {'path': parentPath})[0];
       parent.subdirs.push(dir);
     }
+  };
+
+  /**
+   * Remove the dir with the given id from the model.
+   * @param {number} id
+   */
+  this.removeDir = function (id) {
+    _.remove(this.dirs, {'id': id});
   };
 });

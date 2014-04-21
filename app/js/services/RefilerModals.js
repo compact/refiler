@@ -751,6 +751,8 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }).success(function (data) {
         scope.$close(data);
 
+        RefilerModel.removeDir(RefilerGalleryModel.dir.id);
+
         $location.path('/');
       }).error(scope.$httpErrorHandler);
     }
