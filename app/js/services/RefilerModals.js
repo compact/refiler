@@ -718,6 +718,9 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         }).success(function (data) {
           scope.$close(data);
 
+          RefilerModel.getDir(data.dir.id).setPath(data.dir.path);
+          RefilerModel.sortDirs();
+
           // route to the new dir path
           $location.path('/dir/' + data.dir.path);
         }).error(scope.$httpErrorHandler);

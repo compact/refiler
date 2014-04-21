@@ -1,15 +1,14 @@
 angular.module('app').factory('RefilerDir', function service() {
   /**
-   * Constructor for a dir. Not every plain object containing dir data has to
-   *   be passed into this constructor; do it when the methods are helpful.
-   * @param {Object} dir
+   * Constructor for a dir.
+   * @param {Object} data
    */
-  var RefilerDir = function (dir) {
-    this.id = parseInt(dir.id, 10);
-    this.path = dir.path;
-    this.displayPath = '/' + dir.path;
-    this.fileCount = parseInt(dir.fileCount, 10);
-    this.subdirs = dir.subdirs;
+  var RefilerDir = function (data) {
+    this.id = parseInt(data.id, 10);
+    this.path = data.path;
+    this.displayPath = '/' + data.path;
+    this.fileCount = parseInt(data.fileCount, 10);
+    this.subdirs = data.subdirs;
   };
 
   /**
@@ -49,6 +48,14 @@ angular.module('app').factory('RefilerDir', function service() {
   RefilerDir.prototype.getParentPath = function () {
     var matches = this.path.match(/^(.*)\/[^\/]+$/);
     return matches === null ? '.' : matches[1];
+  };
+
+  /**
+   * @param {string} path
+   */
+  RefilerDir.prototype.setPath = function (path) {
+    this.path = path;
+    this.displayPath = '/' + this.path;
   };
 
   return RefilerDir;

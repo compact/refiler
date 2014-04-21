@@ -20,9 +20,9 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
 
     self.dirTree = (function (dirs) {
       var convert = function (dirs) {
-        return _.map(dirs, function (dir) {
-          dir.subdirs = convert(dir.subdirs);
-          return new RefilerDir(dir);
+        return _.map(dirs, function (data) {
+          data.subdirs = convert(data.subdirs);
+          return new RefilerDir(data);
         });
       };
 
@@ -67,14 +67,14 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
 
   /**
    * Add the given dir to the model.
-   * @param {Object} dir
+   * @param {Object} data Does not have to be a RefilerDir.
    */
-  this.addDir = function (dir) {
-    dir = new RefilerDir(dir);
+  this.addDir = function (data) {
+    dir = new RefilerDir(data);
 
     // add to this.dirs and sort it
     this.dirs.push(dir);
-    this.dirs = _.sortBy(this.dirs, 'path');
+    this.sortDirs();
 
     // add as a subdir to the parent dir
     var parentPath = dir.getParentPath();
@@ -90,5 +90,23 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
    */
   this.removeDir = function (id) {
     _.remove(this.dirs, {'id': id});
+  };
+
+  /**
+   * Update the dir with the given id with the given data (properties of
+   *   RefilerDir).
+   * @param  {number} id
+   * @param  {object} data
+   */
+  this.updateDir = function (id, data) {
+    this.getDir(id).update(data);
+    this.dirs = _.sortBy(this.dirs, 'path');
+  };
+
+  /**
+   * Sort the dirs. Call this method after updating the model.
+   */
+  this.sortDirs = function () {
+    this.dirs = _.sortBy(this.dirs, 'path');
   };
 });

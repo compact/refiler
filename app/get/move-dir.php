@@ -37,9 +37,7 @@ try {
 
   echo json_encode(array(
     'success' => true,
-    'dir' => array(
-      'path' => $dir->get_path()
-    )
+    'dir' => $dir->get_array()
   ));
 } catch (\Exception $e) {
   echo json_encode(array(
