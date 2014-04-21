@@ -21,9 +21,9 @@ angular.module('app').provider('Auth', function () {
     Auth.permissions = _.clone(Auth.guestPermissions);
 
     // get permissions right away
-    RefilerModel.getUser().then(function (user) {
-      Auth.loggedIn = user.loggedIn;
-      Auth.permissions = user.permissions;
+    RefilerModel.ready().then(function (model) {
+      Auth.loggedIn = model.user.loggedIn;
+      Auth.permissions = model.user.permissions;
     });
 
     /**

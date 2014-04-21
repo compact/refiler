@@ -1,21 +1,18 @@
 angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
-  var self = this, deferreds = {};
+  var self = this;
 
   // page
   this.page = {};
   this.page.title = ''; // the current title displayed in <h1>
   this.page.error = false; // whether a $routeChangeError has occurred
 
-  // these properties can be used directly when it's known the corresponding
-  // promises must have resolved
+  var deferred = $q.defer();
+  // these properties can be used directly when it's known that the promise must
+  // have resolved
   this.user = null;
   this.tags = null;
   this.dirs = null;
   this.dirTree = null;
-
-  deferreds.user = $q.defer();
-  deferreds.tags = $q.defer();
-  deferreds.dirs = $q.defer();
 
   $http.get('get/get-user-tags-dirs.php').success(function (data) {
     self.user = data.user;
@@ -50,30 +47,14 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
       return flatten(dirs);
     }(self.dirTree));
 
-    deferreds.user.resolve(self.user);
-    deferreds.tags.resolve(self.tags);
-    deferreds.dirs.resolve(self.dirs);
+    deferred.resolve(self);
   });
 
   /**
-   * @return Promise
+   * @return {Promise}
    */
-  this.getUser = function () {
-    return deferreds.user.promise;
-  };
-
-  /**
-   * @return Promise
-   */
-  this.getTags = function () {
-    return deferreds.tags.promise;
-  };
-
-  /**
-   * @return Promise
-   */
-  this.getDirs = function () {
-    return deferreds.dirs.promise;
+  this.ready = function () {
+    return deferred.promise;
   };
 
   /**
