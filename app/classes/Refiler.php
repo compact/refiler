@@ -153,7 +153,10 @@ class Refiler {
     // a/b/c is stored in $tree['a']['subdirs']['b']['subdirs']['c']
     $tree = array();
     foreach ($rows as $row) {
-      $components = explode('/', $row['path']);
+      $components = explode(
+        '/',
+        $row['path'] === '.' ? '.' : "./{$row['path']}" // to put . at the top
+      );
 
       $branch = array(
         array_pop($components) => $row
