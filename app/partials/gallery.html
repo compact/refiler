@@ -46,8 +46,8 @@
 <ul id="gallery" class="stack clearfix">
   <li ng-repeat="file in RefilerGalleryModel.files | limitTo: (page - 1) * Prefs.filesPerPage - RefilerGalleryModel.files.length | limitTo: Prefs.filesPerPage">
     <div class="file-thumb" ng-class="file.isImage() ? 'image-thumb' : ''">
-      <a ng-href="{{file.getPath()}}" target="_blank"
-          ng-click="$event.which === 1 && file.isImage() ? openLightboxModal(file) : null">
+      <a ng-href="{{file.getPath()}}" ng-click="openFile($event, file)"
+          target="_blank">
         <file-thumb file="file"></file-thumb>
       </a>
     </div>

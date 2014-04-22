@@ -26,6 +26,20 @@ angular.module('app').controller('GalleryCtrl', function ($scope, $modal, Auth,
   // alerts
   $scope.alerts = [];
 
+  $scope.openFile = function ($event, file) {
+    if ($event.which === 1 && file.isImage()) {
+      // open the lightbox modal
+      Lightbox.openModal(
+        RefilerGalleryModel.filterImages(),
+        RefilerGalleryModel.getImageIndex(file)
+      );
+    } else {
+      // trigger middle click
+      // TODO: the cursor gets stuck in the loading animation
+      $event.which = 2;
+    }
+  };
+
   // modals
   $scope.openModal = function (key, data) {
     var modal = RefilerModals.open(key, data);
@@ -38,13 +52,5 @@ angular.module('app').controller('GalleryCtrl', function ($scope, $modal, Auth,
         $scope.alerts = $scope.alerts.concat(alerts);
       }
     });
-  };
-
-  // Lightbox modal
-  $scope.openLightboxModal = function (file) {
-    Lightbox.openModal(
-      RefilerGalleryModel.filterImages(),
-      RefilerGalleryModel.getImageIndex(file)
-    );
   };
 });
