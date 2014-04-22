@@ -12,24 +12,23 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   this.user = null;
   this.tags = null;
   this.dirs = null;
-  this.dirTree = null;
 
   $http.get('get/get-user-tags-dirs.php').success(function (data) {
     self.user = data.user;
     self.tags = data.tags;
 
-    self.dirTree = (function (dirs) {
-      var convert = function (dirs) {
-        return _.map(dirs, function (data) {
-          data.subdirs = convert(data.subdirs);
-          return new RefilerDir(data);
-        });
-      };
-
-      return convert(dirs);
-    }(data.dirs));
-
     self.dirs = (function (dirs) {
+      var tree = (function (dirs) {
+        var convert = function (dirs) {
+          return _.map(dirs, function (data) {
+            data.subdirs = convert(data.subdirs);
+            return new RefilerDir(data);
+          });
+        };
+
+        return convert(dirs);
+      }(dirs));
+
       var flatten = function (dirs) {
         var result = [];
 
@@ -44,8 +43,8 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
         return result;
       };
 
-      return flatten(dirs);
-    }(self.dirTree));
+      return flatten(tree);
+    }(data.dirs));
 
     deferred.resolve(self);
   });
