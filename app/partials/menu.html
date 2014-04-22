@@ -129,13 +129,13 @@
             Create
           </a>
         </li>
-        <li>
+        <li ng-show="RefilerGalleryModel.dir.path !== '.'">
           <a ng-click="openModal('moveDir')">
             <i class="fa fa-fw fa-folder-open-o"></i>
             Rename
           </a>
         </li>
-        <li>
+        <li ng-show="RefilerGalleryModel.dir.path !== '.'">
           <a ng-click="openModal('deleteDir')">
             <i class="fa fa-fw fa-trash-o"></i>
             Delete
