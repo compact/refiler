@@ -125,6 +125,20 @@ h1 {
     width: $side-bar-width + $perfect-scrollbar-width;
     overflow: hidden;
 
+    h2 {
+      width: $side-bar-width;
+      margin: 0;
+      padding:
+        ($small-gutter-width / 2)
+        0
+        ($small-gutter-width / 2)
+        $small-gutter-width;
+      background-color: #e0e2e6;
+      border-right: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      font-size: 1em;
+    }
+
     ul {
       overflow: hidden;
       width: $side-bar-width;
