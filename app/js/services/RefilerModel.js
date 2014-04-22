@@ -100,12 +100,14 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   };
 
   /**
-   * The tag updated is matched by name, not id. This is useful in the case
-   *   where a new tag's id is not yet known.
+   * The tag to be updated is matched by id, or name (if no id is given). The
+   *   second case is useful when a new tag's id is not yet known.
    * @param  {object} data
    */
   this.updateTag = function (data) {
-    _.assign(_.where(this.tags, {'name': data.name})[0], data);
+    var where = typeof data.id === 'number' ?
+      {'id': data.id} : {'name': data.name};
+    return _.assign(_.where(self.tags, where)[0], data);
   };
 
   /**

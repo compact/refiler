@@ -569,18 +569,23 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'caption': scope.model.caption,
         'parentNames': scope.model.parentNames,
         'childNames': scope.model.childNames
-      }).success(function () {
+      }).success(function (data) {
         scope.$close();
 
-        if (scope.model.url !== RefilerGalleryModel.tag.url) {
+        if (data.tag.url !== RefilerGalleryModel.tag.url) {
           // if the url has changed, route to the new url
-          $location.path('/tag/' + RefilerGalleryModel.tag.url);
+          $location.path('/tag/' + data.tag.url);
         } else {
-          $route.reload();
-          // TODO: can do this instead, though more complicated
-          // RefilerGalleryModel.tag.name = scope.model.name;
+          // update both models
+          RefilerModel.page.title = data.tag.name;
+          RefilerModel.updateTag(data.tag);
+          RefilerGalleryModel.tag = data.tag;
         }
-        // TODO: reload (or update) the tag nav on url or name change
+
+        // add any new tags to the model
+        RefilerModel.addTagNames(
+          scope.model.parentNames.concat(scope.model.childNames)
+        );
       }).error(scope.$httpErrorHandler);
     }
   };

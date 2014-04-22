@@ -97,7 +97,8 @@ if ($count === 0) { // special case: delete all relatives
 $db->commit();
 
 echo json_encode(array(
-  'success' => true
+  'success' => true,
+  'tag' => $tag->get_array()
 ));
 
 ?>

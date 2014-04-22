@@ -117,11 +117,32 @@ class Tag {
     return $relatives;
   }
 
+  /**
+   * TODO: include fileCount
+   * @return array An array for outputting in JSON.
+   */
+  public function get_array() {
+    $array = array(
+      'id' => $this->id,
+      'name' => $this->name,
+      'url' => $this->url,
+      'caption' => $this->caption
+    );
+    $array = array_merge($array, $this->get_relatives());
+    return $array;
+  }
+
   ///////////////////////////////////////////////////////////////// db functions
   public function update($name, $url, $caption) {
-    return $this->db->query('UPDATE `TAGS`
+    $statement = $this->db->query('UPDATE `TAGS`
       SET `name` = ?, `url` = ?, `caption` = ?
       WHERE `id` = ?', array($name, $url, $caption, $this->id));
+
+    $this->name = $name;
+    $this->url = $url;
+    $this->caption = $caption;
+
+    return $statement;
   }
   /**
    * Call DB::begin_transaction() and DB::commit() around this function.
