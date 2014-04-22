@@ -110,8 +110,8 @@ angular.module('app').config(function ($routeProvider) {
     'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
-      'data': ['$http', '$route', 'RefilerGalleryModel', function ($http,
-          $route, RefilerGalleryModel) {
+      'data': ['$http', '$route', 'RefilerModel', 'RefilerGalleryModel',
+          function ($http, $route, RefilerModel, RefilerGalleryModel) {
         // we use $route.current.params instead of $routeParams because the
         // latter gets updated only after the route resolves
         return $http.get('get/get-files-by-dir.php', {
@@ -119,6 +119,7 @@ angular.module('app').config(function ($routeProvider) {
             'path': $route.current.params.dir || '.'
           }
         }).success(function (data) {
+          data.dir = RefilerModel.getDir(data.dir.id);
           RefilerGalleryModel.set(data);
         });
       }]
@@ -141,7 +142,9 @@ angular.module('app').config(function ($routeProvider) {
             'url': $route.current.params.tag
           }
         }).success(function (data) {
+          // in case the tag is new, and its data is not yet known
           RefilerModel.updateTag(data.tag);
+
           RefilerGalleryModel.set(data);
         });
       }]

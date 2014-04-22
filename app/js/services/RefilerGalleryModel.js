@@ -3,7 +3,7 @@
  *   for manipulating that data.
  */
 angular.module('app').service('RefilerGalleryModel', function ($filter,
-    $rootScope, Prefs, RefilerModel, RefilerFile) {
+    $rootScope, Prefs, RefilerFile) {
   var self, sortFiles;
 
   this.files = [];
@@ -26,13 +26,11 @@ angular.module('app').service('RefilerGalleryModel', function ($filter,
 
   this.set = function (data) {
     if (typeof data.tag === 'object') {
-      // set tag data
       this.type = 'tag';
       this.tag = data.tag;
     } else if (typeof data.dir === 'object') {
-      // set dir data
       this.type = 'dir';
-      this.dir = RefilerModel.getDir(data.dir.id);
+      this.dir = data.dir;
     } else {
       this.type = '';
     }
