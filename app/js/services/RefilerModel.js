@@ -73,11 +73,11 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
         var url = name.toLowerCase().replace(/[ \W]+/g, '-');
 
         self.tags.push({
-          'id': url, // placeholder until the user reloads
+          // id not set until the user navigates to the tag
           'name': name,
           'url': url,
           'caption': '',
-          'fileCount': 'new', // placeholder until the user reloads
+          'fileCount': 'new', // displayed placeholder until the user reloads
           'parentCount': 0,
           'childCount': 0
         });
@@ -100,14 +100,18 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   };
 
   /**
-   * The tag to be updated is matched by id, or name (if no id is given). The
-   *   second case is useful when a new tag's id is not yet known.
+   * The tag to be updated is matched by id, or name (if the id isn't found).
+   *   The second case is useful when a new tag's id is not yet known.
    * @param  {object} data
    */
   this.updateTag = function (data) {
-    var where = typeof data.id === 'number' ?
-      {'id': data.id} : {'name': data.name};
-    return _.assign(_.where(self.tags, where)[0], data);
+    var tags = _.where(self.tags, {'id': data.id});
+
+    if (tags.length === 0) {
+      tags = _.where(self.tags, {'name': data.name});
+    }
+
+    _.assign(tags[0], data);
   };
 
   /**
