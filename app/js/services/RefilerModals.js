@@ -560,8 +560,8 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'caption': scope.model.caption,
         'parentNames': scope.model.parentNames,
         'childNames': scope.model.childNames
-      }).success(function (data) {
-        scope.$close(data);
+      }).success(function () {
+        scope.$close();
 
         if (scope.model.url !== RefilerGalleryModel.tag.url) {
           // if the url has changed, route to the new url
@@ -599,8 +599,8 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'params': {
           'id': RefilerGalleryModel.tag.id
         }
-      }).success(function (data) {
-        scope.$close(data);
+      }).success(function () {
+        scope.$close();
 
         $location.path('/');
       });
@@ -643,8 +643,9 @@ angular.module('app').service('RefilerModals', function ($http, $location,
           'path': path
         }
       }).success(function (data) {
-        scope.$close(data);
+        scope.$close();
 
+        // update the model
         RefilerModel.addDir(data.dir);
 
         // route to the new dir
@@ -716,8 +717,9 @@ angular.module('app').service('RefilerModals', function ($http, $location,
             'path': newPath
           }
         }).success(function (data) {
-          scope.$close(data);
+          scope.$close();
 
+          // update the model
           RefilerModel.getDir(data.dir.id).setPath(data.dir.path);
           RefilerModel.sortDirs();
 
@@ -751,9 +753,10 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'params': {
           'id': RefilerGalleryModel.dir.id
         }
-      }).success(function (data) {
-        scope.$close(data);
+      }).success(function () {
+        scope.$close();
 
+        // update the model
         RefilerModel.removeDir(RefilerGalleryModel.dir.id);
 
         $location.path('/');
@@ -799,8 +802,8 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'tagNames': scope.model.tagNames,
         'recursive': scope.model.recursive ? 1 : 0,
         'overwrite': scope.model.overwrite ? 1 : 0
-      }).success(function (data) {
-        scope.$close(data);
+      }).success(function () {
+        scope.$close();
       }).error(scope.$httpErrorHandler);
     }
   };
