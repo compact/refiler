@@ -813,6 +813,9 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'overwrite': scope.model.overwrite ? 1 : 0
       }).success(function () {
         scope.$close();
+
+        // add any new tags to the model
+        RefilerModel.addTagNames(scope.model.tagNames);
       }).error(scope.$httpErrorHandler);
     }
   };
@@ -841,6 +844,9 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'overwrite': scope.model.overwrite ? 1 : 0
       }).success(function () {
         scope.$close();
+
+        // add any new tags to the model
+        RefilerModel.addTagNames(scope.model.tagNames);
       }).error(scope.$httpErrorHandler);
     }
   };
