@@ -134,15 +134,16 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   this.addDir = function (data) {
     dir = new RefilerDir(data);
 
-    // add to this.dirs and sort it
+    // add to this.dirs, and sort it
     this.dirs.push(dir);
     this.sortDirs();
 
-    // add as a subdir to the parent dir
+    // add as a subdir to the parent dir, and sort the subdirs
     var parentPath = dir.getParentPath();
     if (parentPath !== '.') {
       var parent = _.where(this.dirs, {'path': parentPath})[0];
       parent.subdirs.push(dir);
+      parent.subdirs = _.sortBy(parent.subdirs, 'path');
     }
   };
 
