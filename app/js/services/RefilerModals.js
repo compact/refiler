@@ -676,28 +676,18 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       }
     ],
     'open': function (scope) {
-      var parentPath, name, matches;
-
-      // calculate the parent and name of the current dir
-      matches = RefilerGalleryModel.dir.path.match(/^(.+)\/([^/]+)$/);
-      if (matches !== null) {
-        parentPath = matches[1];
-        name = matches[2];
-      } else {
-        // no '/' in path, so it's in the base dir
-        parentPath = '.';
-        name = RefilerGalleryModel.dir.path;
-      }
-
       // old path for display only
       scope.path = RefilerGalleryModel.dir.displayPath;
 
       // model to set the new path
+      var parentPath = RefilerGalleryModel.dir.getParentPath();
       scope.model.parent = {
-        'id': _.where(RefilerModel.dirs, {'path': parentPath})[0].id,
+        'id': _.where(RefilerModel.dirs, {
+          'path': parentPath
+        })[0].id, // TODO: turn this into a method of RefilerModel
         'text': '/' + parentPath
       };
-      scope.model.name = name;
+      scope.model.name = RefilerGalleryModel.dir.getName();
 
       // focus the name input
       $timeout(function () {
