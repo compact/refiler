@@ -49,7 +49,7 @@ angular.module('app').config(function ($httpProvider) {
 
 
 
-  // $http response interceptor for requests to get/* and post/*
+  // $http response interceptor for requests to get and post
   $httpProvider.interceptors.push(['$q', function($q) {
     return {
       'response': function (response) {

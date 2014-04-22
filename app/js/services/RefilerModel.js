@@ -32,7 +32,7 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
       var flatten = function (dirs) {
         var result = [];
 
-        _.each(dirs, function (dir, i) {
+        _.each(dirs, function (dir) {
           result.push(dir);
 
           if (dir.subdirs.length > 0) {
@@ -129,10 +129,10 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
 
   /**
    * Add the given dir to the model.
-   * @param {Object} data Does not have to be a RefilerDir.
+   * @param {object} data Does not have to be a RefilerDir.
    */
   this.addDir = function (data) {
-    dir = new RefilerDir(data);
+    var dir = new RefilerDir(data);
 
     // add to this.dirs, and sort it
     this.dirs.push(dir);
