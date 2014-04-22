@@ -1,6 +1,7 @@
 /**
  * An object storing the tag/dir/files currently being viewed, with methods
- *   for manipulating that data.
+ *   for manipulating that data. The RefilerGalleryModelChange event is
+ *   triggered when the files change.
  */
 angular.module('app').service('RefilerGalleryModel', function ($filter,
     $rootScope, Prefs, RefilerFile) {

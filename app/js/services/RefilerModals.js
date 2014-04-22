@@ -579,6 +579,8 @@ angular.module('app').service('RefilerModals', function ($http, $location,
           // update both models
           RefilerModel.page.title = data.tag.name;
           RefilerModel.updateTag(data.tag);
+          // no need to trigger RefilerGalleryModelChange, because the files
+          // haven't changed
           RefilerGalleryModel.tag = data.tag;
         }
 
