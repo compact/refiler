@@ -347,14 +347,13 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
       scope.uploader.bind('completeall', function () {
         // the attempt to upload all files in the queue has completed
-        var dir, dirLink, alerts = [];
+        var dir = RefilerModel.getDir(scope.model.dir.id);
 
-        dir = new RefilerDir({
-          'path': scope.model.dir.text.substr(1)
-        });
-        dirLink = dir.formatLink({
-          'class': 'alert-link'
-        });
+        // update the model
+        dir.fileCount += uploadedFiles.length;
+
+        var alerts = [];
+        var dirLink = dir.formatLink({'class': 'alert-link'});
 
         // format an alert for all uploaded files
         if (uploadedFiles.length > 0) {
@@ -460,20 +459,20 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         'tagNames': scope.model.tagNames,
         'urls': scope.model.urls
       }).success(function (data) {
-        var alerts, dir, dirLink;
-
-        // add to the model any curled files that belong in it
+        // add to the gallery model any curled files that belong in it
         if (RefilerGalleryModel.type === 'dir') {
           RefilerGalleryModel.addFiles(_.where(data.files, {
             'dirPath': RefilerGalleryModel.dir.path
           }));
         }
 
-        alerts = [];
-        dir = new RefilerDir({
-          'path': scope.model.dir.text.substr(1)
-        });
-        dirLink = dir.formatLink({
+        var dir = RefilerModel.getDir(scope.model.dir.id);
+
+        // update the dir model
+        dir.fileCount += data.files.length;
+
+        var alerts = [];
+        var dirLink = dir.formatLink({
           'class': 'alert-link'
         });
 
