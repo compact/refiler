@@ -134,13 +134,14 @@ angular.module('app').config(function ($routeProvider) {
     'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
-      'data': ['$http', '$route', 'RefilerGalleryModel', function ($http,
-          $route, RefilerGalleryModel) {
+      'data': ['$http', '$route', 'RefilerModel', 'RefilerGalleryModel',
+          function ($http, $route, RefilerModel, RefilerGalleryModel) {
         return $http.get('get/get-files-by-tag.php', {
           'params': {
             'url': $route.current.params.tag
           }
         }).success(function (data) {
+          RefilerModel.updateTag(data.tag);
           RefilerGalleryModel.set(data);
         });
       }]

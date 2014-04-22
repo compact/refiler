@@ -163,9 +163,12 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         if (RefilerGalleryModel.type === 'dir' &&
             data.file.dirPath !== RefilerGalleryModel.dir.path) {
           RefilerGalleryModel.removeFile(data.file.id);
-        } else { // TODO for tags
+        } else { // TODO for tags: remove the file if it has been untagged
           RefilerGalleryModel.updateFile(data.file);
         }
+
+        // add any new tags to the model
+        RefilerModel.addTagNames(scope.model.tagNames);
       }).error(scope.$httpErrorHandler);
     }
   };
@@ -405,6 +408,10 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
         // upload all files; the event handlers were bound in .open above
         scope.uploader.uploadAll();
+
+        // add any new tags to the model; these tags are added even if no files
+        // were successfully uploaded
+        RefilerModel.addTagNames(scope.model.tagNames);
       }
     }
   };
@@ -470,6 +477,9 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
         // update the dir model
         dir.fileCount += data.files.length;
+
+        // add any new tags to the model
+        RefilerModel.addTagNames(scope.model.tagNames);
 
         var alerts = [];
         var dirLink = dir.formatLink({
@@ -600,6 +610,9 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         }
       }).success(function () {
         scope.$close();
+
+        // update the model
+        RefilerModel.removeTag(RefilerGalleryModel.tag.id);
 
         $location.path('/');
       });

@@ -49,12 +49,73 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
     deferred.resolve(self);
   });
 
+
+
   /**
    * @return {Promise}
    */
   this.ready = function () {
     return deferred.promise;
   };
+
+
+
+  /**
+   * Add the given tag names to the model, if they don't already exist in it.
+   * @param {array} names
+   */
+  this.addTagNames = function (names) {
+    var tagsPushed = false; // determines whether the tags have to be sorted
+
+    _.each(names, function (name) {
+      if (_.where(self.tags, {'name': name}).length === 0) {
+        // see Tag::get_default_url()
+        var url = name.toLowerCase().replace(/[ \W]+/g, '-');
+
+        self.tags.push({
+          'id': url, // placeholder until the user reloads
+          'name': name,
+          'url': url,
+          'caption': '',
+          'fileCount': 'new', // placeholder until the user reloads
+          'parentCount': 0,
+          'childCount': 0
+        });
+
+        tagsPushed = true;
+      }
+    });
+
+    if (tagsPushed) {
+      this.sortTags();
+    }
+  };
+
+  /**
+   * Remove the tag with the given id from the model.
+   * @param  {number} id
+   */
+  this.removeTag = function (id) {
+    _.remove(this.tags, {'id': id});
+  };
+
+  /**
+   * The tag updated is matched by name, not id. This is useful in the case
+   *   where a new tag's id is not yet known.
+   * @param  {object} data
+   */
+  this.updateTag = function (data) {
+    _.assign(_.where(this.tags, {'name': data.name})[0], data);
+  };
+
+  /**
+   * Sort the dirs. Call this method after updating the model.
+   */
+  this.sortTags = function () {
+    this.tags = _.sortBy(this.tags, 'name');
+  };
+
+
 
   /**
    * @param  {number} id
@@ -89,17 +150,6 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
    */
   this.removeDir = function (id) {
     _.remove(this.dirs, {'id': id});
-  };
-
-  /**
-   * Update the dir with the given id with the given data (properties of
-   *   RefilerDir).
-   * @param  {number} id
-   * @param  {object} data
-   */
-  this.updateDir = function (id, data) {
-    this.getDir(id).update(data);
-    this.dirs = _.sortBy(this.dirs, 'path');
   };
 
   /**
