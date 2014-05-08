@@ -16,35 +16,7 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   $http.get('get/get-user-tags-dirs.php').success(function (data) {
     self.user = data.user;
     self.tags = data.tags;
-
-    self.dirs = (function (dirs) {
-      var tree = (function (dirs) {
-        var convert = function (dirs) {
-          return _.map(dirs, function (data) {
-            data.subdirs = convert(data.subdirs);
-            return new RefilerDir(data);
-          });
-        };
-
-        return convert(dirs);
-      }(dirs));
-
-      var flatten = function (dirs) {
-        var result = [];
-
-        _.each(dirs, function (dir) {
-          result.push(dir);
-
-          if (dir.subdirs.length > 0) {
-            result = result.concat(flatten(dir.subdirs));
-          }
-        });
-
-        return result;
-      };
-
-      return flatten(tree);
-    }(data.dirs));
+    self.setDirs(data.dirs);
 
     deferred.resolve(self);
   });
@@ -122,6 +94,36 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   };
 
 
+
+  /**
+   * Set the dirs with the given data, which is a tree of plain objects that
+   *   must be flattened and converted to RefilerDir objects.
+   * @param {Object[]} dirs
+   */
+  this.setDirs = function (dirs) {
+    var convert = function (dirs) {
+      return _.map(dirs, function (data) {
+        data.subdirs = convert(data.subdirs);
+        return new RefilerDir(data);
+      });
+    };
+
+    var flatten = function (dirs) {
+      var result = [];
+
+      _.each(dirs, function (dir) {
+        result.push(dir);
+
+        if (dir.subdirs.length > 0) {
+          result = result.concat(flatten(dir.subdirs));
+        }
+      });
+
+      return result;
+    };
+
+    this.dirs = flatten(convert(dirs));
+  };
 
   /**
    * @param  {number} id

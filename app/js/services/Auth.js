@@ -45,7 +45,7 @@ angular.module('app').provider('Auth', function () {
           RefilerModel.tags = data.tags;
         }
         if (typeof data.dirs !== 'undefined') {
-          RefilerModel.dirs = data.dirs;
+          RefilerModel.setDirs(data.dirs);
         }
 
         deferred.resolve();
