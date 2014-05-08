@@ -25,6 +25,9 @@ angular.module('app').provider('Refiler', function () {
   this.config.defaultParentlessTagsInNav = false;
   this.config.defaultParentlessDirsInNav = false;
 
+  // whether to highlight the search text in the nav
+  this.config.highlightSearchText = true;
+
   // TODO: default upload dir
 
   // service

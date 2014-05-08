@@ -242,4 +242,5 @@ angular.module('app').config(function (LightboxProvider) {
 angular.module('app').config(function (RefilerProvider) {
   RefilerProvider.config.defaultParentlessTagsInNav = true;
   RefilerProvider.config.defaultParentlessDirsInNav = true;
+  RefilerProvider.config.highlightSearchText = false;
 });

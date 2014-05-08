@@ -54,4 +54,6 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
       return '';
     }
   };
+
+  $scope.highlightSearchText = Refiler.config.highlightSearchText;
 });

@@ -16,7 +16,9 @@
       <li ng-repeat="tag in filteredTags = (RefilerModel.tags | filter: tagFilter(searchText))">
         <a href="#!/tag/{{tag.url}}" title="{{tag.caption}}"
             ng-class="{'selected': isSelected('tag', tag.id)}">
-          <span ng-bind-html="tag.name | highlight: searchText"></span>
+          <span ng-if="!highlightSearchText">{{tag.name}}</span>
+          <span ng-if="highlightSearchText"
+            ng-bind-html="tag.name | highlight: searchText"></span>
           <span class="details">
             {{tag.fileCount}}
             {{tag.childCount > 0 ? '~ ' + tag.childCount : ''}}
@@ -39,7 +41,9 @@
             tooltip-placement="right"
             tooltip-animation="false"
             tooltip-append-to-body="true">
-          <span ng-bind-html="dir.displayPath | highlight: searchText"></span>
+          <span ng-if="!highlightSearchText">{{dir.displayPath}}</span>
+          <span ng-if="highlightSearchText"
+            ng-bind-html="dir.displayPath | highlight: searchText"></span>
           <span class="details">{{dirDetails(dir)}}</span>
         </a>
       </li>
