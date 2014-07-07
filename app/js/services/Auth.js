@@ -20,10 +20,14 @@ angular.module('app').provider('Auth', function () {
     // logs in successfully
     Auth.permissions = _.clone(Auth.guestPermissions);
 
+    // whether the user's permissions have been verified
+    Auth.verified = false;
+
     // get permissions right away
     RefilerModel.ready().then(function (model) {
       Auth.loggedIn = model.user.loggedIn;
       Auth.permissions = model.user.permissions;
+      Auth.verified = true;
     });
 
     /**

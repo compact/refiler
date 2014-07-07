@@ -48,7 +48,7 @@
 
 
   <!-- guest menu -->
-  <div class="btn-group" ng-if="!Auth.loggedIn">
+  <div class="btn-group" ng-if="!Auth.loggedIn && Auth.verified">
     <a class="btn btn-sm btn-default" href="#!/login">
       <i class="fa fa-fw fa-user"></i>
       Login
