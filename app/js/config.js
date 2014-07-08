@@ -59,14 +59,14 @@ angular.module('app').config(function ($httpProvider) {
             if (response.data.success) {
               return $q.when(response);
             } else if (typeof response.data.error === 'string') {
-              console.warn('$http response error, case 1', response.data);
+              console.warn('$http response error (custom)', response.data);
               return $q.reject(response);
             }
           }
 
           // mostly a case where an error gets output inadvertently as a string
           // (outside the intended JSON)
-          console.warn('$http response error, case 2', response.data);
+          console.warn('$http response error (direct output)', response.data);
           return $q.reject(response);
         } else {
           // default behaviour for all other urls
@@ -74,7 +74,7 @@ angular.module('app').config(function ($httpProvider) {
         }
       },
       'responseError': function (rejection) {
-        console.warn('$http response error, case 3', rejection);
+        console.warn('$http response error (rejection)', rejection);
         return $q.reject(rejection);
         // if (typeof rejection.status === 'number') {
         //   switch (rejection.status) {
