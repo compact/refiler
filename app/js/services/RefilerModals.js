@@ -2,8 +2,8 @@
  * The modals defined here are opened in GalleryCtrl, its descendant MenuCtrl,
  *   and in the lightbox. 
  */
-angular.module('app').service('RefilerModals', function ($http, $location,
-    $route, $timeout, $modal, $fileUploader, Auth, RefilerDir, RefilerFile,
+angular.module('app').service('RefilerModals', function ($location, $route,
+    $timeout, $modal, $fileUploader, Auth, RefilerAPI, RefilerDir, RefilerFile,
     RefilerGalleryModel, RefilerModel) {
   var modals = {};
 
@@ -103,11 +103,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
       scope.path = file.getPath();
 
-      $http.get('get/get-tags-by-file.php', {
-        'params': {
-          'id': file.id
-        }
-      }).success(function (data) {
+      RefilerAPI.getTagsByFile(file.id).then(function (data) {
         scope.model.tagNames = _.pluck(data.tags, 'name');
         scope.disabled = false;
       });
@@ -123,11 +119,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       scope.file = file;
 
       scope.updateThumb = function () {
-        $http.get('get/update-thumb.php', {
-          'params': {
-            'id': file.id
-          }
-        }).success(function (data) {
+        RefilerAPI.updateFileThumb(file.id).then(function (data) {
           // update the model
           RefilerGalleryModel.updateFile(data.file);
 
@@ -156,7 +148,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         data.name = newName;
       }
 
-      $http.post('post/edit-file.php', data).success(function (data) {
+      RefilerAPI.editFile(data).then(function (data) {
         scope.$close();
 
         // update the gallery
@@ -169,7 +161,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
         // add any new tags to the model
         RefilerModel.addTagNames(scope.model.tagNames);
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -194,15 +186,11 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       });
     },
     'submit': function (scope, file) {
-      $http.get('get/delete-file.php', {
-        'params': {
-          'id': file.id
-        }
-      }).success(function () {
+      RefilerAPI.deleteFile(file.id).then(function () {
         RefilerGalleryModel.removeFile(file.id);
 
         scope.$close();
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -307,7 +295,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       // usage of $http.
       scope.uploader = $fileUploader.create({
         'scope': scope,
-        'url': 'post/upload-file.php',
+        'url': RefilerAPI.uploadFileUrl,
          // purely for visual consistency so the queue doesn't disappear row by
          // row; we close the modal after all files have uploaded
         'removeAfterUpload': false
@@ -461,11 +449,11 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       });
     },
     'submit': function (scope) {
-      $http.post('post/curl-files.php', {
+      RefilerAPI.curl({
         'dirId': scope.model.dir.id,
         'tagNames': scope.model.tagNames,
         'urls': scope.model.urls
-      }).success(function (data) {
+      }).then(function (data) {
         // add to the gallery model any curled files that belong in it
         if (RefilerGalleryModel.type === 'dir') {
           RefilerGalleryModel.addFiles(_.where(data.files, {
@@ -514,7 +502,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
         // close the modal and display the alerts in the gallery
         scope.$close(alerts);
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -562,14 +550,14 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       });
     },
     'submit': function (scope) {
-      $http.post('post/edit-tag.php', {
+      RefilerAPI.editTag({
         'id': RefilerGalleryModel.tag.id,
         'name': scope.model.name,
         'url': scope.model.url,
         'caption': scope.model.caption,
         'parentNames': scope.model.parentNames,
         'childNames': scope.model.childNames
-      }).success(function (data) {
+      }).then(function (data) {
         scope.$close();
 
         if (data.tag.url !== RefilerGalleryModel.tag.url) {
@@ -588,7 +576,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
         RefilerModel.addTagNames(
           scope.model.parentNames.concat(scope.model.childNames)
         );
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -611,15 +599,13 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       });
     },
     'submit': function (scope) {
-      $http.get('get/delete-tag.php', {
-        'params': {
-          'id': RefilerGalleryModel.tag.id
-        }
-      }).success(function () {
+      var id = RefilerGalleryModel.tag.id;
+
+      RefilerAPI.deleteTag(id).then(function () {
         scope.$close();
 
         // update the model
-        RefilerModel.removeTag(RefilerGalleryModel.tag.id);
+        RefilerModel.removeTag(id);
 
         $location.path('/');
       });
@@ -657,11 +643,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       var path = scope.model.parent.text.substr(1); // remove leading slash
       path += '/' + scope.model.name;
 
-      $http.get('get/create-dir.php', {
-        'params': {
-          'path': path
-        }
-      }).success(function (data) {
+      RefilerAPI.createDir(path).then(function (data) {
         scope.$close();
 
         // update the model
@@ -669,7 +651,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
         // route to the new dir
         $location.path('/dir/' + data.dir.path);
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -720,12 +702,10 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       if (RefilerGalleryModel.dir.path === newPath) {
         scope.alerts.push({'message': 'No change.'});
       } else {
-        $http.get('get/move-dir.php', {
-          'params': {
-            'id': RefilerGalleryModel.dir.id,
-            'path': newPath
-          }
-        }).success(function (data) {
+        RefilerAPI.moveDir({
+          'id': RefilerGalleryModel.dir.id,
+          'path': newPath
+        }).then(function (data) {
           scope.$close();
 
           // update the model
@@ -734,7 +714,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
           // route to the new dir path
           $location.path('/dir/' + data.dir.path);
-        }).error(scope.$httpErrorHandler);
+        }, scope.$httpErrorHandler);
       }
     }
   };
@@ -758,18 +738,16 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       });
     },
     'submit': function (scope) {
-      $http.get('get/delete-dir.php', {
-        'params': {
-          'id': RefilerGalleryModel.dir.id
-        }
-      }).success(function () {
+      var id = RefilerGalleryModel.dir.id;
+
+      RefilerAPI.deleteDir(id).then(function () {
         scope.$close();
 
         // update the model
-        RefilerModel.removeDir(RefilerGalleryModel.dir.id);
+        RefilerModel.removeDir(id);
 
         $location.path('/');
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -806,17 +784,17 @@ angular.module('app').service('RefilerModals', function ($http, $location,
       scope.model.overwrite = false;
     },
     'submit': function (scope) {
-      $http.post('post/tag-files-by-dir.php', {
+      RefilerAPI.tagFilesByDir({
         'dirId': RefilerGalleryModel.dir.id,
         'tagNames': scope.model.tagNames,
         'recursive': scope.model.recursive ? 1 : 0,
         'overwrite': scope.model.overwrite ? 1 : 0
-      }).success(function () {
+      }).then(function () {
         scope.$close();
 
         // add any new tags to the model
         RefilerModel.addTagNames(scope.model.tagNames);
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -838,16 +816,16 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     'submit': function (scope) {
       var fileIds = RefilerGalleryModel.getSelectedFileIds();
 
-      $http.post('post/tag-files-by-ids.php', {
+      RefilerAPI.tagFilesByIds({
         'fileIds': fileIds,
         'tagNames': scope.model.tagNames,
         'overwrite': scope.model.overwrite ? 1 : 0
-      }).success(function () {
+      }).then(function () {
         scope.$close();
 
         // add any new tags to the model
         RefilerModel.addTagNames(scope.model.tagNames);
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -877,14 +855,14 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     'submit': function (scope) {
       var fileIds = RefilerGalleryModel.getSelectedFileIds();
 
-      $http.post('post/move-files-by-ids.php', {
+      RefilerAPI.moveFilesByIds({
         'fileIds': fileIds,
         'dirId': scope.model.dir.id
-      }).success(function () {
+      }).then(function () {
         scope.$close();
 
         $route.reload();
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -901,13 +879,11 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     'submit': function (scope) {
       var ids = RefilerGalleryModel.getSelectedFileIds();
 
-      $http.post('post/delete-files-by-ids.php', {
-        'ids': ids
-      }).success(function () {
+      RefilerAPI.deleteFilesByIds(ids).then(function () {
         RefilerGalleryModel.removeFiles(ids);
 
         scope.$close();
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 
@@ -971,7 +947,7 @@ angular.module('app').service('RefilerModals', function ($http, $location,
     ],
     'open': function (scope) {
       scope.disabled = true;
-      $http.get('get/get-users.php').success(function (data) {
+      RefilerAPI.getUsers().then(function (data) {
         scope.users = data.users;
         scope.disabled = false;
       });
@@ -985,24 +961,18 @@ angular.module('app').service('RefilerModals', function ($http, $location,
 
       scope.deleteUser = function (user) {
         scope.disabled = true;
-        $http.get('get/delete-user.php', {
-          'params': {
-            'id': user.id
-          }
-        }).success(function () {
+        RefilerAPI.deleteUser(user.id).then(function () {
           _.remove(scope.users, {'id': user.id});
           scope.disabled = false;
-        }).error(scope.$httpErrorHandler);
+        }, scope.$httpErrorHandler);
       };
     },
     'submit': function (scope) {
       scope.disabled = true;
-      $http.post('post/edit-users.php', {
-        'users': scope.users
-      }).success(function (data) {
+      RefilerAPI.editUsers(scope.users).then(function (data) {
         scope.users = data.users;
         scope.disabled = false;
-      }).error(scope.$httpErrorHandler);
+      }, scope.$httpErrorHandler);
     }
   };
 });

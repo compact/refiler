@@ -7,7 +7,8 @@ angular.module('app').provider('Auth', function () {
   };
 
   // service
-  this.$get = function service($http, $location, $q, RefilerModel) {
+  this.$get = function service($http, $location, $q, Refiler, RefilerAPI,
+      RefilerModel) {
     var Auth = {};
 
     // whether the user is currently logged in
@@ -32,7 +33,7 @@ angular.module('app').provider('Auth', function () {
 
     /**
      * User activation is absorbed into this method since its logic is the same
-     *   as logging in.
+     *   as logging in. TODO: try not using $q
      * @param  {string}  action 'login' or 'activate'
      * @param  {Object}  data
      * @return {Promise}
@@ -40,7 +41,7 @@ angular.module('app').provider('Auth', function () {
     Auth.login = function (action, data) {
       var deferred = $q.defer();
 
-      $http.post('post/' + action + '.php', data).success(function (data) {
+      RefilerAPI[action](data).then(function (data) {
         Auth.loggedIn = true;
         Auth.permissions = data.user.permissions;
 
@@ -53,7 +54,7 @@ angular.module('app').provider('Auth', function () {
         }
 
         deferred.resolve();
-      }).error(function (data) {
+      }, function (data) {
         deferred.reject(data.error || 'Error.');
       });
 
@@ -61,7 +62,7 @@ angular.module('app').provider('Auth', function () {
     };
 
     Auth.logout = function () {
-      $http.get('get/logout.php').success(function (data) {
+      RefilerAPI.logout().then(function (data) {
         Auth.loggedIn = false;
 
         // update RefilerModel if needed
@@ -81,13 +82,9 @@ angular.module('app').provider('Auth', function () {
     Auth.getEmailByActivationCode = function (activationCode) {
       var deferred = $q.defer();
 
-      $http.get('get/get-email-by-activation-code.php', {
-        'params': {
-          'activationCode': activationCode
-        }
-      }).success(function (data) {
+      RefilerAPI.getUserByActivationCode(activationCode).then(function (data) {
         deferred.resolve(data.email);
-      }).error(function (data) {
+      }, function (data) {
         deferred.reject(data.error || 'Error.');
       });
 

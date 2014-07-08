@@ -1,5 +1,5 @@
 angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
-    $modal, Auth, Prefs, RefilerGalleryModel) {
+    $modal, Auth, Prefs, RefilerAPI, RefilerGalleryModel) {
   $scope.Prefs = Prefs;
   $scope.reload = $route.reload;
   $scope.Auth = Auth;
@@ -9,12 +9,8 @@ angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
 
   // when the Folder → Reload data button is clicked
   $scope.updateDir = function () {
-    $http.get('get/update-dir.php', {
-      'params': {
-        'id': RefilerGalleryModel.dir.id
-      }
-    }).then(function success() {
-      $route.reload();
+    RefilerAPI.getDir(RefilerGalleryModel.dir.id, true).then(function () {
+      $route.reload(); // TODO: update the model instead of reloading
     });
   };
 

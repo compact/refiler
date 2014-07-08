@@ -1,4 +1,5 @@
-angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
+angular.module('app').service('RefilerModel', function ($http, $q, RefilerAPI,
+    RefilerDir) {
   var self = this;
 
   // page
@@ -13,7 +14,7 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   this.tags = null;
   this.dirs = null;
 
-  $http.get('get/get-user-tags-dirs.php').success(function (data) {
+  RefilerAPI.getInitData().then(function (data) {
     self.user = data.user;
     self.tags = data.tags;
     self.setDirs(data.dirs);
@@ -31,6 +32,10 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   };
 
 
+
+  this.getTagByUrl = function (url) {
+    return _.where(this.tags, {'url': url})[0] || null;
+  };
 
   /**
    * Add the given tag names to the model, if they don't already exist in it.
@@ -126,11 +131,19 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerDir) {
   };
 
   /**
-   * @param  {number} id
-   * @return {RefilerDir|undefined}
+   * @param  {number}          id
+   * @return {RefilerDir|null}
    */
   this.getDir = function (id) {
-    return _.where(this.dirs, {'id': id})[0];
+    return _.where(this.dirs, {'id': id})[0] || null;
+  };
+
+  /**
+   * @param  {string}          path
+   * @return {RefilerDir|null}
+   */
+  this.getDirByPath = function (path) {
+    return _.where(this.dirs, {'path': path})[0] || null;
   };
 
   /**

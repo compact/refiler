@@ -53,7 +53,7 @@ angular.module('app').config(function ($httpProvider) {
   $httpProvider.interceptors.push(['$q', function($q) {
     return {
       'response': function (response) {
-        if (response.config.url.match(/^(get|post)/)) {
+        if (response.config.url.match(/^api/)) {
           // these urls being intercepted all respond with a success boolean
           if (typeof response.data.success === 'boolean') {
             if (response.data.success) {
@@ -110,17 +110,26 @@ angular.module('app').config(function ($routeProvider) {
     'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
-      'data': ['$http', '$route', 'RefilerModel', 'RefilerGalleryModel',
-          function ($http, $route, RefilerModel, RefilerGalleryModel) {
-        // we use $route.current.params instead of $routeParams because the
-        // latter gets updated only after the route resolves
-        return $http.get('get/get-files-by-dir.php', {
-          'params': {
-            'path': $route.current.params.dir || '.'
+      'data': ['$route', 'RefilerAPI', 'RefilerModel', 'RefilerGalleryModel',
+          function ($route, RefilerAPI, RefilerModel, RefilerGalleryModel) {
+        // use $route.current.params instead of $routeParams because the latter
+        // gets updated only after the route resolves
+        var path = $route.current.params.path || '.';
+
+        // RefilerModel needs to be ready in order to get the dir id
+        return RefilerModel.ready().then(function (model) {
+          var dir = model.getDirByPath(path);
+
+          if (dir === null) {
+            throw 'Folder not found';
           }
-        }).success(function (data) {
-          data.dir = RefilerModel.getDir(data.dir.id);
-          RefilerGalleryModel.set(data);
+
+          return RefilerAPI.getDir(dir.id).then(function (data) {
+            RefilerGalleryModel.set({
+              'dir': dir,
+              'files': data.files
+            });
+          });
         });
       }]
     }
@@ -131,26 +140,33 @@ angular.module('app').config(function ($routeProvider) {
     'controller': 'LoginCtrl'
   };
 
-  $routeProvider.when('/tag/:tag', {
+  $routeProvider.when('/tag/:url', {
     'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
-      'data': ['$http', '$route', 'RefilerModel', 'RefilerGalleryModel',
-          function ($http, $route, RefilerModel, RefilerGalleryModel) {
-        return $http.get('get/get-files-by-tag.php', {
-          'params': {
-            'url': $route.current.params.tag
-          }
-        }).success(function (data) {
-          // in case the tag is new, and its data is not yet known
-          RefilerModel.updateTag(data.tag);
+      'data': ['$route', 'RefilerAPI', 'RefilerModel', 'RefilerGalleryModel',
+          function ($route, RefilerAPI, RefilerModel, RefilerGalleryModel) {
+        var url = $route.current.params.url;
 
-          RefilerGalleryModel.set(data);
+        // RefilerModel needs to be ready in order to get the tag id
+        return RefilerModel.ready().then(function (model) {
+          var tag = model.getTagByUrl(url);
+
+          if (tag === null) {
+            throw 'Tag not found';
+          }
+
+          return RefilerAPI.getTag(tag.id).then(function (data) {
+            // in case the tag is new, and its data is not yet known
+            RefilerModel.updateTag(data.tag);
+
+            RefilerGalleryModel.set(data);
+          });
         });
       }]
     }
   });
-  $routeProvider.when('/dir/:dir*', dirRoute);
+  $routeProvider.when('/dir/:path*', dirRoute);
   $routeProvider.when('/dir/', dirRoute);
   $routeProvider.when('/nav', {
     'templateUrl': 'nav.html',
