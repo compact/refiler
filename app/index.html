@@ -65,6 +65,11 @@
         ng-bind-html="page.title">
     </h1>
 
+    <!-- show a Home button on $routeChangeError; there's no menu otherwise -->
+    <div ng-show="page.error">
+      <a href="." class="btn btn-sm btn-default">Home</a>
+    </div>
+
     <!-- ngRoute view; show only if there is no $routeChangeError -->
     <div ng-show="!page.error">
       <ng-view></ng-view>
