@@ -49,10 +49,16 @@ $app->post('/dir/:id/files/tags.json', function ($dir_id) use ($app, $config) {
   $dir_ids = array($dir_id);
   if ($recursive) {
     // recursive case
-    $dir = new Dir($refiler, $dir_id); // TODO: try/catch
-    $subdirs = $dir->get_subdirs(true, false); // recursive, not including $dir
-    foreach ($subdirs as $subdir) {
-      $dir_ids[] = $subdir->get_id();
+    try {
+      // get the dir
+      $dir = new Dir($refiler, $dir_id);
+
+      // recursive, not including $dir
+      $subdirs = $dir->get_subdirs(true, false);
+      foreach ($subdirs as $subdir) {
+        $dir_ids[] = $subdir->get_id();
+      }
+    } catch (\Exception $e) {
     }
   }
 

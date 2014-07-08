@@ -37,18 +37,19 @@ $app->post('/file/:id.json', function ($file_id) use ($app, $config) {
     $file_name = File::sanitize_name($dir_path, $file_name);
   }
 
-  // TODO: try/catch on new File instead
-  if (empty($file_id)) {
+  // init
+  $refiler = new Refiler($config, $db);
+
+  // get the file
+  try {
+    $file = new File($refiler, $file_id);
+  } catch (\Exception $e) {
     echo json_encode(array(
       'success' => false,
-      'error' => 'No file given'
+      'error' => $e->getMessage()
     ));
     exit;
   }
-
-  // init
-  $refiler = new Refiler($config, $db);
-  $file = new File($refiler, $file_id);
 
   // params in the UPDATE query
   $params = array();
