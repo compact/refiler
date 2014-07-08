@@ -3,6 +3,7 @@
  */
 angular.module('app').controller('LoginCtrl', function ($scope, $location,
     $routeParams, Auth, RefilerModel) {
+  // RefilerAPI method name
   $scope.action = typeof $routeParams.activationCode === 'string' ?
     'activate' : 'login';
 
@@ -13,12 +14,13 @@ angular.module('app').controller('LoginCtrl', function ($scope, $location,
   if ($scope.action === 'activate') {
     $scope.disabled = true;
 
-    Auth.getEmailByActivationCode(
+    Auth.getUserByActivationCode(
       $routeParams.activationCode
-    ).then(function (email) {
+    ).then(function (user) {
       $scope.credentials = {
         'activationCode': $routeParams.activationCode,
-        'email': email
+        'id': user.id, // unused
+        'email': user.email // unused
       };
       $scope.disabled = false;
     }, function (error) {

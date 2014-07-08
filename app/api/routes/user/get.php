@@ -19,7 +19,10 @@ $app->get('/user/:code.json', function ($activation_code) use ($config) {
 
     echo json_encode(array(
       'success' => true,
-      'email' => $user->email // TODO: user->email
+      'user' => array(
+        'id' => $user->getId(),
+        'email' => $user->email
+      )
     ));
   } catch (\Exception $e) {
     echo json_encode(array(

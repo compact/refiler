@@ -7,7 +7,7 @@ angular.module('app').provider('Auth', function () {
   };
 
   // service
-  this.$get = function service($http, $location, $q, Refiler, RefilerAPI,
+  this.$get = function service($http, $location, Refiler, RefilerAPI,
       RefilerModel) {
     var Auth = {};
 
@@ -37,15 +37,14 @@ angular.module('app').provider('Auth', function () {
 
     /**
      * User activation is absorbed into this method since its logic is the same
-     *   as logging in. TODO: try not using $q
-     * @param  {string}  action 'login' or 'activate'
+     *   as logging in.
+     * @param  {string}  action 'login' or 'activate', a method name of
+     *   RefilerAPI.
      * @param  {Object}  data
      * @return {Promise}
      */
     Auth.login = function (action, data) {
-      var deferred = $q.defer();
-
-      RefilerAPI[action](data).then(function (data) {
+      return RefilerAPI[action](data).then(function (data) {
         Auth.loggedIn = true;
         Auth.permissions = data.user.permissions;
 
@@ -56,17 +55,13 @@ angular.module('app').provider('Auth', function () {
         if (typeof data.dirs !== 'undefined') {
           RefilerModel.setDirs(data.dirs);
         }
-
-        deferred.resolve();
-      }, function (data) {
-        deferred.reject(data.error || 'Error.');
+      }, function (response) {
+        throw response.data.error || 'Error.';
       });
-
-      return deferred.promise;
     };
 
     Auth.logout = function () {
-      RefilerAPI.logout().then(function (data) {
+      return RefilerAPI.logout().then(function (data) {
         Auth.loggedIn = false;
 
         // update RefilerModel if needed
@@ -83,16 +78,12 @@ angular.module('app').provider('Auth', function () {
       });
     };
 
-    Auth.getEmailByActivationCode = function (activationCode) {
-      var deferred = $q.defer();
-
-      RefilerAPI.getUserByActivationCode(activationCode).then(function (data) {
-        deferred.resolve(data.email);
-      }, function (data) {
-        deferred.reject(data.error || 'Error.');
+    Auth.getUserByActivationCode = function (activationCode) {
+      return RefilerAPI.getUserByActivationCode(activationCode).then(function (data) {
+        return data.user;
+      }, function (response) {
+        throw response.data.error || 'Error.';
       });
-
-      return deferred.promise;
     };
 
     return Auth;

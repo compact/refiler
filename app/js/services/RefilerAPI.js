@@ -140,8 +140,10 @@ angular.module('app').service('RefilerAPI', function ($resource) {
     }).$promise;
   };
 
-  this.activateUser = function (data) {
-    return $resource('api/user/:id/activate.json').save(data).$promise;
+  this.activate = function (data) {
+    return $resource('api/user/:id/activate.json', {
+      'id': '@id'
+    }).save(data).$promise;
   };
 
 
