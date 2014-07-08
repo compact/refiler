@@ -20,6 +20,11 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerAPI,
     self.setDirs(data.dirs);
 
     deferred.resolve(self);
+  }, function (response) {
+    var error = response.data.error || 'Failed to load data';
+    self.page.title = error;
+    self.page.error = true;
+    throw error;
   });
 
 
