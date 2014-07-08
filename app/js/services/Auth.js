@@ -24,6 +24,10 @@ angular.module('app').provider('Auth', function () {
     // whether the user's permissions have been verified
     Auth.verified = false;
 
+    if (Refiler.config.staticMode) {
+      return Auth;
+    }
+
     // get permissions right away
     RefilerModel.ready().then(function (model) {
       Auth.loggedIn = model.user.loggedIn;

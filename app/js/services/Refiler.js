@@ -9,6 +9,9 @@ angular.module('app').provider('Refiler', function () {
   // config
   this.config = {};
 
+  // set to true for static page mode, i.e. no PHP and no login
+  this.config.staticMode = false;
+
   // with trailing slash all file paths given are relative to this path
   this.config.basePath = '/';
   this.config.imageExtensions = ['gif', 'jpg', 'jpeg', 'png', 'bmp', 'tiff',
