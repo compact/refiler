@@ -110,11 +110,19 @@ angular.module('app').config(function ($routeProvider) {
     'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
     'resolve': {
-      'data': ['$route', 'RefilerAPI', 'RefilerModel', 'RefilerGalleryModel',
-          function ($route, RefilerAPI, RefilerModel, RefilerGalleryModel) {
+      'data': ['$location', '$route', 'RefilerAPI', 'RefilerDir',
+          'RefilerModel', 'RefilerGalleryModel', function ($location, $route,
+          RefilerAPI, RefilerDir, RefilerModel, RefilerGalleryModel) {
         // use $route.current.params instead of $routeParams because the latter
         // gets updated only after the route resolves
         var path = $route.current.params.path || '.';
+
+        // sanitize the path; if it's different, go to that url instead
+        var sanitizedPath = RefilerDir.sanitizePath(path);
+        if (path !== sanitizedPath) {
+          $location.path('/dir/' + sanitizedPath);
+          return;
+        }
 
         // RefilerModel needs to be ready in order to get the dir id
         return RefilerModel.ready().then(function (model) {

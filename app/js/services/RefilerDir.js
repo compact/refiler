@@ -58,5 +58,18 @@ angular.module('app').factory('RefilerDir', function service() {
     this.displayPath = '/' + this.path;
   };
 
+  /**
+   * Sanitize the given path.
+   */
+  RefilerDir.sanitizePath = function (path) {
+    // remove trailing slashes
+    path = path.replace(/^\/+|\/+$/, '');
+
+    // trim repeated slashes
+    path = path.replace(/\/+/g, '/');
+
+    return path;
+  };
+
   return RefilerDir;
 });
