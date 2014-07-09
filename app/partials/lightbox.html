@@ -4,13 +4,18 @@
   <!-- buttons -->
   <div class="lightbox-nav">
     <!-- close button -->
-    <button class="close" aria-hidden="true" ng-click="$dismiss()">×</button>
+    <button type="button" class="close" aria-hidden="true"
+        ng-click="$dismiss()">
+      ×
+    </button>
 
     <div class="btn-group">
-      <button class="btn btn-xs btn-default" ng-click="Lightbox.prevImage()">
+      <button type="button" class="btn btn-xs btn-default"
+          ng-click="Lightbox.prevImage()">
         <i class="fa fa-fw fa-long-arrow-left"></i>
       </button>
-      <button class="btn btn-xs btn-default" ng-click="Lightbox.nextImage()">
+      <button type="button" class="btn btn-xs btn-default"
+          ng-click="Lightbox.nextImage()">
         <i class="fa fa-fw fa-long-arrow-right"></i>
       </button>
     </div>

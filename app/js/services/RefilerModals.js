@@ -926,8 +926,8 @@ angular.module('app').service('RefilerModals', function ($location, $route,
                 '<td>' +
                   // only existing users can be deleted
                   '<div ng-if="user.id">' +
-                    '<button class="btn btn-xs btn-danger" title="Delete"' +
-                        ' ng-click="deleteUser(user)">' +
+                    '<button type="button" class="btn btn-xs btn-danger"' +
+                        ' title="Delete" ng-click="deleteUser(user)">' +
                       '<i class="fa fa-fw fa-trash-o"></i>' +
                     '</button>' +
                   '</div>' +

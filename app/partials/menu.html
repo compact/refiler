@@ -9,7 +9,7 @@
     </a>
 
     <div class="btn-group">
-      <button class="btn btn-sm btn-default dropdown-toggle">
+      <button type="button" class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-cog"></i>
         Options
         <span class="caret"></span>
@@ -61,7 +61,7 @@
   <div class="btn-group" ng-if="Auth.permissions.edit">
 
     <div class="btn-group">
-      <button class="btn btn-sm btn-default dropdown-toggle">
+      <button type="button" class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-cloud-upload"></i>
         Upload
         <span class="caret"></span>
@@ -89,7 +89,7 @@
     </div>
 
     <div class="btn-group" ng-show="tag">
-      <button class="btn btn-sm btn-default dropdown-toggle">
+      <button type="button" class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-tag"></i>
         Tag
         <span class="caret"></span>
@@ -117,7 +117,7 @@
     </div>
 
     <div class="btn-group" ng-show="dir">
-      <button class="btn btn-sm btn-default dropdown-toggle">
+      <button type="button" class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-folder-open"></i>
         Folder
         <span class="caret"></span>
@@ -163,7 +163,7 @@
     </div>
 
     <div class="btn-group" ng-show="tag || dir">
-      <button class="btn btn-sm dropdown-toggle"
+      <button type="button" class="btn btn-sm dropdown-toggle"
           ng-class="RefilerGalleryModel.hasSelectedFiles() ? 'btn-warning' : 'btn-default'">
         <i class="fa fa-fw fa-check-circle"></i>
         Selection
@@ -215,7 +215,7 @@
 
   <!-- user menu -->
   <div class="btn-group" ng-if="Auth.loggedIn">
-    <button class="btn btn-sm btn-default dropdown-toggle">
+    <button type="button" class="btn btn-sm btn-default dropdown-toggle">
       <i class="fa fa-fw fa-user"></i>
       User
       <span class="caret"></span>
@@ -234,7 +234,7 @@
 
   <!-- admin menu -->
   <div class="btn-group" ng-if="Auth.permissions.admin">
-    <button class="btn btn-sm btn-default dropdown-toggle">
+    <button type="button" class="btn btn-sm btn-default dropdown-toggle">
       <i class="fa fa-fw fa-wrench"></i>
       Admin
       <span class="caret"></span>

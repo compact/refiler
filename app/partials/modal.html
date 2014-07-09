@@ -6,7 +6,10 @@
   <fieldset disable-form-elements="disabled">
 
     <div class="modal-header">
-      <button class="close" aria-hidden="true" ng-click="$dismiss()">×</button>
+      <button type="button" class="close" aria-hidden="true"
+          ng-click="$dismiss()">
+        ×
+      </button>
       <!-- title -->
       <h2 class="modal-title">{{modal.title}}</h2>
     </div>
@@ -30,7 +33,9 @@
     <!-- optional buttons -->
     <div class="modal-footer" ng-if="modal.buttonText"
         disable-form-elements="disabled">
-      <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+      <button type="button" class="btn btn-default" ng-click="$dismiss()">
+        Cancel
+      </button>
       <button type="submit" class="btn btn-primary" focus-on="focusButton">
         {{modal.buttonText}}
       </button>

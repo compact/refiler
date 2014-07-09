@@ -1,16 +1,16 @@
 <div class="btn-group">
 
-  <button class="btn btn-xs btn-primary" title="Edit"
+  <button type="button" class="btn btn-xs btn-primary" title="Edit"
       ng-click="openModal('editFile', file)">
     <i class="fa fa-fw fa-edit"></i>
   </button>
 
-  <button class="btn btn-xs btn-danger" title="Delete"
+  <button type="button" class="btn btn-xs btn-danger" title="Delete"
       ng-click="openModal('deleteFile', file)">
     <i class="fa fa-fw fa-trash-o"></i>
   </button>
 
-  <button class="btn btn-xs btn-warning" title="Select"
+  <button type="button" class="btn btn-xs btn-warning" title="Select"
       ng-click="file.selected = !file.selected">
     <i class="fa fa-fw" ng-class="file.selected ? 'fa-check-circle' : 'fa-check-circle-o'"></i>
   </button>
