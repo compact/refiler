@@ -33,7 +33,7 @@
 <div alerts="alerts"></div>
 
 <!-- pagination of gallery -->
-<pagination page="page"
+<pagination ng-model="page"
     total-items="RefilerGalleryModel.files.length"
     items-per-page="Prefs.filesPerPage"
     previous-text="&lsaquo;"
@@ -70,7 +70,7 @@
 </ul>
 
 <!-- pagination of gallery -->
-<pagination page="page"
+<pagination ng-model="page"
     total-items="RefilerGalleryModel.files.length"
     items-per-page="Prefs.filesPerPage"
     previous-text="&lsaquo;"
