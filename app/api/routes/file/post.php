@@ -60,6 +60,9 @@ $app->post('/file/:id.json', function ($file_id) use ($app, $config) {
     $params[':caption'] = $caption;
   }
 
+  // used below
+  $old_file_type = $file->get_type();
+
   // move the file if the new path is different
   if ($dir_path !== null &&
       $file->get_path() !== File::path($dir_path, $file_name)) {
@@ -84,6 +87,12 @@ $app->post('/file/:id.json', function ($file_id) use ($app, $config) {
     if ($old_file_name !== $file_name) {
       $params[':name'] = $file_name;
     }
+  }
+
+  // set the new type if it is different
+  $file_type = $file->get_type();
+  if ($old_file_type !== $file_type) {
+    $params[':type'] = $file_type;
   }
 
   // update the file row

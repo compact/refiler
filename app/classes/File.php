@@ -127,9 +127,7 @@ class File {
 
     if (!isset($properties['type'])) {
       // the type is needed to determine if the file is an image
-      $properties['type'] = self::sanitize_type(
-        after($properties['name'], '.')
-      );
+      $properties['type'] = self::sanitize_type_by_name($properties['name']);
     }
 
     // if the file exists and it has an image extension, then use the Image
@@ -188,17 +186,18 @@ class File {
   public static function sanitize_name($dir_path, $name,
       $rename_on_duplicate = true) {
     // sanitize extension
-    $ext = after($name, '.');
-    $ext = self::sanitize_type($ext);
+    $ext = self::sanitize_type_by_name($name);
 
     // sanitize filename without extension
-    $name = before_last($name, '.');
-    $name = preg_replace('/[\W"\']+/', '-', $name);
-    $name = trim($name, "- \t\n\r\0\x0B");
+    $basename = before_last($name, '.');
+    $basename = preg_replace('/[\W"\']+/', '-', $basename);
+    $basename = trim($basename, "- \t\n\r\0\x0B");
+
+    $name = $ext !== '' ? "$basename.$ext" : $basename;
 
     // rename on duplicate
-    if ($rename_on_duplicate && is_file("$dir_path/$name.$ext")) {
-      if (preg_match('/\d{1,9}$/', $name, $matches)) {
+    if ($rename_on_duplicate && is_file("$dir_path/$name")) {
+      if (preg_match('/\d{1,9}$/', $basename, $matches)) {
         // if the filename ends in a number, increment that number; we restrict
         // it to 4 digits for practical reasons, and to avoid overflow
         $old_number = $matches[0];
@@ -217,14 +216,14 @@ class File {
           $new_number = '999999999-2';
         }
 
-        $name = before_last($name, $old_number) . $prefix . $new_number;
+        $basename = before_last($basename, $old_number) . $prefix . $new_number;
       } else {
-        $name .= '2';
+        $basename .= '2';
       }
-      return self::sanitize_name($dir_path, "$name.$ext");
+      return self::sanitize_name($dir_path, $name);
     }
 
-    return "$name.$ext";
+    return $name;
   }
 
   /**
@@ -272,10 +271,18 @@ class File {
     $type = before($type, '?'); // remove any url query parameters
     $type = before($type, ':'); // e.g. Twitter uses 'name.jpg:large'
     $type = strtolower($type);
-    if ($type === 'jpeg') {
+    if ($type === 'jpeg') { // special case: jpeg
       $type = 'jpg';
     }
     return $type;
+  }
+
+  /**
+   * @param  string $name
+   * @return string Empty string for a filename with no dot.
+   */
+  public static function sanitize_type_by_name($name) {
+    return self::sanitize_type(after($name, '.', false));
   }
 
   /**
@@ -457,7 +464,8 @@ class File {
   }
 
   /**
-   * This method throws exceptions.
+   * This method throws exceptions. This file is not moved if the new path
+   *   already exists. If this file is moved, its type gets updated.
    * @param string  $new_dir_path Gets sanitized.
    * @param string  $new_name     Gets sanitized, and does not rename on
    *   duplicate since that is not this method's responsibility.
@@ -473,7 +481,7 @@ class File {
     // get new dir
     $this->dir = new Dir($this->refiler, $new_dir_path);
 
-    // sanitize, do not rename on duplicate
+    // sanitize name, do not rename on duplicate
     $this->name = self::sanitize_name($this->dir->get_path(), $new_name, false);
 
     // get new path
@@ -503,6 +511,9 @@ class File {
     if ($this->has_external_thumb() && is_file($old_thumb_path)) {
       rename($old_thumb_path, $new_thumb_path);
     }
+
+    // update type
+    $this->type = self::sanitize_type_by_name($this->name);
 
     // update db
     if ($update) {
