@@ -51,9 +51,9 @@ angular.module('app').service('RefilerModals', function ($location, $route,
 
         // not called in the template directly, but used in the modal
         // definitions below as a shortcut
-        $scope.$httpErrorHandler = function (data) {
+        $scope.$httpErrorHandler = function (response) {
           $scope.alerts.push({
-            'message': data.error || 'Error.'
+            'message': response.data.error || 'Error.'
           });
           $scope.disabled = false;
         };
