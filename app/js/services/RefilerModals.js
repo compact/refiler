@@ -975,4 +975,15 @@ angular.module('app').service('RefilerModals', function ($location, $route,
       }, scope.$httpErrorHandler);
     }
   };
+
+  modals.deleteThumbs = {
+    'title': 'Delete all thumbnails',
+    'buttonText': 'Delete',
+    'formGroups': [],
+    'submit': function (scope) {
+      RefilerAPI.deleteThumbs.then(function () {
+        scope.$close();
+      }, scope.$httpErrorHandler);
+    }
+  };
 });

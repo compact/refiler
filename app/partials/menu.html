@@ -159,6 +159,12 @@
             Reload data
           </a>
         </li>
+        <li ng-if="Auth.permissions.admin">
+          <a ng-click="syncSubdirs()">
+            <i class="fa fa-fw fa-circle-o-notch"></i>
+            Sync subfolders
+          </a>
+        </li>
       </ul>
     </div>
 
@@ -246,8 +252,18 @@
           Manage users
         </a>
       </li>
-      <li><a href="admin/sync-dirs.php" target="_blank">Sync folders</a></li>
-      <li><a href="admin/sync-files.php" target="_blank">Sync files</a></li>
+      <li>
+        <a ng-click="syncThumbs()">
+          <i class="fa fa-fw fa-picture-o"></i>
+          Sync thumbnails
+        </a>
+      </li>
+      <li>
+        <a ng-click="openModal('deleteThumbs')">
+          <i class="fa fa-fw fa-picture-o"></i>
+          Delete all thumbnails
+        </a>
+      </li>
     </ul>
   </div>
 

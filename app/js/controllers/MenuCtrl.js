@@ -5,12 +5,28 @@ angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
   $scope.Auth = Auth;
   $scope.RefilerGalleryModel = RefilerGalleryModel;
 
-
-
   // when the Folder → Reload data button is clicked
   $scope.updateDir = function () {
     RefilerAPI.getDir(RefilerGalleryModel.dir.id, true).then(function () {
       $route.reload(); // TODO: update the model instead of reloading
+    });
+  };
+  // when the Folder → Sync subfolders button is clicked
+  $scope.syncSubdirs = function () {
+    RefilerAPI.syncSubdirs(RefilerGalleryModel.dir.id).then(function (data) {
+      $scope.alerts.push({ // bubbles up to GalleryCtrl
+        'class': 'alert-success',
+        'message': data.output
+      });
+    });
+  };
+  // when the Admin → Sync thumbnails button is clicked
+  $scope.syncThumbs = function () {
+    RefilerAPI.syncThumbs().then(function (data) {
+      $scope.alerts.push({ // bubbles up to GalleryCtrl
+        'class': 'alert-success',
+        'message': data.output
+      });
     });
   };
 

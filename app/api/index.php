@@ -24,6 +24,7 @@ require 'routes/dir/post.php';            # move a dir
 require 'routes/dir/delete.php';          # delete a dir
 require 'routes/dir/post-files.php';      # curl files to a dir
 require 'routes/dir/post-files-tags.php'; # tag the files in a dir
+require 'routes/dir/post-subdirs.php';    # sync the subdirs of a dir
 
 require 'routes/file/post-new.php';       # upload a new file
 require 'routes/file/post.php';           # edit a file
@@ -35,6 +36,9 @@ require 'routes/file/post-thumb.php';     # regenerate the thumb of a file
 require 'routes/files/delete.php';        # delete the given files
 require 'routes/files/post.php';          # move the given files
 require 'routes/files/post-tags.php';     # tag the given files
+
+require 'routes/thumbs/post.php';         # sync thumbs
+require 'routes/thumbs/delete.php';       # delete all thumbs
 
 require 'routes/session/post.php';        # login with the given credentials
 require 'routes/session/delete.php';      # logout the current user

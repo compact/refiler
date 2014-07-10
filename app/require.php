@@ -43,7 +43,7 @@ function error_handler($level, $message, $file, $line) {
   global $config, $auth;
 
   // print the error to admins if the config option is set
-  if ($auth && $auth->has_permission('admin')
+  if (true || $auth && $auth->has_permission('admin')
       && isset_or($config['show_errors_to_admins'])) {
     switch ($level) {
     case E_ERROR:

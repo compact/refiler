@@ -64,6 +64,14 @@ angular.module('app').service('RefilerAPI', function ($resource) {
     }).save(data).$promise;
   };
 
+  this.syncSubdirs = function (id) {
+    return $resource('api/dir/:id/subdirs.json', {
+      'id': '@id'
+    }).save({
+      'id': id
+    }).$promise;
+  };
+
 
 
   this.uploadFileUrl = 'api/file.json'; // to be passed into $fileUploader
@@ -156,5 +164,13 @@ angular.module('app').service('RefilerAPI', function ($resource) {
     return $resource('api/users.json').save({
       'users': users
     }).$promise;
+  };
+
+  this.syncThumbs = function () {
+    return $resource('api/thumbs.json').save().$promise;
+  };
+
+  this.deleteThumbs = function () {
+    return $resource('api/thumbs.json').delete().$promise;
   };
 });
