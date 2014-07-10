@@ -16,7 +16,7 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a ng-click="Prefs.toggle('showFileDetails')">
+          <a dropdown-toggle ng-click="Prefs.toggle('showFileDetails')">
             <i class="fa fa-fw" ng-class="{'fa-check': Prefs.showFileDetails}">
             </i>
             Show file details
@@ -68,13 +68,13 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a ng-click="openModal('uploadFiles')">
+          <a dropdown-toggle ng-click="openModal('uploadFiles')">
             <i class="fa fa-fw fa-hdd-o"></i>
             Computer
           </a>
         </li>
         <li>
-          <a ng-click="openModal('curlFiles')">
+          <a dropdown-toggle ng-click="openModal('curlFiles')">
             <i class="fa fa-fw fa-globe"></i>
             URLs
           </a>
@@ -96,19 +96,19 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a ng-click="openModal('editTag')">
+          <a dropdown-toggle ng-click="openModal('editTag')">
             <i class="fa fa-fw fa-edit"></i>
             Edit
           </a>
         </li>
         <li>
-          <a ng-click="openModal('deleteTag')">
+          <a dropdown-toggle ng-click="openModal('deleteTag')">
             <i class="fa fa-fw fa-trash-o"></i>
             Delete
           </a>
         </li>
         <li>
-          <a ng-click="reload()">
+          <a dropdown-toggle ng-click="reload()">
             <i class="fa fa-fw fa-refresh"></i>
             Reload
           </a>
@@ -124,43 +124,43 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a ng-click="openModal('createDir')">
+          <a dropdown-toggle ng-click="openModal('createDir')">
             <i class="fa fa-fw fa-folder-open-o"></i>
             Create
           </a>
         </li>
         <li ng-show="RefilerGalleryModel.dir.path !== '.'">
-          <a ng-click="openModal('moveDir')">
+          <a dropdown-toggle ng-click="openModal('moveDir')">
             <i class="fa fa-fw fa-folder-open-o"></i>
             Rename
           </a>
         </li>
         <li ng-show="RefilerGalleryModel.dir.path !== '.'">
-          <a ng-click="openModal('deleteDir')">
+          <a dropdown-toggle ng-click="openModal('deleteDir')">
             <i class="fa fa-fw fa-trash-o"></i>
             Delete
           </a>
         </li>
         <li>
-          <a ng-click="openModal('tagFilesByDir')">
+          <a dropdown-toggle ng-click="openModal('tagFilesByDir')">
             <i class="fa fa-fw fa-tags"></i>
             Tag all files
           </a>
         </li>
         <li>
-          <a ng-click="reload()">
+          <a dropdown-toggle ng-click="reload()">
             <i class="fa fa-fw fa-refresh"></i>
             Reload
           </a>
         </li>
         <li>
-          <a ng-click="updateDir()">
+          <a dropdown-toggle ng-click="updateDir()">
             <i class="fa fa-fw fa-refresh"></i>
             Reload data
           </a>
         </li>
         <li ng-if="Auth.permissions.admin">
-          <a ng-click="syncSubdirs()">
+          <a dropdown-toggle ng-click="syncSubdirs()">
             <i class="fa fa-fw fa-circle-o-notch"></i>
             Sync subfolders
           </a>
@@ -177,37 +177,37 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a ng-click="selectAll()">
+          <a dropdown-toggle ng-click="selectAll()">
             <i class="fa fa-fw fa-square"></i>
             Select all
           </a>
         </li>
         <li>
-          <a ng-click="selectNone()">
+          <a dropdown-toggle ng-click="selectNone()">
             <i class="fa fa-fw fa-square-o"></i>
             Select none
           </a>
         </li>
         <li>
-          <a ng-click="toggleSelection()">
+          <a dropdown-toggle ng-click="toggleSelection()">
             <i class="fa fa-fw fa-minus-square"></i>
             Toggle selection
           </a>
         </li>
         <li>
-          <a ng-click="openModal('tagSelectedFiles')">
+          <a dropdown-toggle ng-click="openModal('tagSelectedFiles')">
             <i class="fa fa-fw fa-tags"></i>
             Tag selected
           </a>
         </li>
         <li>
-          <a ng-click="openModal('moveSelectedFiles')">
+          <a dropdown-toggle ng-click="openModal('moveSelectedFiles')">
             <i class="fa fa-fw fa-files-o"></i>
             Move selected
           </a>
         </li>
         <li>
-          <a ng-click="openModal('deleteSelectedFiles')">
+          <a dropdown-toggle ng-click="openModal('deleteSelectedFiles')">
             <i class="fa fa-fw fa-trash-o"></i>
             Delete selected
           </a>
@@ -228,7 +228,7 @@
     </button>
     <ul class="dropdown-menu">
       <li>
-        <a ng-click="Auth.logout()">
+        <a dropdown-toggle ng-click="Auth.logout()">
           <i class="fa fa-fw fa-sign-out"></i>
           Logout
         </a>
@@ -247,19 +247,19 @@
     </button>
     <ul class="dropdown-menu">
       <li>
-        <a ng-click="openModal('manageUsers')">
+        <a dropdown-toggle ng-click="openModal('manageUsers')">
           <i class="fa fa-fw fa-users"></i>
           Manage users
         </a>
       </li>
       <li>
-        <a ng-click="syncThumbs()">
+        <a dropdown-toggle ng-click="syncThumbs()">
           <i class="fa fa-fw fa-picture-o"></i>
           Sync thumbnails
         </a>
       </li>
       <li>
-        <a ng-click="openModal('deleteThumbs')">
+        <a dropdown-toggle ng-click="openModal('deleteThumbs')">
           <i class="fa fa-fw fa-picture-o"></i>
           Delete all thumbnails
         </a>
