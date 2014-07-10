@@ -220,7 +220,9 @@ class File {
       } else {
         $basename .= '2';
       }
-      return self::sanitize_name($dir_path, $name);
+
+      $name = $ext !== '' ? "$basename.$ext" : $basename;
+      $name = self::sanitize_name($dir_path, $name);
     }
 
     return $name;
