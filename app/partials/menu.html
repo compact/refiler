@@ -8,7 +8,7 @@
       Navigation
     </a>
 
-    <div class="btn-group">
+    <div class="btn-group" dropdown>
       <button type="button" class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-cog"></i>
         Options
@@ -60,7 +60,7 @@
   <!-- edit menu -->
   <div class="btn-group" ng-if="Auth.permissions.edit">
 
-    <div class="btn-group">
+    <div class="btn-group" dropdown>
       <button type="button" class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-cloud-upload"></i>
         Upload
@@ -88,7 +88,7 @@
       </ul>
     </div>
 
-    <div class="btn-group" ng-show="tag">
+    <div class="btn-group" dropdown ng-show="tag">
       <button type="button" class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-tag"></i>
         Tag
@@ -116,7 +116,7 @@
       </ul>
     </div>
 
-    <div class="btn-group" ng-show="dir">
+    <div class="btn-group" dropdown ng-show="dir">
       <button type="button" class="btn btn-sm btn-default dropdown-toggle">
         <i class="fa fa-fw fa-folder-open"></i>
         Folder
@@ -162,7 +162,7 @@
       </ul>
     </div>
 
-    <div class="btn-group" ng-show="tag || dir">
+    <div class="btn-group" dropdown ng-show="tag || dir">
       <button type="button" class="btn btn-sm dropdown-toggle"
           ng-class="RefilerGalleryModel.hasSelectedFiles() ? 'btn-warning' : 'btn-default'">
         <i class="fa fa-fw fa-check-circle"></i>
@@ -214,7 +214,7 @@
 
 
   <!-- user menu -->
-  <div class="btn-group" ng-if="Auth.loggedIn">
+  <div class="btn-group" dropdown ng-if="Auth.loggedIn">
     <button type="button" class="btn btn-sm btn-default dropdown-toggle">
       <i class="fa fa-fw fa-user"></i>
       User
@@ -233,7 +233,7 @@
 
 
   <!-- admin menu -->
-  <div class="btn-group" ng-if="Auth.permissions.admin">
+  <div class="btn-group" dropdown ng-if="Auth.permissions.admin">
     <button type="button" class="btn btn-sm btn-default dropdown-toggle">
       <i class="fa fa-fw fa-wrench"></i>
       Admin
