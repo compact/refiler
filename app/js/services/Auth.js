@@ -7,8 +7,7 @@ angular.module('app').provider('Auth', function () {
   };
 
   // service
-  this.$get = function service($http, $location, _, Refiler, RefilerAPI,
-      RefilerModel) {
+  this.$get = function service($location, _, RefilerAPI, RefilerModel) {
     var Auth = {};
 
     // whether the user is currently logged in
@@ -23,10 +22,6 @@ angular.module('app').provider('Auth', function () {
 
     // whether the user's permissions have been verified
     Auth.verified = false;
-
-    if (Refiler.config.staticMode) {
-      return Auth;
-    }
 
     // get permissions right away
     RefilerModel.ready().then(function (model) {
