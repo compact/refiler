@@ -9,16 +9,19 @@ angular.module('app').controller('AppCtrl', function ($scope, $rootScope,
 
     if (typeof rejection === 'string') {
       errorMessage = rejection;
-    } else if (typeof rejection === 'object' &&
-        typeof rejection.data === 'object' &&
-        typeof rejection.data.error === 'string') {
-      if (rejection.data.error === 'Forbidden' && !Auth.loggedIn) {
-        // prompt the user to login
-        $location.search({
-          'path': $location.path() // path to set after login
-        }).path('/login');
-      } else {
-        errorMessage = rejection.data.error;
+    } else if (typeof rejection === 'object') {
+      if (typeof rejection.data === 'string') {
+        errorMessage = rejection.data;
+      } else if (typeof rejection.data === 'object' &&
+          typeof rejection.data.error === 'string') {
+        if (rejection.data.error === 'Forbidden' && !Auth.loggedIn) {
+          // prompt the user to login
+          $location.search({
+            'path': $location.path() // path to set after login
+          }).path('/login');
+        } else {
+          errorMessage = rejection.data.error;
+        }
       }
     } else {
       // this case should never occur
