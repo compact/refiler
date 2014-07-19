@@ -29,7 +29,6 @@ require 'routes/dir/post-subdirs.php';    # sync the subdirs of a dir
 require 'routes/file/post-new.php';       # upload a new file
 require 'routes/file/post.php';           # edit a file
 require 'routes/file/delete.php';         # delete a file
-require 'routes/file/get-download.php';   # download a file
 require 'routes/file/get-tags.php';       # get the tags of a file
 require 'routes/file/post-thumb.php';     # regenerate the thumb of a file
 
