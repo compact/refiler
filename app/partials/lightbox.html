@@ -9,24 +9,31 @@
       ×
     </button>
 
+    <!-- navigation buttons -->
     <div class="btn-group">
-      <button type="button" class="btn btn-xs btn-default"
-          ng-click="Lightbox.prevImage()">
+      <button type="button" ng-click="Lightbox.prevImage()"
+          class="btn btn-xs btn-default" title="Previous image">
         <i class="fa fa-fw fa-long-arrow-left"></i>
       </button>
-      <button type="button" class="btn btn-xs btn-default"
-          ng-click="Lightbox.nextImage()">
+      <button type="button" ng-click="Lightbox.nextImage()"
+          class="btn btn-xs btn-default" title="Next image">
         <i class="fa fa-fw fa-long-arrow-right"></i>
       </button>
     </div>
 
+    <!-- current image buttons -->
     <div class="btn-group">
       <a ng-href="{{Lightbox.image.getPath()}}" target="_blank"
           class="btn btn-xs btn-default" title="Open in new tab">
         <i class="fa fa-fw fa-search-plus"></i>
       </a>
+      <a ng-href="{{Lightbox.image.getPath()}}" target="_self"
+          download="{{Lightbox.image.name}}" class="btn btn-xs btn-default" title="Download">
+        <i class="fa fa-fw fa-download"></i>
+      </button>
     </div>
 
+    <!-- admin buttons -->
     <div ng-if="Auth.permissions.edit" file-edit-btn-group="Lightbox.image">
     </div>
   </div>
