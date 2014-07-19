@@ -1,5 +1,5 @@
 angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
-    $modal, Auth, Prefs, RefilerAPI, RefilerGalleryModel) {
+    $modal, _, Auth, Prefs, RefilerAPI, RefilerGalleryModel) {
   $scope.Prefs = Prefs;
   $scope.reload = $route.reload;
   $scope.Auth = Auth;

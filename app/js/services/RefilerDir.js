@@ -1,4 +1,4 @@
-angular.module('app').factory('RefilerDir', function service() {
+angular.module('app').factory('RefilerDir', function service(_) {
   /**
    * Constructor for a dir.
    * @param {Object} data

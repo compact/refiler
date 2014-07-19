@@ -3,7 +3,7 @@
  *   and in the lightbox. 
  */
 angular.module('app').service('RefilerModals', function ($location, $route,
-    $timeout, $modal, $fileUploader, Auth, RefilerAPI, RefilerDir, RefilerFile,
+    $timeout, $modal, $fileUploader, _, Auth, RefilerAPI, RefilerFile,
     RefilerGalleryModel, RefilerModel) {
   var modals = {};
 

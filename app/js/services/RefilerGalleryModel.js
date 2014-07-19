@@ -4,7 +4,7 @@
  *   triggered when the files change.
  */
 angular.module('app').service('RefilerGalleryModel', function ($filter,
-    $rootScope, Prefs, RefilerFile) {
+    $rootScope, _, Prefs, RefilerFile) {
   var self, sortFiles;
 
   this.files = [];

@@ -1,4 +1,4 @@
-angular.module('app').factory('RefilerFile', function service(Refiler) {
+angular.module('app').factory('RefilerFile', function service(_, Refiler) {
   /**
    * Each file gets an instance of this class.
    * @param {Object} file
@@ -55,7 +55,7 @@ angular.module('app').factory('RefilerFile', function service(Refiler) {
   RefilerFile.prototype.formatTags = function () {
     var html = '', links = [];
     if (typeof this.tags === 'object') {
-      angular.forEach(this.tags, function (tag) {
+      _.each(this.tags, function (tag) {
         links.push('<a href="#!/' + tag.url + '">' + tag.name + '</a>');
       });
       html = 'Tags: ' + links.join(', ');

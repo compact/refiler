@@ -7,7 +7,7 @@ angular.module('app').provider('Prefs', function () {
   };
 
   // service
-  this.$get = function service() {
+  this.$get = function service(_) {
     var Prefs;
 
     // initialize prefs based on localStorage and defaults

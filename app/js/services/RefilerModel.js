@@ -1,4 +1,4 @@
-angular.module('app').service('RefilerModel', function ($http, $q, RefilerAPI,
+angular.module('app').service('RefilerModel', function ($q, _, RefilerAPI,
     RefilerDir) {
   var self = this;
 

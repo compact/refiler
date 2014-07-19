@@ -7,7 +7,7 @@ angular.module('app').provider('Auth', function () {
   };
 
   // service
-  this.$get = function service($http, $location, Refiler, RefilerAPI,
+  this.$get = function service($http, $location, _, Refiler, RefilerAPI,
       RefilerModel) {
     var Auth = {};
 
