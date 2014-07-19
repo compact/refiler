@@ -39,3 +39,16 @@ grunt build
 * Upload `dist/`.
 * Edit `admin/create-first-admin.php` and run it remotely.
 * Run `admin/sync-dirs.php` remotely. If there are a lot of dirs, use the param `?path=path/to/dir`.
+
+### Static build
+
+This build contains static files only. It has no PHP, no users, and no file operations. The API is generated as JSON files.
+
+* Edit `paths.url` in `Gruntfile.js` to be your local app URL; the default is 'http://localhost`.
+
+```
+grunt build
+grunt buildStatic
+```
+
+* Upload `dist-static/`.

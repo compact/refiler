@@ -2,6 +2,7 @@
 /app/bower_components/
 /app/vendor/
 /dist/
+/dist-static/
 /.tmp/
 
 # css
