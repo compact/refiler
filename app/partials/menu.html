@@ -162,7 +162,7 @@
         <li ng-if="Auth.permissions.admin">
           <a dropdown-toggle ng-click="syncSubdirs()">
             <i class="fa fa-fw fa-circle-o-notch"></i>
-            Sync subfolders
+            Sync subfolders (slow)
           </a>
         </li>
       </ul>
@@ -253,9 +253,15 @@
         </a>
       </li>
       <li>
+        <a dropdown-toggle ng-click="syncDirs()">
+          <i class="fa fa-fw fa-folder-open-o"></i>
+          Sync folders (slow)
+        </a>
+      </li>
+      <li>
         <a dropdown-toggle ng-click="syncThumbs()">
           <i class="fa fa-fw fa-picture-o"></i>
-          Sync thumbnails
+          Sync thumbnails (slow)
         </a>
       </li>
       <li>

@@ -20,6 +20,15 @@ angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
       });
     });
   };
+  // when the Admin → Sync folders button is clicked
+  $scope.syncDirs = function () {
+    RefilerAPI.syncSubdirs(0).then(function (data) {
+      $scope.alerts.push({ // bubbles up to GalleryCtrl
+        'class': 'alert-success',
+        'message': data.output
+      });
+    });
+  };
   // when the Admin → Sync thumbnails button is clicked
   $scope.syncThumbs = function () {
     RefilerAPI.syncThumbs().then(function (data) {

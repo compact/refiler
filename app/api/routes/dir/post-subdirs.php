@@ -1,8 +1,9 @@
 <?php
 
 /**
- * Synchronize the dirs table based on existing dirs. A use case is when dirs
- *   get deleted or renamed manually without the use of Refiler.
+ * Synchronize the dirs table based on existing dirs, either for subdirs of
+ *   the given dir, or for all dirs (when $id is 0). A use case is when dirs
+ *   get created/renamed/deleted manually without the use of Refiler.
  */
 
 namespace Refiler;
@@ -18,6 +19,9 @@ $app->post('/dir/:id/subdirs.json', function ($id) use ($app, $config) {
 
   // sanitize
   $id = (int)$id;
+
+  // special case
+  $id = $id === 0 ? '.' : $id;
 
   // init
   $refiler = new Refiler($config, $db);
