@@ -38,7 +38,7 @@ grunt build
 
 * Upload `dist/`.
 * Edit `admin/create-first-admin.php` and run it remotely.
-* Run `admin/sync-dirs.php` remotely. If there are a lot of dirs, use the param `?path=path/to/dir`.
+* If there are existing dirs, click `Admin → Sync folders`. Navigate to each dir and click `Folder → Sync files`.
 
 ### Static build
 
