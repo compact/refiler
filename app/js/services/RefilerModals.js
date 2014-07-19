@@ -20,7 +20,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
 
     return $modal.open({
       'templateUrl': 'modal.html',
-      'controller': ['$scope', function ($scope) {
+      'controller': ['$scope', 'ErrorHandler', function ($scope, ErrorHandler) {
         // modal scope, a child of $rootScope
         $scope.model = {}; // populated by child form elements with ng-model
         $scope.alerts = [];
@@ -53,7 +53,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
         // definitions below as a shortcut
         $scope.$httpErrorHandler = function (response) {
           $scope.alerts.push({
-            'message': response.data.error || 'Error.'
+            'message': ErrorHandler.parseMessage(response)
           });
           $scope.disabled = false;
         };

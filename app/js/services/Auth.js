@@ -7,7 +7,8 @@ angular.module('app').provider('Auth', function () {
   };
 
   // service
-  this.$get = function service($location, _, RefilerAPI, RefilerModel) {
+  this.$get = function service($location, _, ErrorHandler, RefilerAPI,
+      RefilerModel) {
     var Auth = {};
 
     // whether the user is currently logged in
@@ -51,7 +52,7 @@ angular.module('app').provider('Auth', function () {
           RefilerModel.setDirs(data.dirs);
         }
       }, function (response) {
-        throw response.data.error || 'Error.';
+        throw ErrorHandler.parseMessage(response);
       });
     };
 
@@ -77,7 +78,7 @@ angular.module('app').provider('Auth', function () {
       return RefilerAPI.getUserByActivationCode(activationCode).then(function (data) {
         return data.user;
       }, function (response) {
-        throw response.data.error || 'Error.';
+        throw ErrorHandler.parseMessage(response);
       });
     };
 

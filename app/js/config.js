@@ -76,17 +76,6 @@ angular.module('app').config(function ($httpProvider) {
       'responseError': function (rejection) {
         console.warn('$http response error (rejection)', rejection);
         return $q.reject(rejection);
-        // if (typeof rejection.status === 'number') {
-        //   switch (rejection.status) {
-        //   case 200:
-        //     return $q.reject(rejection.data);
-        //   case 404:
-        //     return $q.reject('Not found.');
-        //   case 500:
-        //     return $q.reject('Internal server error.');
-        //   }
-        // }
-        // return $q.reject('The response has no status code.');
       }
     };
   }]);
