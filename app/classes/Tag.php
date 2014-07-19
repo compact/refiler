@@ -52,9 +52,11 @@ class Tag {
     $name = trim($name);
     return $name;
   }
+
   public function get_name() {
     return $this->name;
   }
+
   public static function sanitize_url($url) {
     $url = (string)$url;
     $url = trim($url);
@@ -62,17 +64,22 @@ class Tag {
     $url = preg_replace('/[ \W]+/', '-', $url);
     return $url;
   }
+
   public function get_url() {
     return $this->url;
   }
+
   public function get_default_url() {
     $url = strtolower($this->name);
     $url = preg_replace('/[ \W]+/', '-', $url);
     return $url;
   }
+
   public function get_caption() {
     return $this->caption;
   }
+
+
 
   /**
    * @return array All files tagged with this tag.
@@ -83,6 +90,7 @@ class Tag {
       ON `FILE_TAG_MAP`.`file_id` = `FILES`.`id`
       WHERE `tag_id` = ?', array($this->id));
   }
+
   /**
    * @return array Array of two multidimensional arrays:
    *   'parents' => arrays containing keys 'url' and 'name'
@@ -121,18 +129,23 @@ class Tag {
    * TODO: include fileCount
    * @return array An array for outputting in JSON.
    */
-  public function get_array() {
+  public function get_array($include_relatives = true) {
     $array = array(
       'id' => $this->id,
       'name' => $this->name,
       'url' => $this->url,
       'caption' => $this->caption
     );
-    $array = array_merge($array, $this->get_relatives());
+    $relatives = $include_relatives ? $this->get_relatives() : array(
+      'parents' => array(),
+      'children' => array()
+    );
+    $array = array_merge($array, $relatives);
     return $array;
   }
 
-  ///////////////////////////////////////////////////////////////// db functions
+
+
   public function update($name, $url, $caption) {
     $statement = $this->db->query('UPDATE `TAGS`
       SET `name` = ?, `url` = ?, `caption` = ?
@@ -144,6 +157,7 @@ class Tag {
 
     return $statement;
   }
+
   /**
    * Call DB::begin_transaction() and DB::commit() around this function.
    */
@@ -186,12 +200,14 @@ class Tag {
     }
     $this->db->insert('TAG_MAP', $rows, true);
   }
+
   public function delete() {
     return $this->db->query('DELETE FROM `TAGS` WHERE id = ?',
       array($this->id));
   }
 
-  //////////////////////////////////////////////////////////// compare functions
+
+
   public static function compare_rows($row1, $row2) {
     return strcmp($row1['name'], $row2['name']);
   }

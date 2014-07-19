@@ -120,8 +120,7 @@ $app->post('/file/:id.json', function ($file_id) use ($app, $config) {
 
 
   // tag the file
-  $tag_count = count($tag_names);
-  if ($tag_count === 0) {
+  if (count($tag_names) === 0) {
     // special case: no tags, so delete all tags
     $db->query('DELETE FROM `FILE_TAG_MAP` WHERE `file_id` = ?', array($file_id));
   } else {
@@ -131,21 +130,19 @@ $app->post('/file/:id.json', function ($file_id) use ($app, $config) {
     $refiler->insert_tags($tag_names);
 
     // get the tags
-    $tags = $db->fetch_all_in("SELECT `id`, `url`, `name` FROM `TAGS`
-      WHERE `name` IN (%s)
-      LIMIT $tag_count", $tag_names);
+    $tag_rows = $refiler->get_tag_rows($tag_names);
 
     // delete existing tags not in the list of new tags
     $db->query_in('DELETE FROM `FILE_TAG_MAP`
       WHERE `tag_id` NOT IN (%s)
-      AND `file_id` = ?', multi_array_values($tags, 'id'), array($file_id));
+      AND `file_id` = ?', multi_array_values($tag_rows, 'id'), array($file_id));
 
     // insert into map; existing pairs are excluded
     $rows = array();
-    foreach ($tags as $tag) {
+    foreach ($tag_rows as $tag_row) {
       $rows[] = array(
         'file_id' => $file_id,
-        'tag_id' => $tag['id']
+        'tag_id' => $tag_row['id']
       );
     }
     $db->insert('FILE_TAG_MAP', $rows, true);
@@ -158,7 +155,8 @@ $app->post('/file/:id.json', function ($file_id) use ($app, $config) {
   // output the result
   echo json_encode(array(
     'success' => true,
-    'file' => $file->get_array()
+    'file' => $file->get_array(),
+    'tags' => $refiler->get_tag_arrays($tag_rows)
   ));
 });
 

@@ -107,7 +107,8 @@ $app->post('/dir/:id/files/tags.json', function ($dir_id) use ($app, $config) {
   $db->commit();
 
   echo json_encode(array(
-    'success' => true
+    'success' => true,
+    'tags' => $refiler->get_tag_arrays($tag_names)
   ));
 });
 

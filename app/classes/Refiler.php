@@ -92,6 +92,33 @@ class Refiler {
     return $this->db->insert('TAGS', $rows, true);
   }
 
+  /**
+   * @param  array $names Tag names.
+   * @return array Tag rows.
+   */
+  public function get_tag_rows($names) {
+    return $this->db->fetch_all_in('SELECT * FROM `TAGS`
+      WHERE `name` IN (%s)
+      LIMIT ' . count($names), $names);
+  }
+
+  /**
+   * @param  array $names_or_rows Tag names or rows.
+   * @return array Tag arrays as returned by Tag::get_array().
+   */
+  public function get_tag_arrays($names_or_rows) {
+    if (is_array(current($names_or_rows))) { // rows
+      $rows = $names_or_rows;
+    } else { // names
+      $rows = $this->get_tag_rows($names_or_rows);
+    }
+
+    return array_map(function ($row) {
+      $tag = new Tag($this, $row);
+      return $tag->get_array(false);
+    }, $rows);
+  }
+
 
 
   /**
@@ -175,4 +202,5 @@ class Refiler {
     return $tree;
   }
 }
+
 ?>

@@ -125,7 +125,8 @@ $app->post('/file.json', function () use ($app, $config) {
   // output the result
   echo json_encode(array(
     'success' => true,
-    'file' => $file->get_array()
+    'file' => $file->get_array(),
+    'tags' => $refiler->get_tag_arrays($tag_names)
   ));
 });
 

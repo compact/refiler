@@ -143,7 +143,8 @@ $app->post('/dir/:id/files.json', function ($dir_id) use ($app, $config) {
     'files' => array_map(function ($file) {
       return $file->get_array();
     }, $uploaded_files),
-    'failedUrls' => $failed_urls
+    'failedUrls' => $failed_urls,
+    'tags' => $refiler->get_tag_arrays($tag_names)
   ));
 });
 

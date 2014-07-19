@@ -62,29 +62,26 @@ $app->post('/tag/:id.json', function ($id) use ($app, $config) {
 
   // no array_unique(); logically there should be no duplicates, though they are
   // permitted
-  $all_names = array_merge($parent_names, $child_names);
-  $count = count($all_names);
+  $relative_names = array_merge($parent_names, $child_names);
 
-  if ($count === 0) { // special case: delete all relatives
+  if (count($relative_names) === 0) { // special case: delete all relatives
     $tag->update_relatives(array(), array());
   } else {
     // insert tags; existing tags are excluded
-    $refiler->insert_tags($all_names);
+    $refiler->insert_tags($relative_names);
 
     // get the tag ids
-    $relatives = $db->fetch_all_in("SELECT `id`, `name` FROM `TAGS`
-      WHERE `name` IN (%s)
-      LIMIT $count", $all_names);
+    $relative_rows = $refiler->get_tag_rows($relative_names);
 
     // filter the parent and child ids
     $parent_ids = array();
     $child_ids = array();
-    foreach ($relatives as $relative) {
-      if (in_array($relative['name'], $parent_names)) {
-        $parent_ids[] = $relative['id'];
+    foreach ($relative_rows as $relative_row) {
+      if (in_array($relative_row['name'], $parent_names)) {
+        $parent_ids[] = $relative_row['id'];
       }
-      if (in_array($relative['name'], $child_names)) {
-        $child_ids[] = $relative['id'];
+      if (in_array($relative_row['name'], $child_names)) {
+        $child_ids[] = $relative_row['id'];
       }
     }
 
@@ -97,7 +94,8 @@ $app->post('/tag/:id.json', function ($id) use ($app, $config) {
 
   echo json_encode(array(
     'success' => true,
-    'tag' => $tag->get_array()
+    'tag' => $tag->get_array(), // TODO: set relatives without the extra query
+    'tags' => $refiler->get_tag_arrays($relative_names)
   ));
 });
 

@@ -43,25 +43,26 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerAPI,
   };
 
   /**
-   * Add the given tag names to the model, if they don't already exist in it.
-   * @param {array} names
+   * Merge the given array of tags with the model.
+   * @param {array} tags
    */
-  this.addTagNames = function (names) {
+  this.mergeTags = function (tags) {
     var tagsPushed = false; // determines whether the tags have to be sorted
 
-    _.each(names, function (name) {
-      if (_.where(self.tags, {'name': name}).length === 0) {
-        // see Tag::get_default_url()
-        var url = name.toLowerCase().replace(/[ \W]+/g, '-');
+    _.each(tags, function (tag) {
+      // sanitize
+      tag.id = parseInt(tag.id, 10);
 
+      // push the tag if it is new
+      if (_.where(self.tags, {'id': tag.id}).length === 0) {
         self.tags.push({
-          // id not set until the user navigates to the tag
-          'name': name,
-          'url': url,
-          'caption': '',
+          'id': tag.id,
+          'name': tag.name,
+          'url': tag.url,
+          'caption': tag.caption,
           'fileCount': 'new', // displayed placeholder until the user reloads
-          'parentCount': 0,
-          'childCount': 0
+          'parentCount': tag.parents.length,
+          'childCount': tag.children.length
         });
 
         tagsPushed = true;
@@ -97,7 +98,7 @@ angular.module('app').service('RefilerModel', function ($http, $q, RefilerAPI,
   };
 
   /**
-   * Sort the dirs. Call this method after updating the model.
+   * Sort the tags. Call this method after updating the model.
    */
   this.sortTags = function () {
     this.tags = _.sortBy(this.tags, 'name');

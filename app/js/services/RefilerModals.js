@@ -159,8 +159,8 @@ angular.module('app').service('RefilerModals', function ($location, $route,
           RefilerGalleryModel.updateFile(data.file);
         }
 
-        // add any new tags to the model
-        RefilerModel.addTagNames(scope.model.tagNames);
+        // update the tags model
+        RefilerModel.mergeTags(data.tags);
       }, scope.$httpErrorHandler);
     }
   };
@@ -334,6 +334,9 @@ angular.module('app').service('RefilerModals', function ($location, $route,
           // printed error
           console.warn('reached unexpected case', data);
         }
+
+        // update the tags model
+        RefilerModel.mergeTags(data.tags);
       });
 
       scope.uploader.bind('completeall', function () {
@@ -396,10 +399,6 @@ angular.module('app').service('RefilerModals', function ($location, $route,
 
         // upload all files; the event handlers were bound in .open above
         scope.uploader.uploadAll();
-
-        // add any new tags to the model; these tags are added even if no files
-        // were successfully uploaded
-        RefilerModel.addTagNames(scope.model.tagNames);
       }
     }
   };
@@ -466,8 +465,8 @@ angular.module('app').service('RefilerModals', function ($location, $route,
         // update the dir model
         dir.fileCount += data.files.length;
 
-        // add any new tags to the model
-        RefilerModel.addTagNames(scope.model.tagNames);
+        // update the tags model
+        RefilerModel.mergeTags(data.tags);
 
         var alerts = [];
         var dirLink = dir.formatLink({
@@ -572,10 +571,8 @@ angular.module('app').service('RefilerModals', function ($location, $route,
           RefilerGalleryModel.tag = data.tag;
         }
 
-        // add any new tags to the model
-        RefilerModel.addTagNames(
-          scope.model.parentNames.concat(scope.model.childNames)
-        );
+        // update the tags model
+        RefilerModel.mergeTags(data.tags);
       }, scope.$httpErrorHandler);
     }
   };
@@ -789,11 +786,11 @@ angular.module('app').service('RefilerModals', function ($location, $route,
         'tagNames': scope.model.tagNames,
         'recursive': scope.model.recursive ? 1 : 0,
         'overwrite': scope.model.overwrite ? 1 : 0
-      }).then(function () {
+      }).then(function (data) {
         scope.$close();
 
-        // add any new tags to the model
-        RefilerModel.addTagNames(scope.model.tagNames);
+        // update the tags model
+        RefilerModel.mergeTags(data.tags);
       }, scope.$httpErrorHandler);
     }
   };
@@ -820,11 +817,11 @@ angular.module('app').service('RefilerModals', function ($location, $route,
         'fileIds': fileIds,
         'tagNames': scope.model.tagNames,
         'overwrite': scope.model.overwrite ? 1 : 0
-      }).then(function () {
+      }).then(function (data) {
         scope.$close();
 
-        // add any new tags to the model
-        RefilerModel.addTagNames(scope.model.tagNames);
+        // update the tags model
+        RefilerModel.mergeTags(data.tags);
       }, scope.$httpErrorHandler);
     }
   };
