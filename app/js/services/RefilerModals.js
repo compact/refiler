@@ -244,12 +244,12 @@ angular.module('app').service('RefilerModals', function ($location, $route,
                 '</td>' +
                 '<td ng-if="uploader.hasHTML5">' +
                   '<div class="progress" ng-class="{' +
-                    "'progress-striped active': !item.isSuccess" +
+                    '\'progress-striped active\': !item.isSuccess' +
                   '}">' +
                     '<div role="progressbar" class="progress-bar" ng-class="{' +
-                      "'progress-bar-success': item.isSuccess" +
+                      '\'progress-bar-success\': item.isSuccess' +
                     '}" ng-style="{' +
-                      "'width': item.progress + '%'" +
+                      '\'width\': item.progress + \'%\'' +
                     '}">' +
                     '</div>' +
                   '</div>' +

@@ -467,7 +467,7 @@ module.exports = function (grunt) {
           grunt.log.error(error);
           return;
         }
-        if (response.statusCode != 200) {
+        if (response.statusCode !== 200) {
           grunt.log.error('status code:', response.statusCode);
           return;
         }
