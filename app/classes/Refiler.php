@@ -176,6 +176,11 @@ class Refiler {
       );
     }, $rows);
 
+    // filter out dirs with excluded paths
+    $rows = array_filter($rows, function ($row) {
+      return !$this->path_is_excluded($row['path']);
+    });
+
     // convert to a tree with path components as keys; for example, the row for
     // a/b/c is stored in $tree['a']['subdirs']['b']['subdirs']['c']
     $tree = array();
