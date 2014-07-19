@@ -97,6 +97,10 @@ class Refiler {
    * @return array Tag rows.
    */
   public function get_tag_rows($names) {
+    if (count($names) === 0) {
+      return array();
+    }
+
     return $this->db->fetch_all_in('SELECT * FROM `TAGS`
       WHERE `name` IN (%s)
       LIMIT ' . count($names), $names);
@@ -107,7 +111,9 @@ class Refiler {
    * @return array Tag arrays as returned by Tag::get_array().
    */
   public function get_tag_arrays($names_or_rows) {
-    if (is_array(current($names_or_rows))) { // rows
+    if (count($names_or_rows) === 0) {
+      return array();
+    } elseif (is_array(current($names_or_rows))) { // rows
       $rows = $names_or_rows;
     } else { // names
       $rows = $this->get_tag_rows($names_or_rows);
