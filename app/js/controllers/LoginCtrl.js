@@ -36,7 +36,7 @@ angular.module('app').controller('LoginCtrl', function ($scope, $location,
 
     // login
     Auth.login($scope.action, credentials).then(function () {
-      $location.path($location.search().path || '/');
+      $location.path(Auth.pathAfterLogin);
     }, function (error) {
       $scope.alerts.push({'message': error});
       $scope.disabled = false;

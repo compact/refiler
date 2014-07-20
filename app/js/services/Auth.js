@@ -24,6 +24,9 @@ angular.module('app').provider('Auth', function () {
     // whether the user's permissions have been verified
     Auth.verified = false;
 
+    // path to go to after login
+    Auth.pathAfterLogin = '/';
+
     // get permissions right away
     RefilerModel.ready().then(function (model) {
       Auth.loggedIn = model.user.loggedIn;
@@ -68,9 +71,9 @@ angular.module('app').provider('Auth', function () {
           RefilerModel.dirs = data.dirs;
         }
 
-        $location.search({
-          'path': $location.path() // path to set after login
-        }).path('/login');
+        // go to the login page
+        Auth.pathAfterLogin = $location.path();
+        $location.path('/login');
       });
     };
 

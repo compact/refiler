@@ -10,9 +10,8 @@ angular.module('app').controller('AppCtrl', function ($scope, $rootScope,
     // custom error 'Forbidden' from Refiler\Auth permission checks
     if (errorMessage === 'Forbidden') {
       // prompt the user to login
-      $location.search({
-        'path': $location.path() // path to set after login
-      }).path('/login');
+      Auth.pathAfterLogin = $location.path();
+      $location.path('/login');
     }
 
     // display the error message to the user
