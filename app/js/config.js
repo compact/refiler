@@ -50,7 +50,7 @@ angular.module('app').config(function ($httpProvider) {
 
 
   // $http response interceptor for requests to get and post
-  $httpProvider.interceptors.push(['$q', function($q) {
+  $httpProvider.interceptors.push(function($q) {
     return {
       'response': function (response) {
         if (response.config.url.match(/^api/)) {
@@ -78,7 +78,7 @@ angular.module('app').config(function ($httpProvider) {
         return $q.reject(rejection);
       }
     };
-  }]);
+  });
 });
 
 
@@ -98,10 +98,9 @@ angular.module('app').config(function ($routeProvider) {
   dirRoute = {
     'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
-    'resolve': {
-      'data': ['$location', '$route', 'RefilerAPI', 'RefilerDir',
-          'RefilerModel', 'RefilerGalleryModel', function ($location, $route,
-          RefilerAPI, RefilerDir, RefilerModel, RefilerGalleryModel) {
+    'resolve': /* @ngInject */ {
+      'data': function ($location, $route, RefilerAPI, RefilerDir,
+          RefilerModel, RefilerGalleryModel) {
         // use $route.current.params instead of $routeParams because the latter
         // gets updated only after the route resolves
         var path = $route.current.params.path || '.';
@@ -128,7 +127,7 @@ angular.module('app').config(function ($routeProvider) {
             });
           });
         });
-      }]
+      }
     }
   };
 
@@ -140,9 +139,8 @@ angular.module('app').config(function ($routeProvider) {
   $routeProvider.when('/tag/:url', {
     'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
-    'resolve': {
-      'data': ['$route', 'RefilerAPI', 'RefilerModel', 'RefilerGalleryModel',
-          function ($route, RefilerAPI, RefilerModel, RefilerGalleryModel) {
+    'resolve': /* @ngInject */ {
+      'data': function ($route, RefilerAPI, RefilerModel, RefilerGalleryModel) {
         var url = $route.current.params.url;
 
         // RefilerModel needs to be ready in order to get the tag id
@@ -160,17 +158,17 @@ angular.module('app').config(function ($routeProvider) {
             RefilerGalleryModel.set(data);
           });
         });
-      }]
+      }
     }
   });
   $routeProvider.when('/dir/:path*', dirRoute);
   $routeProvider.when('/dir/', dirRoute);
   $routeProvider.when('/nav', {
     'templateUrl': 'nav.html',
-    'resolve': {
-      'data': ['RefilerModel', function (RefilerModel) {
+    'resolve': /* @ngInject */ {
+      'data': function (RefilerModel) {
         RefilerModel.page.title = 'Navigation';
-      }]
+      }
     }
   });
   $routeProvider.when('/login', loginRoute);
@@ -178,12 +176,11 @@ angular.module('app').config(function ($routeProvider) {
   $routeProvider.when('/', {
     'templateUrl': 'gallery.html',
     'controller': 'GalleryCtrl',
-    'resolve': {
-      'data': ['RefilerGalleryModel', 'RefilerModel', function (
-          RefilerGalleryModel, RefilerModel) {
+    'resolve': /* @ngInject */ {
+      'data': function (RefilerGalleryModel, RefilerModel) {
         RefilerModel.page.title = 'Home';
         RefilerGalleryModel.set({});
-      }]
+      }
     }
   });
 });

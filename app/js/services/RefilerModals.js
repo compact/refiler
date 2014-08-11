@@ -20,7 +20,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
 
     return $modal.open({
       'templateUrl': 'modal.html',
-      'controller': ['$scope', 'ErrorHandler', function ($scope, ErrorHandler) {
+      'controller': /* @ngInject */ function ($scope, ErrorHandler) {
         // modal scope, a child of $rootScope
         $scope.model = {}; // populated by child form elements with ng-model
         $scope.alerts = [];
@@ -57,7 +57,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
           });
           $scope.disabled = false;
         };
-      }],
+      },
       'windowClass': modal.class
     });
   };

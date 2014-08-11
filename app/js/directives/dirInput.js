@@ -9,8 +9,7 @@ angular.module('app').directive('dirInput', function () {
     'replace': true, // replace to get the element's ng-model
     'template':
       '<input ui-select2="select2Options" style="width: 100%;"></input>',
-    'controller': ['$scope', '_', 'RefilerModel',
-        function ($scope, _, RefilerModel) {
+    'controller': /* @ngInject */ function ($scope, _, RefilerModel) {
       $scope.select2Options = {
         'data': _.map(RefilerModel.dirs, function (dir) {
           // format required by Select2
@@ -24,6 +23,6 @@ angular.module('app').directive('dirInput', function () {
           return pattern.test(dir);
         }
       };
-    }]
+    }
   };
 });

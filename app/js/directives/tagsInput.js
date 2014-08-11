@@ -8,8 +8,7 @@ angular.module('app').directive('tagsInput', function () {
     'replace': true, // replace to get the element's ng-model
     'template':
       '<input ui-select2="select2Options" style="width: 100%;"></input>',
-    'controller': ['$scope', '_', 'RefilerModel',
-        function ($scope, _, RefilerModel) {
+    'controller': /* @ngInject */ function ($scope, _, RefilerModel) {
       $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
@@ -20,6 +19,6 @@ angular.module('app').directive('tagsInput', function () {
         },
         'tags': _.pluck(RefilerModel.tags, 'name')
       };
-    }]
+    }
   };
 });
