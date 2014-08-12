@@ -97,10 +97,10 @@ angular.module('app').config(function ($routeProvider) {
 
   dirRoute = {
     'templateUrl': 'gallery.html',
-    'controller': 'GalleryCtrl',
+    'controller': 'GalleryCtrl as gallery',
     'resolve': /* @ngInject */ {
-      'data': function ($location, $route, RefilerAPI, RefilerDir,
-          RefilerModel, RefilerGalleryModel) {
+      'data': function ($location, $route, RefilerAPI, RefilerDir, RefilerModel,
+          RefilerGalleryModel) {
         // use $route.current.params instead of $routeParams because the latter
         // gets updated only after the route resolves
         var path = $route.current.params.path || '.';
@@ -133,12 +133,12 @@ angular.module('app').config(function ($routeProvider) {
 
   loginRoute = {
     'templateUrl': 'login.html',
-    'controller': 'LoginCtrl'
+    'controller': 'LoginCtrl as login'
   };
 
   $routeProvider.when('/tag/:url', {
     'templateUrl': 'gallery.html',
-    'controller': 'GalleryCtrl',
+    'controller': 'GalleryCtrl as gallery',
     'resolve': /* @ngInject */ {
       'data': function ($route, RefilerAPI, RefilerModel, RefilerGalleryModel) {
         var url = $route.current.params.url;
@@ -175,7 +175,7 @@ angular.module('app').config(function ($routeProvider) {
   $routeProvider.when('/activate/:activationCode', loginRoute);
   $routeProvider.when('/', {
     'templateUrl': 'gallery.html',
-    'controller': 'GalleryCtrl',
+    'controller': 'GalleryCtrl as gallery',
     'resolve': /* @ngInject */ {
       'data': function (RefilerGalleryModel, RefilerModel) {
         RefilerModel.page.title = 'Home';

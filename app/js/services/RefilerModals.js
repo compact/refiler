@@ -2,8 +2,8 @@
  * The modals defined here are opened in GalleryCtrl, its descendant MenuCtrl,
  *   and in the lightbox. 
  */
-angular.module('app').service('RefilerModals', function ($location, $route,
-    $timeout, $modal, $fileUploader, _, Auth, RefilerAPI, RefilerFile,
+angular.module('app').service('RefilerModals', function ($location, $modal,
+    $route, $timeout, _, Auth, FileUploader, RefilerAPI, RefilerFile,
     RefilerGalleryModel, RefilerModel) {
   var modals = {};
 
@@ -16,49 +16,18 @@ angular.module('app').service('RefilerModals', function ($location, $route,
    *                        event handlers.
    */
   this.open = function (key, data) {
-    var modal = modals[key]; // modal-specific data
-
     return $modal.open({
       'templateUrl': 'modal.html',
-      'controller': /* @ngInject */ function ($scope, ErrorHandler) {
-        // modal scope, a child of $rootScope
-        $scope.model = {}; // populated by child form elements with ng-model
-        $scope.alerts = [];
-
-        if (typeof modal.open === 'function') {
-          // optional custom handler for the modal open event; we could call
-          // this in the promise provided by ui.bootstrap.modal called
-          // 'opened' instead, but that resolves after this controller
-          modal.open($scope, data);
+      'controller': 'ModalCtrl as modal',
+      'resolve': {
+        'data': function () {
+          return data;
+        },
+        'modal': function () {
+          return modals[key]; // one of the objects below
         }
-
-        // bind the custom modal properties to the modal scope
-        $scope.modal = {
-          'title': modal.title,
-          'buttonText': modal.buttonText,
-          'class': modal.class,
-          'formGroups': modal.formGroups
-        };
-
-        // bind the custom submit handler
-        $scope.submit = function () {
-          // disable the modal while submitting
-          $scope.disabled = true;
-
-          // submit
-          modal.submit($scope, data);
-        };
-
-        // not called in the template directly, but used in the modal
-        // definitions below as a shortcut
-        $scope.$httpErrorHandler = function (response) {
-          $scope.alerts.push({
-            'message': ErrorHandler.parseMessage(response)
-          });
-          $scope.disabled = false;
-        };
       },
-      'windowClass': modal.class
+      'windowClass': modals[key].class
     });
   };
 
@@ -71,85 +40,87 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'File',
-        'control':
-          '<input type="text" value="{{path}}" class="form-control" disabled>'
+        'control': '<input type="text" value="{{modal.path}}"' +
+          ' class="form-control" disabled>'
       },
       {
         'label': 'New folder',
-        'control': '<dir-input ng-model="model.dir"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.dir"></dir-input>'
       },
       {
         'label': 'New name',
-        'control':
-          '<input type="text" ng-model="model.name" class="form-control">'
+        'control': '<input type="text" ng-model="modal.model.name"' +
+          ' class="form-control">'
       },
       {
         'label': 'Caption',
-        'control':
-          '<textarea ng-model="model.caption" class="form-control"></textarea>'
+        'control': '<textarea ng-model="modal.model.caption"' +
+          ' class="form-control"></textarea>'
       },
       {
         'label': 'Tags',
-        'control': '<tags-input ng-model="model.tagNames"></tags-input>'
+        'control': '<tags-input ng-model="modal.model.tagNames"></tags-input>'
       },
       {
         'label': 'Thumbnail',
-        'control': '<file-thumb file="file"></file-thumb><br>' +
-          '<a ng-if="file.isImage()" ng-click="updateThumb()">Regenerate</a>'
+        'control': '<file-thumb file="modal.file"></file-thumb><br>' +
+          '<a ng-if="modal.file.isImage()" ng-click="modal.updateThumb()">' +
+            'Regenerate' +
+          '</a>'
       }
     ],
-    'open': function (scope, file) {
-      scope.disabled = true;
+    'open': function (ctrl, file) {
+      ctrl.disabled = true;
 
-      scope.path = file.getPath();
+      ctrl.path = file.getPath();
 
       RefilerAPI.getTagsByFile(file.id).then(function (data) {
-        scope.model.tagNames = _.pluck(data.tags, 'name');
-        scope.disabled = false;
+        ctrl.model.tagNames = _.pluck(data.tags, 'name');
+        ctrl.disabled = false;
       });
 
-      scope.model.caption = file.caption;
-      scope.model.dir = {
+      ctrl.model.caption = file.caption;
+      ctrl.model.dir = {
         'id': file.id,
         'text': '/' + file.dirPath
       };
-      scope.model.name = file.name;
+      ctrl.model.name = file.name;
 
       // used for showing the thumb
-      scope.file = file;
+      ctrl.file = file;
 
-      scope.updateThumb = function () {
+      ctrl.updateThumb = function () {
         RefilerAPI.updateFileThumb(file.id).then(function (data) {
           // update the model
           RefilerGalleryModel.updateFile(data.file);
 
           // add alert (the modal isn't closed)
-          scope.alerts.push({
+          ctrl.alerts.push({
             'class': 'alert-success',
             'message': 'Thumbnail updated.'
           });
         });
       };
     },
-    'submit': function (scope, file) {
+    'submit': function (ctrl, file) {
       var data, newDirPath, newName;
 
       data = {
         'id': file.id,
-        'tagNames': scope.model.tagNames,
-        'caption': scope.model.caption
+        'tagNames': ctrl.model.tagNames,
+        'caption': ctrl.model.caption
       };
 
       // idiosyncratic: only POST the dir path and name if they have changed
-      newDirPath = scope.model.dir.text.substr(1); // remove leading slash
-      newName = scope.model.name;
+      newDirPath = ctrl.model.dir.text.substr(1); // remove leading slash
+      newName = ctrl.model.name;
       if (file.dirPath !== newDirPath || file.name !== newName) {
         data.dirPath = newDirPath;
         data.name = newName;
       }
 
       RefilerAPI.editFile(data).then(function (data) {
-        scope.$close();
+        ctrl.close();
 
         // update the gallery
         if (RefilerGalleryModel.type === 'dir' &&
@@ -161,7 +132,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
 
         // update the tags model
         RefilerModel.mergeTags(data.tags);
-      }, scope.$httpErrorHandler);
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -171,26 +142,26 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'File',
-        'control':
-          '<input type="text" value="{{name}}" class="form-control" disabled>'
+        'control': '<input type="text" value="{{modal.name}}"' +
+          ' class="form-control" disabled>'
       }
     ],
-    'open': function (scope, file) {
-      scope.name = file.name;
+    'open': function (ctrl, file) {
+      ctrl.name = file.name;
 
       // focus the submit button
       $timeout(function () {
         // wait for the next digest because the focus-on directive needs to be
         // linked first
-        scope.$broadcast('focusButton');
+        ctrl.broadcast('focusButton');
       });
     },
-    'submit': function (scope, file) {
+    'submit': function (ctrl, file) {
       RefilerAPI.deleteFile(file.id).then(function () {
         RefilerGalleryModel.removeFile(file.id);
 
-        scope.$close();
-      }, scope.$httpErrorHandler);
+        ctrl.close();
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -204,45 +175,48 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<dir-input ng-model="model.dir"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.dir"></dir-input>'
       },
       {
         'label': 'Tags',
-        'control': '<tags-input ng-model="model.tagNames"></tags-input>'
+        'control': '<tags-input ng-model="modal.model.tagNames"></tags-input>'
       },
       {
         'label': 'Files',
         'control':
-          // file drop zone
-          '<div ng-file-drop ng-file-over="alert-info"' +
-              ' ng-if="uploader.hasHTML5" class="alert alert-warning">' +
+          // file drop area
+          '<div nv-file-drop nv-file-over over-class="alert-info"' +
+              ' uploader="modal.uploader"' +
+              ' ng-if="modal.uploader.isHTML5" class="alert alert-warning">' +
             'Drag and drop files here, or use the input.<br><br>' +
             // file input
-            '<input ng-file-select type="file" multiple>' +
+            '<input type="file" nv-file-select uploader="modal.uploader"' +
+              ' multiple>' +
           '</div>' +
           // table showing queued files
-          '<table class="table" ng-show="uploader.queue.length > 0">' +
+          '<table class="table" ng-show="modal.uploader.queue.length > 0">' +
             '<thead>' +
               '<tr>' +
                 '<th>Filename</th>' +
-                '<th ng-if="uploader.hasHTML5">Size</th>' +
-                '<th ng-if="uploader.hasHTML5">Progress</th>' +
+                '<th ng-if="modal.uploader.isHTML5">Size</th>' +
+                '<th ng-if="modal.uploader.isHTML5">Progress</th>' +
                 '<th></th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
               // item row
-              '<tr ng-repeat="(key, item) in uploader.queue">' +
+              '<tr ng-repeat="(key, item) in modal.uploader.queue">' +
                 // file name
                 '<td>' +
                   '<input type="text" ng-model="item.formData[0].name"' +
                       'class="form-control">' +
                 '</td>' +
                 // file size
-                '<td ng-if="uploader.hasHTML5" style="white-space: nowrap;">' +
-                  '{{formatSize(item.file.size)}}' +
+                '<td ng-if="modal.uploader.isHTML5"' +
+                    ' style="white-space: nowrap;">' +
+                  '{{modal.formatSize(item.file.size)}}' +
                 '</td>' +
-                '<td ng-if="uploader.hasHTML5">' +
+                '<td ng-if="modal.uploader.isHTML5">' +
                   '<div class="progress" ng-class="{' +
                     '\'progress-striped active\': !item.isSuccess' +
                   '}">' +
@@ -265,13 +239,13 @@ angular.module('app').service('RefilerModals', function ($location, $route,
           '</table>'
       }
     ],
-    'open': function (scope) {
+    'open': function (ctrl) {
       // arrays of RefilerFile objects used to generate alerts in the
       // completeall event below
       var uploadedFiles = [], failedFiles = [];
 
       // init
-      scope.model.dir = {
+      ctrl.model.dir = {
         'id': 0,
         'text': ''
       };
@@ -279,35 +253,35 @@ angular.module('app').service('RefilerModals', function ($location, $route,
       if (RefilerGalleryModel.type === 'dir') {
         // if the user is currently viewing a dir, default to that dir for
         // upload
-        scope.model.dir = {
+        ctrl.model.dir = {
           'id': RefilerGalleryModel.dir.id,
           'text': RefilerGalleryModel.dir.displayPath
         };
       } else if (RefilerGalleryModel.type === 'tag') {
         // likewise for a tag
-        scope.model.tagNames = [RefilerGalleryModel.tag.name];
+        ctrl.model.tagNames = [RefilerGalleryModel.tag.name];
       }
 
-      // $fileUploader configuration. $fileUploader uses an XMLHttpRequest
+      // FileUploader configuration. FileUploader uses an XMLHttpRequest
       // object rather than $http for requests, so our $http configurations do
       // not apply. I decided to handle requests and responses manually in a
       // different way than the rest of the app rather than try to integrate
       // usage of $http.
-      scope.uploader = $fileUploader.create({
-        'scope': scope,
+      ctrl.uploader = new FileUploader({
+        'scope': ctrl,
         'url': RefilerAPI.uploadFileUrl,
          // purely for visual consistency so the queue doesn't disappear row by
          // row; we close the modal after all files have uploaded
         'removeAfterUpload': false
       });
 
-      scope.uploader.bind('afteraddingfile', function (event, item) {
+      ctrl.uploader.onAfterAddingFile = function (item) {
         item.formData.push({
           'name': item.file.name // used as ng-model to rename the file
         });
-      });
+      };
 
-      scope.uploader.bind('success', function (event, xhr, item, data) {
+      ctrl.uploader.onSuccessItem = function (item, data) {
         // the attempt to upload one file has completed
         if (typeof data.success === 'boolean') {
           if (data.success) {
@@ -337,11 +311,11 @@ angular.module('app').service('RefilerModals', function ($location, $route,
 
         // update the tags model
         RefilerModel.mergeTags(data.tags);
-      });
+      };
 
-      scope.uploader.bind('completeall', function () {
+      ctrl.uploader.onCompleteAll = function () {
         // the attempt to upload all files in the queue has completed
-        var dir = RefilerModel.getDir(scope.model.dir.id);
+        var dir = RefilerModel.getDir(ctrl.model.dir.id);
 
         // update the model
         dir.fileCount += uploadedFiles.length;
@@ -378,27 +352,27 @@ angular.module('app').service('RefilerModals', function ($location, $route,
         }
 
         // close the modal and display the alerts in the gallery
-        scope.$close(alerts);
-      });
+        ctrl.close(alerts);
+      };
 
       // file size formatting function
-      scope.formatSize = RefilerFile.formatSize;
+      ctrl.formatSize = RefilerFile.formatSize;
     },
-    'submit': function (scope) {
-      if (scope.uploader.queue.length === 0) {
-        scope.disabled = false;
+    'submit': function (ctrl) {
+      if (ctrl.uploader.queue.length === 0) {
+        ctrl.disabled = false;
       } else {
         // add dir and tag data for each file
-        _.each(scope.uploader.queue, function (item) {
+        _.each(ctrl.uploader.queue, function (item) {
           // item.formData is an array of plain objects, not a FormData object
           item.formData.push({
-            'dirId': scope.model.dir.id,
-            'tagNames': JSON.stringify(scope.model.tagNames)
+            'dirId': ctrl.model.dir.id,
+            'tagNames': JSON.stringify(ctrl.model.tagNames)
           });
         });
 
         // upload all files; the event handlers were bound in .open above
-        scope.uploader.uploadAll();
+        ctrl.uploader.uploadAll();
       }
     }
   };
@@ -410,22 +384,22 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<dir-input ng-model="model.dir"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.dir"></dir-input>'
       },
       {
         'label': 'Tags',
-        'control': '<tags-input ng-model="model.tagNames"></tags-input>'
+        'control': '<tags-input ng-model="modal.model.tagNames"></tags-input>'
       },
       {
         'label': 'URLs',
-        'control':
-          '<textarea id="curl-files-urls" ng-model="model.urls"' +
-            ' class="form-control" focus-on="focus"></textarea>'
+        'control': '<textarea id="curl-files-urls"' +
+          ' ng-model="modal.model.urls" class="form-control"' +
+          ' focus-on="focus"></textarea>'
       }
     ],
-    'open': function (scope) {
+    'open': function (ctrl) {
       // init
-      scope.model.dir = {
+      ctrl.model.dir = {
         'id': 0,
         'text': ''
       };
@@ -433,25 +407,25 @@ angular.module('app').service('RefilerModals', function ($location, $route,
       if (RefilerGalleryModel.type === 'dir') {
         // if the user is currently viewing a dir, default to that dir for
         // upload
-        scope.model.dir = {
+        ctrl.model.dir = {
           'id': RefilerGalleryModel.dir.id,
           'text': RefilerGalleryModel.dir.displayPath
         };
       } else if (RefilerGalleryModel.type === 'tag') {
         // likewise for a tag
-        scope.model.tagNames = [RefilerGalleryModel.tag.name];
+        ctrl.model.tagNames = [RefilerGalleryModel.tag.name];
       }
 
       // focus the textarea
       $timeout(function () {
-        scope.$broadcast('focus');
+        ctrl.broadcast('focus');
       });
     },
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       RefilerAPI.curl({
-        'dirId': scope.model.dir.id,
-        'tagNames': scope.model.tagNames,
-        'urls': scope.model.urls
+        'dirId': ctrl.model.dir.id,
+        'tagNames': ctrl.model.tagNames,
+        'urls': ctrl.model.urls
       }).then(function (data) {
         // add to the gallery model any curled files that belong in it
         if (RefilerGalleryModel.type === 'dir') {
@@ -460,7 +434,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
           }));
         }
 
-        var dir = RefilerModel.getDir(scope.model.dir.id);
+        var dir = RefilerModel.getDir(ctrl.model.dir.id);
 
         // update the dir model
         dir.fileCount += data.files.length;
@@ -500,8 +474,8 @@ angular.module('app').service('RefilerModals', function ($location, $route,
         }
 
         // close the modal and display the alerts in the gallery
-        scope.$close(alerts);
-      }, scope.$httpErrorHandler);
+        ctrl.close(alerts);
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -511,53 +485,53 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Name',
-        'control':
-          '<input type="text" ng-model="model.name" class="form-control"' +
-            ' focus-on="focus">'
+        'control': '<input type="text" ng-model="modal.model.name"' +
+          ' class="form-control" focus-on="focus">'
       },
       {
         'label': 'URL',
-        'control':
-          '<input type="text" ng-model="model.url" class="form-control">'
+        'control': '<input type="text" ng-model="modal.model.url"' +
+          ' class="form-control">'
       },
       {
         'label': 'Caption',
-        'control':
-          '<textarea ng-model="model.caption" class="form-control"></textarea>'
+        'control': '<textarea ng-model="modal.model.caption"' +
+          ' class="form-control"></textarea>'
       },
       {
         'label': 'Parent tags',
-        'control': '<tags-input ng-model="model.parentNames"></tags-input>'
+        'control': '<tags-input ng-model="modal.model.parentNames">' +
+          '</tags-input>'
       },
       {
         'label': 'Child tags',
-        'control': '<tags-input ng-model="model.childNames"></tags-input>'
+        'control': '<tags-input ng-model="modal.model.childNames"></tags-input>'
       }
     ],
-    'open': function (scope) {
+    'open': function (ctrl) {
       var tag = RefilerGalleryModel.tag;
 
-      scope.model.name = tag.name;
-      scope.model.url = tag.url;
-      scope.model.caption = tag.caption;
-      scope.model.parentNames = _.pluck(tag.parents, 'name');
-      scope.model.childNames = _.pluck(tag.children, 'name');
+      ctrl.model.name = tag.name;
+      ctrl.model.url = tag.url;
+      ctrl.model.caption = tag.caption;
+      ctrl.model.parentNames = _.pluck(tag.parents, 'name');
+      ctrl.model.childNames = _.pluck(tag.children, 'name');
 
       // focus the name input
       $timeout(function () {
-        scope.$broadcast('focus');
+        ctrl.broadcast('focus');
       });
     },
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       RefilerAPI.editTag({
         'id': RefilerGalleryModel.tag.id,
-        'name': scope.model.name,
-        'url': scope.model.url,
-        'caption': scope.model.caption,
-        'parentNames': scope.model.parentNames,
-        'childNames': scope.model.childNames
+        'name': ctrl.model.name,
+        'url': ctrl.model.url,
+        'caption': ctrl.model.caption,
+        'parentNames': ctrl.model.parentNames,
+        'childNames': ctrl.model.childNames
       }).then(function (data) {
-        scope.$close();
+        ctrl.close();
 
         if (data.tag.url !== RefilerGalleryModel.tag.url) {
           // if the url has changed, route to the new url
@@ -573,7 +547,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
 
         // update the tags model
         RefilerModel.mergeTags(data.tags);
-      }, scope.$httpErrorHandler);
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -583,23 +557,23 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Name',
-        'control':
-          '<input type="text" value="{{name}}" class="form-control" disabled>'
+        'control': '<input type="text" value="{{modal.name}}"' +
+          ' class="form-control" disabled>'
       }
     ],
-    'open': function (scope) {
-      scope.name = RefilerGalleryModel.tag.name;
+    'open': function (ctrl) {
+      ctrl.name = RefilerGalleryModel.tag.name;
 
       // focus the button
       $timeout(function () {
-        scope.$broadcast('focusButton');
+        ctrl.broadcast('focusButton');
       });
     },
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       var id = RefilerGalleryModel.tag.id;
 
       RefilerAPI.deleteTag(id).then(function () {
-        scope.$close();
+        ctrl.close();
 
         // update the model
         RefilerModel.removeTag(id);
@@ -615,40 +589,39 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Parent',
-        'control': '<dir-input ng-model="model.parent"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.parent"></dir-input>'
       },
       {
         'label': 'Name',
-        'control':
-          '<input type="text" ng-model="model.name" class="form-control"' +
-            ' focus-on="focus">'
+        'control': '<input type="text" ng-model="modal.model.name"' +
+          ' class="form-control" focus-on="focus">'
       }
     ],
-    'open': function (scope) {
-      scope.model.parent = {
+    'open': function (ctrl) {
+      ctrl.model.parent = {
         'id': RefilerGalleryModel.dir.id,
         'text': RefilerGalleryModel.dir.displayPath
       };
-      scope.model.name = '';
+      ctrl.model.name = '';
 
       // focus the name input
       $timeout(function () {
-        scope.$broadcast('focus');
+        ctrl.broadcast('focus');
       });
     },
-    'submit': function (scope) {
-      var path = scope.model.parent.text.substr(1); // remove leading slash
-      path += '/' + scope.model.name;
+    'submit': function (ctrl) {
+      var path = ctrl.model.parent.text.substr(1); // remove leading slash
+      path += '/' + ctrl.model.name;
 
       RefilerAPI.createDir(path).then(function (data) {
-        scope.$close();
+        ctrl.close();
 
         // update the model
         RefilerModel.addDir(data.dir);
 
         // route to the new dir
         $location.path('/dir/' + data.dir.path);
-      }, scope.$httpErrorHandler);
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -658,52 +631,51 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Folder',
-        'control':
-          '<input type="text" value="{{path}}" class="form-control" disabled>'
+        'control': '<input type="text" value="{{modal.path}}"' +
+          ' class="form-control" disabled>'
       },
       {
         'label': 'New parent',
-        'control': '<dir-input ng-model="model.parent"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.parent"></dir-input>'
       },
       {
         'label': 'New name',
-        'control':
-          '<input type="text" ng-model="model.name" class="form-control"' +
-            ' focus-on="focus">' +
+        'control': '<input type="text" ng-model="modal.model.name"' +
+            ' class="form-control" focus-on="focus">' +
           '<span class="help-block">Slashes are allowed.</span>'
       }
     ],
-    'open': function (scope) {
+    'open': function (ctrl) {
       // old path for display only
-      scope.path = RefilerGalleryModel.dir.displayPath;
+      ctrl.path = RefilerGalleryModel.dir.displayPath;
 
       // model to set the new path
       var parentPath = RefilerGalleryModel.dir.getParentPath();
-      scope.model.parent = {
+      ctrl.model.parent = {
         'id': _.where(RefilerModel.dirs, {
           'path': parentPath
         })[0].id, // TODO: turn this into a method of RefilerModel
         'text': '/' + parentPath
       };
-      scope.model.name = RefilerGalleryModel.dir.getName();
+      ctrl.model.name = RefilerGalleryModel.dir.getName();
 
       // focus the name input
       $timeout(function () {
-        scope.$broadcast('focus');
+        ctrl.broadcast('focus');
       });
     },
-    'submit': function (scope) {
-      var newPath = scope.model.parent.text.substr(1) + '/' +
-        scope.model.name;
+    'submit': function (ctrl) {
+      var newPath = ctrl.model.parent.text.substr(1) + '/' +
+        ctrl.model.name;
 
       if (RefilerGalleryModel.dir.path === newPath) {
-        scope.alerts.push({'message': 'No change.'});
+        ctrl.alerts.push({'message': 'No change.'});
       } else {
         RefilerAPI.moveDir({
           'id': RefilerGalleryModel.dir.id,
           'path': newPath
         }).then(function (data) {
-          scope.$close();
+          ctrl.close();
 
           // update the model
           RefilerModel.getDir(data.dir.id).setPath(data.dir.path);
@@ -711,7 +683,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
 
           // route to the new dir path
           $location.path('/dir/' + data.dir.path);
-        }, scope.$httpErrorHandler);
+        }, ctrl.$httpErrorHandler);
       }
     }
   };
@@ -722,29 +694,29 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Folder',
-        'control':
-          '<input type="text" value="{{path}}" class="form-control" disabled>'
+        'control': '<input type="text" value="{{modal.path}}"' +
+          ' class="form-control" disabled>'
       }
     ],
-    'open': function (scope) {
-      scope.path = RefilerGalleryModel.dir.path;
+    'open': function (ctrl) {
+      ctrl.path = RefilerGalleryModel.dir.path;
 
       // focus the button
       $timeout(function () {
-        scope.$broadcast('focusButton');
+        ctrl.broadcast('focusButton');
       });
     },
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       var id = RefilerGalleryModel.dir.id;
 
       RefilerAPI.deleteDir(id).then(function () {
-        scope.$close();
+        ctrl.close();
 
         // update the model
         RefilerModel.removeDir(id);
 
         $location.path('/');
-      }, scope.$httpErrorHandler);
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -754,44 +726,41 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Folder',
-        'control':
-          '<input type="text" value="{{dirPath}}" class="form-control"' +
-            ' disabled>'
+        'control': '<input type="text" value="{{modal.dirPath}}"' +
+          ' class="form-control" disabled>'
       },
       {
         'label': 'Tags',
-        'control': '<tags-input ng-model="model.tagNames"></tags-input>'
+        'control': '<tags-input ng-model="modal.model.tagNames"></tags-input>'
       },
       {
         'label': 'Recursive',
-        'control':
-          '<input type="checkbox" ng-model="model.recursive"> ' +
+        'control': '<input type="checkbox" ng-model="modal.model.recursive"> ' +
           'Include files in all subfolders'
       },
       {
         'label': 'Overwrite',
-        'control':
-          '<input type="checkbox" ng-model="model.overwrite"> ' +
+        'control': '<input type="checkbox" ng-model="modal.model.overwrite"> ' +
           'Replace existing tags'
       }
     ],
-    'open': function (scope) {
-      scope.dirPath = RefilerGalleryModel.dir.path;
-      scope.model.recursive = false;
-      scope.model.overwrite = false;
+    'open': function (ctrl) {
+      ctrl.dirPath = RefilerGalleryModel.dir.path;
+      ctrl.model.recursive = false;
+      ctrl.model.overwrite = false;
     },
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       RefilerAPI.tagFilesByDir({
         'dirId': RefilerGalleryModel.dir.id,
-        'tagNames': scope.model.tagNames,
-        'recursive': scope.model.recursive ? 1 : 0,
-        'overwrite': scope.model.overwrite ? 1 : 0
+        'tagNames': ctrl.model.tagNames,
+        'recursive': ctrl.model.recursive ? 1 : 0,
+        'overwrite': ctrl.model.overwrite ? 1 : 0
       }).then(function (data) {
-        scope.$close();
+        ctrl.close();
 
         // update the tags model
         RefilerModel.mergeTags(data.tags);
-      }, scope.$httpErrorHandler);
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -801,28 +770,27 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Tags',
-        'control': '<tags-input ng-model="model.tagNames"></tags-input>'
+        'control': '<tags-input ng-model="modal.model.tagNames"></tags-input>'
       },
       {
         'label': 'Overwrite',
-        'control':
-          '<input type="checkbox" ng-model="model.overwrite"> ' +
+        'control': '<input type="checkbox" ng-model="modal.model.overwrite"> ' +
           'Replace existing tags'
       }
     ],
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       var fileIds = RefilerGalleryModel.getSelectedFileIds();
 
       RefilerAPI.tagFilesByIds({
         'fileIds': fileIds,
-        'tagNames': scope.model.tagNames,
-        'overwrite': scope.model.overwrite ? 1 : 0
+        'tagNames': ctrl.model.tagNames,
+        'overwrite': ctrl.model.overwrite ? 1 : 0
       }).then(function (data) {
-        scope.$close();
+        ctrl.close();
 
         // update the tags model
         RefilerModel.mergeTags(data.tags);
-      }, scope.$httpErrorHandler);
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -832,34 +800,34 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<dir-input ng-model="model.dir"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.dir"></dir-input>'
       }
     ],
-    'open': function (scope) {
+    'open': function (ctrl) {
       // init
-      scope.model.dir = {
+      ctrl.model.dir = {
         'id': 0,
         'text': ''
       };
 
       if (RefilerGalleryModel.type === 'dir') {
-        scope.model.dir = {
+        ctrl.model.dir = {
           'id': RefilerGalleryModel.dir.id,
           'text': RefilerGalleryModel.dir.displayPath
         };
       }
     },
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       var fileIds = RefilerGalleryModel.getSelectedFileIds();
 
       RefilerAPI.moveFilesByIds({
         'fileIds': fileIds,
-        'dirId': scope.model.dir.id
+        'dirId': ctrl.model.dir.id
       }).then(function () {
-        scope.$close();
+        ctrl.close();
 
         $route.reload();
-      }, scope.$httpErrorHandler);
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -867,20 +835,20 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'title': 'Delete selected files',
     'buttonText': 'Delete',
     'formGroups': [],
-    'open': function (scope) {
+    'open': function (ctrl) {
       // focus the button
       $timeout(function () {
-        scope.$broadcast('focusButton');
+        ctrl.broadcast('focusButton');
       });
     },
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       var ids = RefilerGalleryModel.getSelectedFileIds();
 
       RefilerAPI.deleteFilesByIds(ids).then(function () {
         RefilerGalleryModel.removeFiles(ids);
 
-        scope.$close();
-      }, scope.$httpErrorHandler);
+        ctrl.close();
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -896,14 +864,15 @@ angular.module('app').service('RefilerModals', function ($location, $route,
             '<thead>' +
               '<tr>' +
                 '<th>Email</th>' +
-                '<th ng-repeat="(key, permission) in users[0].permissions">' +
+                '<th ng-repeat="(key, permission) in' +
+                    ' modal.users[0].permissions">' +
                   '{{key}}' +
                 '</th>' +
                 '<th></th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
-              '<tr ng-repeat="user in users"' +
+              '<tr ng-repeat="user in modal.users"' +
                   // class for new user rows
                   ' ng-class="{\'warning\': !user.id}">' +
                 '<td>' +
@@ -924,7 +893,7 @@ angular.module('app').service('RefilerModals', function ($location, $route,
                   // only existing users can be deleted
                   '<div ng-if="user.id">' +
                     '<button type="button" class="btn btn-xs btn-danger"' +
-                        ' title="Delete" ng-click="deleteUser(user)">' +
+                        ' title="Delete" ng-click="modal.deleteUser(user)">' +
                       '<i class="fa fa-fw fa-trash-o"></i>' +
                     '</button>' +
                   '</div>' +
@@ -942,34 +911,34 @@ angular.module('app').service('RefilerModals', function ($location, $route,
           '<span class="help-block">Note: Deletes apply instantly.</span>'
       }
     ],
-    'open': function (scope) {
-      scope.disabled = true;
+    'open': function (ctrl) {
+      ctrl.disabled = true;
       RefilerAPI.getUsers().then(function (data) {
-        scope.users = data.users;
-        scope.disabled = false;
+        ctrl.users = data.users;
+        ctrl.disabled = false;
       });
 
-      scope.createUser = function () {
-        scope.users.push({
+      ctrl.createUser = function () {
+        ctrl.users.push({
           'email': '',
           'permissions': _.clone(Auth.guestPermissions)
         });
       };
 
-      scope.deleteUser = function (user) {
-        scope.disabled = true;
+      ctrl.deleteUser = function (user) {
+        ctrl.disabled = true;
         RefilerAPI.deleteUser(user.id).then(function () {
-          _.remove(scope.users, {'id': user.id});
-          scope.disabled = false;
-        }, scope.$httpErrorHandler);
+          _.remove(ctrl.users, {'id': user.id});
+          ctrl.disabled = false;
+        }, ctrl.$httpErrorHandler);
       };
     },
-    'submit': function (scope) {
-      scope.disabled = true;
-      RefilerAPI.editUsers(scope.users).then(function (data) {
-        scope.users = data.users;
-        scope.disabled = false;
-      }, scope.$httpErrorHandler);
+    'submit': function (ctrl) {
+      ctrl.disabled = true;
+      RefilerAPI.editUsers(ctrl.users).then(function (data) {
+        ctrl.users = data.users;
+        ctrl.disabled = false;
+      }, ctrl.$httpErrorHandler);
     }
   };
 
@@ -977,10 +946,10 @@ angular.module('app').service('RefilerModals', function ($location, $route,
     'title': 'Delete all thumbnails',
     'buttonText': 'Delete',
     'formGroups': [],
-    'submit': function (scope) {
+    'submit': function (ctrl) {
       RefilerAPI.deleteThumbs.then(function () {
-        scope.$close();
-      }, scope.$httpErrorHandler);
+        ctrl.close();
+      }, ctrl.$httpErrorHandler);
     }
   };
 });

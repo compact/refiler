@@ -1,24 +1,24 @@
-<div ng-controller="NavCtrl"
-    ng-show="RefilerModel.tags.length + RefilerModel.dirs.length > 0">
+<div ng-controller="NavCtrl as nav"
+    ng-show="nav.RefilerModel.tags.length + nav.RefilerModel.dirs.length > 0">
   <!-- search filter -->
-  <input id="nav-list-filter" type="search" ng-model="searchText"
+  <input id="nav-list-filter" type="search" ng-model="nav.searchText"
     placeholder="Filter tags and folders" class="form-control">
 
   <!-- navigation list of tags and dirs -->
-  <div id="nav-list-container" perfect-scrollbar="perfectScrollbarOptions">
+  <div id="nav-list-container" perfect-scrollbar="nav.perfectScrollbarOptions">
     <!-- tags -->
-    <h2 ng-show="RefilerModel.tags.length > 0">
+    <h2 ng-show="nav.RefilerModel.tags.length > 0">
       <strong>Tags</strong>
-      ({{filteredTags.length}} of {{RefilerModel.tags.length}})
+      ({{filteredTags.length}} of {{nav.RefilerModel.tags.length}})
     </h2>
 
     <ul class="nav">
-      <li ng-repeat="tag in filteredTags = (RefilerModel.tags | filter: tagFilter(searchText))">
+      <li ng-repeat="tag in filteredTags = (nav.RefilerModel.tags | filter: nav.tagFilter(nav.searchText))">
         <a href="#!/tag/{{tag.url}}" title="{{tag.caption}}"
-            ng-class="{'selected': isSelected('tag', tag.id)}">
-          <span ng-if="!highlightSearchText">{{tag.name}}</span>
-          <span ng-if="highlightSearchText"
-            ng-bind-html="tag.name | highlight: searchText"></span>
+            ng-class="{'selected': nav.isSelected('tag', tag.id)}">
+          <span ng-if="!nav.highlightSearchText">{{tag.name}}</span>
+          <span ng-if="nav.highlightSearchText"
+            ng-bind-html="tag.name | highlight: nav.searchText"></span>
           <span class="details">
             {{tag.fileCount}}
             {{tag.childCount > 0 ? '~ ' + tag.childCount : ''}}
@@ -28,23 +28,23 @@
     </ul>
 
     <!-- dirs -->
-    <h2 ng-show="RefilerModel.dirs.length > 0">
+    <h2 ng-show="nav.RefilerModel.dirs.length > 0">
       <strong>Folders</strong>
-      ({{filteredDirs.length}} of {{RefilerModel.dirs.length}})
+      ({{filteredDirs.length}} of {{nav.RefilerModel.dirs.length}})
     </h2>
 
     <ul class="nav">
-      <li ng-repeat="dir in filteredDirs = (RefilerModel.dirs | filter: dirFilter(searchText))">
+      <li ng-repeat="dir in filteredDirs = (nav.RefilerModel.dirs | filter: nav.dirFilter(nav.searchText))">
         <a href="#!/dir/{{dir.path}}"
-            ng-class="{'selected': isSelected('dir', dir.id)}"
+            ng-class="{'selected': nav.isSelected('dir', dir.id)}"
             tooltip="{{dir.displayPath}}"
             tooltip-placement="right"
             tooltip-animation="false"
             tooltip-append-to-body="true">
-          <span ng-if="!highlightSearchText">{{dir.displayPath}}</span>
-          <span ng-if="highlightSearchText"
-            ng-bind-html="dir.displayPath | highlight: searchText"></span>
-          <span class="details">{{dirDetails(dir)}}</span>
+          <span ng-if="!nav.highlightSearchText">{{dir.displayPath}}</span>
+          <span ng-if="nav.highlightSearchText"
+            ng-bind-html="dir.displayPath | highlight: nav.searchText"></span>
+          <span class="details">{{nav.dirDetails(dir)}}</span>
         </a>
       </li>
 

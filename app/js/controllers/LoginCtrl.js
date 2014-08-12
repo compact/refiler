@@ -1,45 +1,47 @@
 /**
  * Login or activate a user account.
  */
-angular.module('app').controller('LoginCtrl', function ($scope, $location,
-    $routeParams, Auth, RefilerModel) {
+angular.module('app').controller('LoginCtrl', function ($location, $routeParams,
+    Auth, RefilerModel) {
+  var ctrl = this;
+
   // RefilerAPI method name
-  $scope.action = typeof $routeParams.activationCode === 'string' ?
+  this.action = typeof $routeParams.activationCode === 'string' ?
     'activate' : 'login';
 
-  $scope.alerts = [];
+  this.alerts = [];
 
-  RefilerModel.page.title = $scope.action === 'activate' ? 'Activate' : 'Login';
+  RefilerModel.page.title = this.action === 'activate' ? 'Activate' : 'Login';
 
-  if ($scope.action === 'activate') {
-    $scope.disabled = true;
+  if (this.action === 'activate') {
+    this.disabled = true;
 
     Auth.getUserByActivationCode(
       $routeParams.activationCode
     ).then(function (user) {
-      $scope.credentials = {
+      ctrl.credentials = {
         'activationCode': $routeParams.activationCode,
         'id': user.id, // unused
         'email': user.email // unused
       };
-      $scope.disabled = false;
+      ctrl.disabled = false;
     }, function (error) {
-      $scope.alerts.push({'message': error});
+      ctrl.alerts.push({'message': error});
     });
   }
 
-  $scope.login = function (credentials) {
-    $scope.disabled = true;
+  this.login = function (credentials) {
+    this.disabled = true;
 
     // clear old alerts
-    $scope.alerts = [];
+    this.alerts = [];
 
     // login
-    Auth.login($scope.action, credentials).then(function () {
+    Auth.login(this.action, credentials).then(function () {
       $location.path(Auth.pathAfterLogin);
     }, function (error) {
-      $scope.alerts.push({'message': error});
-      $scope.disabled = false;
+      ctrl.alerts.push({'message': error});
+      ctrl.disabled = false;
     });
   };
 });

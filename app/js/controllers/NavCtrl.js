@@ -1,7 +1,7 @@
-angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
+angular.module('app').controller('NavCtrl', function ($http, Refiler,
     RefilerGalleryModel, RefilerModel) {
-  $scope.RefilerModel = RefilerModel;
-  $scope.searchText = '';
+  this.RefilerModel = RefilerModel;
+  this.searchText = '';
 
   /**
    * When the user has entered search text, filter the tags by name. If the
@@ -11,7 +11,7 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
    * @param  {string} searchText
    * @return {Object} Object passed into ng.filter:filter.
    */
-  $scope.tagFilter = function (searchText) {
+  this.tagFilter = function (searchText) {
     return Refiler.config.defaultParentlessTagsInNav && searchText === '' ?
       {'parentCount': 0} :
       {'name': searchText};
@@ -23,7 +23,7 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
    * @param  {string}   searchText
    * @return {Function} Function passed into ng.filter:filter.
    */
-  $scope.dirFilter = function (searchText) {
+  this.dirFilter = function (searchText) {
     if (Refiler.config.defaultParentlessDirsInNav && searchText === '') {
       return function (dir) {
         return dir.path.indexOf('/') === -1;
@@ -33,19 +33,19 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
     }
   };
 
-  $scope.isSelected = function (type, id) {
+  this.isSelected = function (type, id) {
     return type === RefilerGalleryModel.type &&
       id === RefilerGalleryModel[type].id;
   };
 
-  $scope.perfectScrollbarOptions = {
+  this.perfectScrollbarOptions = {
     'wheelSpeed': 60,
     'wheelPropagation': true,
     'minScrollbarLength': 100,
     'suppressScrollX': true
   };
 
-  $scope.dirDetails = function (dir) {
+  this.dirDetails = function (dir) {
     if (dir.subdirs.length > 0) {
       return dir.fileCount + ' ~ ' + dir.subdirs.length;
     } else if (dir.fileCount > 0) {
@@ -55,5 +55,5 @@ angular.module('app').controller('NavCtrl', function ($http, $scope, Refiler,
     }
   };
 
-  $scope.highlightSearchText = Refiler.config.highlightSearchText;
+  this.highlightSearchText = Refiler.config.highlightSearchText;
 });

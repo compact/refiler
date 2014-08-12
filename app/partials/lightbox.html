@@ -1,4 +1,4 @@
-<div class="modal-body" ng-controller="LightboxCtrl"
+<div class="modal-body" ng-controller="LightboxCtrl as lightbox"
     ng-swipe-left="Lightbox.prevImage()"
     ng-swipe-right="Lightbox.nextImage()">
   <!-- buttons -->
@@ -34,7 +34,8 @@
     </div>
 
     <!-- admin buttons -->
-    <div ng-if="Auth.permissions.edit" file-edit-btn-group="Lightbox.image">
+    <div ng-if="lightbox.Auth.permissions.edit"
+        file-edit-btn-group="Lightbox.image">
     </div>
   </div>
 

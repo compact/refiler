@@ -1,23 +1,20 @@
-<!-- title -->
-<h1 class="stack">{{title}}</h1>
-
-
+<!-- controller: LoginCtrl as login -->
 
 <!-- alerts -->
-<div alerts="alerts"></div>
-
-
+<div alerts="login.alerts"></div>
 
 <!-- login form -->
-<form ng-submit="login(credentials)" class="form-horizontal" role="form">
-  <fieldset ng-disabled="disabled">
+<form ng-submit="login.login(login.credentials)" class="form-horizontal"
+    role="form">
+  <fieldset ng-disabled="login.disabled">
 
     <!-- email -->
     <div class="form-group">
       <label for="login-email" class="col-sm-2 control-label">Email</label>
       <div class="col-sm-6">
         <input type="email" class="form-control" required id="login-email"
-            ng-model="credentials.email" ng-disabled="action === 'activate'">
+            ng-model="login.credentials.email"
+            ng-disabled="login.action === 'activate'">
       </div>
     </div>
 
@@ -28,7 +25,7 @@
       </label>
       <div class="col-sm-6">
         <input type="password" class="form-control" required id="login-password"
-            ng-model="credentials.password">
+            ng-model="login.credentials.password">
       </div>
     </div>
 

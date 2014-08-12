@@ -1,8 +1,6 @@
-angular.module('app').controller('AppCtrl', function ($scope, $rootScope,
-    $location, Auth, ErrorHandler, RefilerModel) {
-  $scope.error = false;
-
-  $scope.page = RefilerModel.page;
+angular.module('app').controller('AppCtrl', function ($location, $rootScope,
+    Auth, ErrorHandler, RefilerModel) {
+  this.page = RefilerModel.page;
 
   $rootScope.$on('$routeChangeError', function (e, c, p, rejection) {
     var errorMessage = ErrorHandler.parseMessage(rejection);

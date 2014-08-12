@@ -1,38 +1,36 @@
-angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
-    $modal, _, Auth, Prefs, RefilerAPI, RefilerGalleryModel) {
-  $scope.Prefs = Prefs;
-  $scope.reload = $route.reload;
-  $scope.Auth = Auth;
-  $scope.RefilerGalleryModel = RefilerGalleryModel;
+angular.module('app').controller('MenuCtrl', function ($http, $modal, $route,
+    $scope, _, RefilerAPI, RefilerGalleryModel) {
+  // when the Tag → Reload or Folder → Reload button is clicked
+  this.reload = $route.reload;
 
   // when the Folder → Reload data button is clicked
-  $scope.updateDir = function () {
+  this.updateDir = function () {
     RefilerAPI.getDir(RefilerGalleryModel.dir.id, true).then(function () {
       $route.reload(); // TODO: update the model instead of reloading
     });
   };
   // when the Folder → Sync subfolders button is clicked
-  $scope.syncSubdirs = function () {
+  this.syncSubdirs = function () {
     RefilerAPI.syncSubdirs(RefilerGalleryModel.dir.id).then(function (data) {
-      $scope.alerts.push({ // bubbles up to GalleryCtrl
+      $scope.gallery.alerts.push({
         'class': 'alert-success',
         'message': data.output
       });
     });
   };
   // when the Admin → Sync folders button is clicked
-  $scope.syncDirs = function () {
+  this.syncDirs = function () {
     RefilerAPI.syncSubdirs(0).then(function (data) {
-      $scope.alerts.push({ // bubbles up to GalleryCtrl
+      $scope.gallery.alerts.push({
         'class': 'alert-success',
         'message': data.output
       });
     });
   };
   // when the Admin → Sync thumbnails button is clicked
-  $scope.syncThumbs = function () {
+  this.syncThumbs = function () {
     RefilerAPI.syncThumbs().then(function (data) {
-      $scope.alerts.push({ // bubbles up to GalleryCtrl
+      $scope.gallery.alerts.push({
         'class': 'alert-success',
         'message': data.output
       });
@@ -40,17 +38,17 @@ angular.module('app').controller('MenuCtrl', function ($scope, $http, $route,
   };
 
   // selection changes
-  $scope.selectAll = function () {
+  this.selectAll = function () {
     _.each(RefilerGalleryModel.files, function (file) {
       file.selected = true;
     });
   };
-  $scope.selectNone = function () {
+  this.selectNone = function () {
     _.each(RefilerGalleryModel.files, function (file) {
       file.selected = false;
     });
   };
-  $scope.toggleSelection = function () {
+  this.toggleSelection = function () {
     _.each(RefilerGalleryModel.files, function (file) {
       file.selected = !file.selected;
     });

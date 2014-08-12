@@ -1,27 +1,31 @@
+<!-- controller: GalleryCtrl as gallery -->
+
 <!-- caption -->
-<h2 class="stack" ng-show="caption">{{caption}}</h2>
+<h2 class="stack" ng-show="gallery.tag.caption">{{gallery.tag.caption}}</h2>
 
 <!-- related tags -->
-<div ng-if="tag" ng-show="tag.parents.length + tag.children.length > 0"
+<div ng-if="gallery.tag"
+    ng-show="gallery.tag.parents.length + gallery.tag.children.length > 0"
     class="stack well well-sm">
-  <div ng-show="tag.parents.length > 0">
+  <div ng-show="gallery.tag.parents.length > 0">
     Parent tags
-    <span ng-repeat="tag in tag.parents">
+    <span ng-repeat="tag in gallery.tag.parents">
       | <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>
     </span>
   </div>
-  <div ng-show="tag.children.length > 0">
+  <div ng-show="gallery.tag.children.length > 0">
     Child tags
-    <span ng-repeat="tag in tag.children">
+    <span ng-repeat="tag in gallery.tag.children">
       | <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>
     </span>
   </div>
 </div>
 
 <!-- subdirs -->
-<div ng-if="dir" ng-show="dir.subdirs.length > 0" class="stack well well-sm">
+<div ng-if="gallery.dir" ng-show="gallery.dir.subdirs.length > 0"
+    class="stack well well-sm">
   Subfolders
-  <span ng-repeat="subdir in dir.subdirs">
+  <span ng-repeat="subdir in gallery.dir.subdirs">
     | <a href="#!/dir/{{subdir.path}}">{{subdir.getName()}}</a>
   </span>
 </div>
@@ -30,29 +34,29 @@
 <div ng-include="'menu.html'"></div>
 
 <!-- alerts -->
-<div alerts="alerts"></div>
+<div alerts="gallery.alerts"></div>
 
 <!-- pagination of gallery -->
-<pagination ng-model="page"
-    total-items="RefilerGalleryModel.files.length"
-    items-per-page="Prefs.filesPerPage"
+<pagination ng-model="gallery.page"
+    total-items="gallery.Model.files.length"
+    items-per-page="gallery.Prefs.filesPerPage"
     previous-text="&lsaquo;"
     next-text="&rsaquo;"
-    ng-show="RefilerGalleryModel.files.length > Prefs.filesPerPage"
+    ng-show="gallery.Model.files.length > gallery.Prefs.filesPerPage"
     class="stack unselectable">
 </pagination>
 
 <!-- gallery of files -->
 <ul id="gallery" class="stack clearfix">
-  <li ng-repeat="file in RefilerGalleryModel.files | limitTo: (page - 1) * Prefs.filesPerPage - RefilerGalleryModel.files.length | limitTo: Prefs.filesPerPage">
+  <li ng-repeat="file in gallery.Model.files | limitTo: (gallery.page - 1) * gallery.Prefs.filesPerPage - gallery.Model.files.length | limitTo: gallery.Prefs.filesPerPage">
     <div class="file-thumb" ng-class="file.isImage() ? 'image-thumb' : ''">
-      <a ng-href="{{file.getPath()}}" ng-click="openFile($event, file)"
+      <a ng-href="{{file.getPath()}}" ng-click="gallery.openFile($event, file)"
           target="_blank">
         <file-thumb file="file"></file-thumb>
       </a>
     </div>
 
-    <div class="details file-details" ng-show="Prefs.showFileDetails">
+    <div class="details file-details" ng-show="gallery.Prefs.showFileDetails">
       <div class="file-name">{{file.name}}</div>
       <div class="inline-left">
         <span ng-show="file.isImage()">
@@ -64,17 +68,18 @@
       </div>
       <div>{{file.formatDate()}}</div>
 
-      <div ng-if="Auth.permissions.edit" file-edit-btn-group="file"></div>
+      <div ng-if="gallery.Auth.permissions.edit" file-edit-btn-group="file">
+      </div>
     </div>
   </li>
 </ul>
 
 <!-- pagination of gallery -->
 <pagination ng-model="page"
-    total-items="RefilerGalleryModel.files.length"
-    items-per-page="Prefs.filesPerPage"
+    total-items="gallery.Model.files.length"
+    items-per-page="gallery.Prefs.filesPerPage"
     previous-text="&lsaquo;"
     next-text="&rsaquo;"
-    ng-show="RefilerGalleryModel.files.length > Prefs.filesPerPage"
+    ng-show="gallery.Model.files.length > gallery.Prefs.filesPerPage"
     class="stack unselectable">
 </pagination>
