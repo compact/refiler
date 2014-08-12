@@ -7,7 +7,7 @@ angular.module('app').directive('tagsInput', function () {
   return {
     'restrict': 'E',
     'replace': true, // replace to get the element's ng-model
-    'template': '<input ui-select2="tagsInput.select2Options" style="width: 100%;"></input>',
+    'template': '<input ui-select2="tagsInput.select2Options"></input>',
     'controller': /* @ngInject */ function (_, RefilerModel) {
       this.select2Options = {
         'multiple': true,

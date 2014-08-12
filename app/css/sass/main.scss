@@ -1,6 +1,6 @@
 /*! Refiler */
 
-@import "../../bower_components/bootstrap-sass/vendor/assets/stylesheets/bootstrap/_variables.scss";
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss";
 @import "compass/css3";
 @import "compass/css3/user-interface";
 
@@ -269,9 +269,10 @@ input[type="search"]::-webkit-search-cancel-button {
 ////////////////////////////////////////////////////////////// library overrides
 
 @import "angular.scss";
-@import "ui-utils.scss";
 @import "angular-file-upload.scss";
 @import "angular-loading-bar.scss";
+@import "angular-ui-select2.scss";
 @import "bootstrap.scss";
 @import "lightbox.scss";
 @import "perfect-scrollbar.scss";
+@import "ui-utils.scss";
