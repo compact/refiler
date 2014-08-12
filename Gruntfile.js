@@ -15,6 +15,17 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  // https://github.com/kangax/html-minifier#options-quick-reference
+  var htmlminOptions = {
+    collapseBooleanAttributes: true,
+    collapseWhitespace: true,
+    conservativeCollapse: true, // collapse to 1 space
+    removeAttributeQuotes: true,
+    removeComments: true,
+    removeEmptyAttributes: false,
+    removeRedundantAttributes: true
+  };
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -202,20 +213,11 @@ module.exports = function (grunt) {
     },
     htmlmin: {
       dist: {
-        options: {
-          // Optional configurations that you can uncomment to use
-          // removeCommentsFromCDATA: true,
-          // collapseBooleanAttributes: true,
-          // removeAttributeQuotes: true,
-          // removeRedundantAttributes: true,
-          // useShortDoctype: true,
-          // removeEmptyAttributes: true,
-          // removeOptionalTags: true*/
-        },
+        options: htmlminOptions,
         files: [{
           expand: true,
-          cwd: '<%= paths.app %>',
-          src: ['*.html', 'views/*.html'],
+          cwd: '<%= paths.dist %>',
+          src: '*.html',
           dest: '<%= paths.dist %>'
         }]
       }
@@ -376,14 +378,7 @@ module.exports = function (grunt) {
         src: '*.html',
         dest: '.tmp/templates.js',
         options: {
-          htmlmin: {
-            collapseBooleanAttributes: true,
-            collapseWhitespace: false,
-            removeAttributeQuotes: true,
-            removeComments: true,
-            removeEmptyAttributes: false,
-            removeRedundantAttributes: true
-          }
+          htmlmin: htmlminOptions
         }
       }
     },
@@ -440,6 +435,7 @@ module.exports = function (grunt) {
     'rev',
     'usemin',
     'htmlrefs',
+    'htmlmin',
   ]);
 
   // generate .json files in dist-static/api by copying output from the PHP API
