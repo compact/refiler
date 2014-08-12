@@ -2,7 +2,7 @@
  * The element shown is the thumbnail (img or i) only. It is not linked.
  * Usage: <file-thumb file="file"></file-thumb>
  */
-angular.module('app').directive('fileThumb', function ($rootScope) {
+angular.module('app').directive('fileThumb', function () {
   return {
     'restrict': 'E',
     'templateUrl': 'fileThumb.html',
@@ -10,8 +10,7 @@ angular.module('app').directive('fileThumb', function ($rootScope) {
       scope.file = scope.$eval(attrs.file);
 
       // update the scope when the thumb gets updated
-      var off = $rootScope.$on('RefilerGalleryModelChange', function (event,
-          model) {
+      var off = scope.$on('RefilerGalleryModelChange', function (event, model) {
         scope.file = model.getFile(scope.file.id);
       });
 

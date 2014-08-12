@@ -4,7 +4,10 @@ angular.module('app').controller('LightboxCtrl', function ($scope, Auth,
   this.Auth = Auth;
 
   // update the Lightbox whenever the model changes
-  $scope.$on('RefilerGalleryModelChange', function () {
+  var off = $scope.$on('RefilerGalleryModelChange', function () {
     Lightbox.setImages(RefilerGalleryModel.filterImages());
   });
+
+  // deregister the listener when this controller is destroyed
+  $scope.$on('$destroy', off);
 });

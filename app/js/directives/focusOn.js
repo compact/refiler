@@ -3,10 +3,13 @@
  */
 angular.module('app').directive('focusOn', function ($timeout) {
   return function (scope, element, attrs) {
-    scope.$on(attrs.focusOn, function () {
+    var off = scope.$on(attrs.focusOn, function () {
       $timeout(function () {
         element[0].focus();
       });
     });
+
+    // deregister the listener when this scope is destroyed
+    scope.$on('$destroy', off);
   };
 });
