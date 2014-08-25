@@ -1,4 +1,4 @@
-angular.module('app').controller('NavCtrl', function ($http, Refiler,
+angular.module('app').controller('NavCtrl', function ($http, RefilerConfig,
     RefilerGalleryModel, RefilerModel) {
   this.RefilerModel = RefilerModel;
   this.searchText = '';
@@ -12,7 +12,7 @@ angular.module('app').controller('NavCtrl', function ($http, Refiler,
    * @return {Object} Object passed into ng.filter:filter.
    */
   this.tagFilter = function (searchText) {
-    return Refiler.config.defaultParentlessTagsInNav && searchText === '' ?
+    return RefilerConfig.defaultParentlessTagsInNav && searchText === '' ?
       {'parentCount': 0} :
       {'name': searchText};
   };
@@ -24,7 +24,7 @@ angular.module('app').controller('NavCtrl', function ($http, Refiler,
    * @return {Function} Function passed into ng.filter:filter.
    */
   this.dirFilter = function (searchText) {
-    if (Refiler.config.defaultParentlessDirsInNav && searchText === '') {
+    if (RefilerConfig.defaultParentlessDirsInNav && searchText === '') {
       return function (dir) {
         return dir.path.indexOf('/') === -1;
       };
@@ -55,5 +55,5 @@ angular.module('app').controller('NavCtrl', function ($http, Refiler,
     }
   };
 
-  this.highlightSearchText = Refiler.config.highlightSearchText;
+  this.highlightSearchText = RefilerConfig.highlightSearchText;
 });

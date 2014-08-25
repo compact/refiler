@@ -1,4 +1,5 @@
-angular.module('app').factory('RefilerFile', function service(_, Refiler) {
+angular.module('app').factory('RefilerFile', function service(_, RefilerConfig,
+    RefilerConstants) {
   /**
    * Each file gets an instance of this class.
    * @param {Object} file
@@ -80,7 +81,7 @@ angular.module('app').factory('RefilerFile', function service(_, Refiler) {
   RefilerFile.prototype.getPath = function (includeBasePath) {
     var path = this.dirPath + '/' + this.name;
     if (typeof includeBasePath === 'undefined' || includeBasePath) {
-      return Refiler.config.basePath + path;
+      return RefilerConfig.basePath + path;
     } else {
       return path;
     }
@@ -88,16 +89,16 @@ angular.module('app').factory('RefilerFile', function service(_, Refiler) {
 
   RefilerFile.prototype.getThumb = function () {
     switch (this.thumbType) {
-      case Refiler.constants.NO_THUMB:
-        return Refiler.config.noThumb;
-      case Refiler.constants.NO_THUMB_TOO_LARGE:
-        return Refiler.config.noThumbTooLarge;
-      case Refiler.constants.NO_THUMB_CORRUPT:
-        return Refiler.config.noThumbCorrupt;
-      case Refiler.constants.SELF_THUMB:
+      case RefilerConstants.NO_THUMB:
+        return RefilerConfig.noThumb;
+      case RefilerConstants.NO_THUMB_TOO_LARGE:
+        return RefilerConfig.noThumbTooLarge;
+      case RefilerConstants.NO_THUMB_CORRUPT:
+        return RefilerConfig.noThumbCorrupt;
+      case RefilerConstants.SELF_THUMB:
         return this.getPath();
       default: // see Refiler\File::get_default_thumb_path()
-        return Refiler.config.basePath + 'thumbs' + this.getPath().replace(
+        return RefilerConfig.basePath + 'thumbs' + this.getPath().replace(
           /\/([^\/]+)\.[^.]+$/,
           '/' + (this.type === 'gif' ? 'gif-' : '') +
           'thumb-$1.' + this.thumbType
@@ -110,7 +111,7 @@ angular.module('app').factory('RefilerFile', function service(_, Refiler) {
   };
 
   RefilerFile.prototype.isImage = function () {
-    return _.indexOf(Refiler.config.imageExtensions, this.type) !== -1 &&
+    return _.indexOf(RefilerConfig.imageExtensions, this.type) !== -1 &&
       this.width > 0 && this.height > 0; // additional check
   };
 
