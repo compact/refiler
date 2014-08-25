@@ -170,7 +170,8 @@
       </ul>
     </div>
 
-    <div class="btn-group" dropdown ng-show="gallery.tag || gallery.dir">
+    <div class="btn-group" dropdown
+        ng-show="(gallery.tag || gallery.dir) && gallery.Model.files.length > 0">
       <button type="button" class="btn btn-sm dropdown-toggle"
           ng-class="gallery.Model.hasSelectedFiles() ? 'btn-warning' : 'btn-default'">
         <i class="fa fa-fw fa-check-circle"></i>
