@@ -44,7 +44,7 @@ $app->post('/dir/:id/subdirs.json', function ($id) use ($app, $config) {
     );
   }, $paths_in_fs);
   $statement = $db->insert('DIRS', $rows_to_insert, true);
-  $output = "Rows inserted: {$statement->rowCount()}<br>";
+  $output = "<strong>Rows inserted:</strong> {$statement->rowCount()}<br>";
 
 
 
@@ -59,9 +59,11 @@ $app->post('/dir/:id/subdirs.json', function ($id) use ($app, $config) {
       'DELETE FROM `DIRS` WHERE `id` IN (%s)',
       multi_array_values($rows_to_delete, 'id')
     );
-    $output = "Rows deleted: {$statement->rowCount()}<br>";
-    $output = print_r($rows_to_delete, true) . '<br>';
   }
+  $output .= "<strong>Rows deleted:</strong> {$statement->rowCount()}<br>";
+  $output .= implode('<br>', array_map(function ($row) {
+    return $row['path'];
+  }, $rows_to_delete));
 
 
 
