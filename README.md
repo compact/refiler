@@ -14,8 +14,8 @@ Requirements
 
 Remote:
 
-* PHP 5.4
-* MySQL 5 (with `innodb_autoinc_lock_mode = 0` or `1`)
+* PHP 5.4 with the extensions [PDO](http://php.net/manual/en/pdo.installation.php), [GD](http://php.net/manual/en/image.installation.php), and [Exif](http://php.net/manual/en/exif.installation.php)
+* MySQL 5 with `innodb_autoinc_lock_mode = 0` or `1`
 
 Local:
 
