@@ -284,15 +284,15 @@ class Dir {
     while ($name = readdir($handle)) {
       $path = File::path($this->path, $name);
 
-      if (!$this->refiler->path_is_excluded($path)) { // filter excluded paths
+      if ($name !== '.' && $name !== '..'
+          && !$this->refiler->path_is_excluded($path)) { // filter path
         if (is_file($path)) {
           // add the file to the resulting array
           $files[] = File::new_file_or_image($this->refiler, array(
             'dir' => $this,
             'name' => $name
           ));
-        } elseif ($recursive && is_dir($path) && $name !== '.'
-            && $name !== '..') {
+        } elseif ($recursive && is_dir($path)) {
           // recursive case
           $subdir = new Dir($this->refiler, $path);
           $files = array_merge($files, $subdir->get_files_in_filesystem($recursive));
