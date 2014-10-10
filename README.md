@@ -19,23 +19,38 @@ Remote:
 
 Local:
 
-* Node.js, npm, Yeoman
+* npm
+* Ruby
 * Composer
 
-Deployment
-----------
+Setup
+-----
+
+```
+npm install -g bower grunt-cli
+gem install compass
+composer install
+npm install
+bower install
+```
+
+Develop
+-------
+
+```
+git update-index --assume-unchanged app/config.php  # then edit this file
+
+grunt ngtemplates                                   # generate Angular templates
+grunt compass:compile                               # compile Sass
+```
+
+Deploy
+------
 
 * Run the queries in `schema.sql`.
 * Run the queries in Sentry's `schema/mysql.sql`.
 * Edit `app/config.php`.
-
-```
-php composer.phar install
-npm install
-bower install
-grunt build
-```
-
+* `grunt build`.
 * Upload `dist/`.
 * Edit `admin/create-first-admin.php` and run it remotely.
 * If there are existing dirs, click `Admin → Sync folders`. Navigate to each dir and click `Folder → Sync files`.
@@ -44,7 +59,7 @@ grunt build
 
 This build contains static files only. It has no PHP, no users, and no file operations. The API is generated as JSON files.
 
-* Edit `paths.url` in `Gruntfile.js` to be your local app URL; the default is 'http://localhost`.
+* Edit `paths.url` in `Gruntfile.js` to be the local app URL; the default is 'http://localhost`.
 
 ```
 grunt build
