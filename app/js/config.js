@@ -207,6 +207,14 @@ angular.module('app').config(function (AuthProvider) {
 angular.module('app').config(function (LightboxProvider) {
   LightboxProvider.templateUrl = 'lightbox.html';
 
+  /**
+   * @param  {RefilerFile} image
+   * @return {String}      URL.
+   */
+  LightboxProvider.getImageUrl = function (image) {
+    return image.getPath();
+  };
+
   // see the default method in the Lightbox provider
   LightboxProvider.calculateImageDimensionLimits = function (dimensions) {
     return {
