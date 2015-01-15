@@ -903,7 +903,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
             '<tfoot>' +
               '<tr>' +
                 '<td colspan="5">' +
-                  '<a ng-click="createUser()">Create new user</a>' +
+                  '<a ng-click="modal.createUser()">Create new user</a>' +
                 '</td>' +
               '</tr>' +
             '</tfoot>' +
