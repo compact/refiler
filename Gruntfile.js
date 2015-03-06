@@ -11,7 +11,6 @@ module.exports = function (grunt) {
 
   // just-in-time plugin loader
   require('jit-grunt')(grunt, {
-    cdnify: 'grunt-google-cdn',
     ngtemplates: 'grunt-angular-templates',
     useminPrepare: 'grunt-usemin'
   });
@@ -218,13 +217,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // Replace Google CDN references
-    cdnify: {
-      dist: {
-        html: ['<%= paths.dist %>/*.html']
-      }
-    },
-
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
@@ -427,7 +419,6 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
-    'cdnify',
     'cssmin',
     'uglify',
     'rev',
