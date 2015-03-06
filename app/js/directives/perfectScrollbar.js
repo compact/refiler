@@ -1,21 +1,17 @@
 angular.module('app').directive('perfectScrollbar', function($timeout,
     $window) {
   return function(scope, element, attrs) {
+    var Ps = $window.Ps;
     var options = scope.$eval(attrs.perfectScrollbar);
     if (typeof options !== 'object') {
       options = {};
     }
 
-    element.perfectScrollbar(options);
-
-    // initialize the size of the perfect scrollbar
-    $timeout(function () {
-      element.perfectScrollbar('update');
-    });
+    Ps.initialize(element[0], options);
 
     // update when the window gets resized
     angular.element($window).bind('resize', function () {
-      element.perfectScrollbar('update');
+      Ps.update(element[0]);
     });
 
     // update when the element gets resized
@@ -25,7 +21,7 @@ angular.module('app').directive('perfectScrollbar', function($timeout,
         'height': element.height()
       };
     }, function () {
-      element.perfectScrollbar('update');
+      Ps.update(element[0]);
     }, true);
 
     // scroll to the top whenever the ul height changes, so the list doesn't
@@ -36,7 +32,7 @@ angular.module('app').directive('perfectScrollbar', function($timeout,
       return ul.height();
     }, function () {
       element.scrollTop(0);
-      element.perfectScrollbar('update');
+      Ps.update(element[0]);
     });
   };
 });

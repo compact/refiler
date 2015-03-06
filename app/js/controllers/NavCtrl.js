@@ -39,7 +39,6 @@ angular.module('app').controller('NavCtrl', function ($http, RefilerConfig,
   };
 
   this.perfectScrollbarOptions = {
-    'wheelSpeed': 60,
     'wheelPropagation': true,
     'minScrollbarLength': 100,
     'suppressScrollX': true
