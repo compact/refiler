@@ -1,68 +1,67 @@
 <div ng-controller="MenuCtrl as menu" id="menu" class="stack unselectable">
+  <div class="btn-group">
 
-  <!-- view options menu -->
-  <div class="btn-group" ng-if="gallery.Auth.permissions.view">
-    <a class="btn btn-sm btn-default hidden-sm hidden-md hidden-lg"
-        href="#!/nav">
-      <i class="fa fa-fw fa-bars"></i>
-      Navigation
-    </a>
+    <!-- view options menu -->
+    <div class="btn-group" ng-if="gallery.Auth.permissions.view">
+      <a class="btn btn-sm btn-default hidden-sm hidden-md hidden-lg"
+          href="#!/nav">
+        <i class="fa fa-fw fa-bars"></i>
+        Navigation
+      </a>
 
-    <div class="btn-group" dropdown>
-      <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
-        <i class="fa fa-fw fa-cog"></i>
-        Options
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li>
-          <a ng-click="gallery.Prefs.toggle('showFileDetails')">
-            <i class="fa fa-fw"
-                ng-class="{'fa-check': gallery.Prefs.showFileDetails}">
-            </i>
-            Show file details
-          </a>
-        </li>
-        <li class="divider"></li>
-        <li class="dropdown-submenu">
-          <a><i class="fa fa-fw"></i> Sort</a>
-          <ul class="dropdown-menu">
-            <li><a pref key="sort" value="name" label="A → Z"></a></li>
-            <li><a pref key="sort" value="-date" label="New → Old"></a></li>
-            <li><a pref key="sort" value="date" label="Old → New"></a></li>
-            <li><a pref key="sort" value="-size" label="Big → Small"></a></li>
-          </ul>
-        </li>
-        <li class="dropdown-submenu">
-          <a><i class="fa fa-fw"></i> Files per page</a>
-          <ul class="dropdown-menu">
-            <li><a pref key="filesPerPage" value="30"></a></li>
-            <li><a pref key="filesPerPage" value="60"></a></li>
-            <li><a pref key="filesPerPage" value="90"></a></li>
-            <li><a pref key="filesPerPage" value="120"></a></li>
-          </ul>
-        </li>
-      </ul>
+      <div class="btn-group" dropdown>
+        <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
+          <i class="fa fa-fw fa-cog"></i>
+          Options
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a ng-click="gallery.Prefs.toggle('showFileDetails')">
+              <i class="fa fa-fw"
+                  ng-class="{'fa-check': gallery.Prefs.showFileDetails}">
+              </i>
+              Show file details
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li class="dropdown-submenu">
+            <a><i class="fa fa-fw"></i> Sort</a>
+            <ul class="dropdown-menu">
+              <li><a pref key="sort" value="name" label="A → Z"></a></li>
+              <li><a pref key="sort" value="-date" label="New → Old"></a></li>
+              <li><a pref key="sort" value="date" label="Old → New"></a></li>
+              <li><a pref key="sort" value="-size" label="Big → Small"></a></li>
+            </ul>
+          </li>
+          <li class="dropdown-submenu">
+            <a><i class="fa fa-fw"></i> Files per page</a>
+            <ul class="dropdown-menu">
+              <li><a pref key="filesPerPage" value="30"></a></li>
+              <li><a pref key="filesPerPage" value="60"></a></li>
+              <li><a pref key="filesPerPage" value="90"></a></li>
+              <li><a pref key="filesPerPage" value="120"></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
 
 
 
-  <!-- guest menu -->
-  <div class="btn-group"
-      ng-if="!gallery.Auth.loggedIn && gallery.Auth.verified">
-    <a class="btn btn-sm btn-default" href="#!/login">
-      <i class="fa fa-fw fa-user"></i>
-      Login
-    </a>
-  </div>
+    <!-- guest menu -->
+    <div class="btn-group"
+        ng-if="!gallery.Auth.loggedIn && gallery.Auth.verified">
+      <a class="btn btn-sm btn-default" href="#!/login">
+        <i class="fa fa-fw fa-user"></i>
+        Login
+      </a>
+    </div>
 
 
 
-  <!-- edit menu -->
-  <div class="btn-group" ng-if="gallery.Auth.permissions.edit">
-
-    <div class="btn-group" dropdown>
+    <!-- edit menu -->
+    <div class="btn-group" dropdown ng-if="gallery.Auth.permissions.edit">
       <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
         <i class="fa fa-fw fa-cloud-upload"></i>
         Upload
@@ -90,7 +89,8 @@
       </ul>
     </div>
 
-    <div class="btn-group" dropdown ng-show="gallery.tag">
+    <div class="btn-group" dropdown ng-if="gallery.Auth.permissions.edit"
+        ng-show="gallery.tag">
       <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
         <i class="fa fa-fw fa-tag"></i>
         Tag
@@ -118,7 +118,8 @@
       </ul>
     </div>
 
-    <div class="btn-group" dropdown ng-show="gallery.dir">
+    <div class="btn-group" dropdown ng-if="gallery.Auth.permissions.edit"
+        ng-show="gallery.dir">
       <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
         <i class="fa fa-fw fa-folder-open"></i>
         Folder
@@ -170,7 +171,7 @@
       </ul>
     </div>
 
-    <div class="btn-group" dropdown
+    <div class="btn-group" dropdown ng-if="gallery.Auth.permissions.edit"
         ng-show="(gallery.tag || gallery.dir) && gallery.Model.files.length > 0">
       <button type="button" class="btn btn-sm" dropdown-toggle
           ng-class="gallery.Model.hasSelectedFiles() ? 'btn-warning' : 'btn-default'">
@@ -218,62 +219,61 @@
       </ul>
     </div>
 
+
+
+    <!-- user menu -->
+    <div class="btn-group" dropdown ng-if="gallery.Auth.loggedIn">
+      <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
+        <i class="fa fa-fw fa-user"></i>
+        User
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="gallery.Auth.logout()">
+            <i class="fa fa-fw fa-sign-out"></i>
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+
+    <!-- admin menu -->
+    <div class="btn-group" dropdown ng-if="gallery.Auth.permissions.admin">
+      <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
+        <i class="fa fa-fw fa-wrench"></i>
+        Admin
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="gallery.openModal('manageUsers')">
+            <i class="fa fa-fw fa-users"></i>
+            Manage users
+          </a>
+        </li>
+        <li>
+          <a ng-click="menu.syncDirs()">
+            <i class="fa fa-fw fa-folder-open-o"></i>
+            Sync folders (slow)
+          </a>
+        </li>
+        <li>
+          <a ng-click="menu.syncThumbs()">
+            <i class="fa fa-fw fa-picture-o"></i>
+            Sync thumbnails (slow)
+          </a>
+        </li>
+        <li>
+          <a ng-click="gallery.openModal('deleteThumbs')">
+            <i class="fa fa-fw fa-picture-o"></i>
+            Delete all thumbnails
+          </a>
+        </li>
+      </ul>
+    </div>
+
   </div>
-
-
-
-  <!-- user menu -->
-  <div class="btn-group" dropdown ng-if="gallery.Auth.loggedIn">
-    <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
-      <i class="fa fa-fw fa-user"></i>
-      User
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a ng-click="gallery.Auth.logout()">
-          <i class="fa fa-fw fa-sign-out"></i>
-          Logout
-        </a>
-      </li>
-    </ul>
-  </div>
-
-
-
-  <!-- admin menu -->
-  <div class="btn-group" dropdown ng-if="gallery.Auth.permissions.admin">
-    <button type="button" class="btn btn-sm btn-default" dropdown-toggle>
-      <i class="fa fa-fw fa-wrench"></i>
-      Admin
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a ng-click="gallery.openModal('manageUsers')">
-          <i class="fa fa-fw fa-users"></i>
-          Manage users
-        </a>
-      </li>
-      <li>
-        <a ng-click="menu.syncDirs()">
-          <i class="fa fa-fw fa-folder-open-o"></i>
-          Sync folders (slow)
-        </a>
-      </li>
-      <li>
-        <a ng-click="menu.syncThumbs()">
-          <i class="fa fa-fw fa-picture-o"></i>
-          Sync thumbnails (slow)
-        </a>
-      </li>
-      <li>
-        <a ng-click="gallery.openModal('deleteThumbs')">
-          <i class="fa fa-fw fa-picture-o"></i>
-          Delete all thumbnails
-        </a>
-      </li>
-    </ul>
-  </div>
-
 </div>
