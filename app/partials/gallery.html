@@ -8,15 +8,15 @@
     ng-show="gallery.tag.parents.length + gallery.tag.children.length > 0"
     class="stack well well-sm">
   <div ng-show="gallery.tag.parents.length > 0">
-    Parent tags
+    Parent tags:
     <span ng-repeat="tag in gallery.tag.parents">
-      | <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>
+      <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>{{$last ? '' : ','}}
     </span>
   </div>
   <div ng-show="gallery.tag.children.length > 0">
-    Child tags
+    Child tags:
     <span ng-repeat="tag in gallery.tag.children">
-      | <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>
+      <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>{{$last ? '' : ','}}
     </span>
   </div>
 </div>
@@ -24,9 +24,11 @@
 <!-- subdirs -->
 <div ng-if="gallery.dir" ng-show="gallery.dir.subdirs.length > 0"
     class="stack well well-sm">
-  Subfolders
+  Subfolders:
   <span ng-repeat="subdir in gallery.dir.subdirs">
-    | <a href="#!/dir/{{subdir.path}}">{{subdir.getName()}}</a>
+    <a href="#!/dir/{{subdir.path}}">
+      {{subdir.getName()}}
+    </a>{{$last ? '' : ','}}
   </span>
 </div>
 
