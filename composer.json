@@ -3,7 +3,7 @@
     "vendor-dir": "app/vendor"
   },
   "require": {
-    "cartalyst/sentry": "2.*",
+    "cartalyst/sentry": "2.1.*",
     "illuminate/database": "4.*",
     "ircmaxell/password-compat": "1.*",
     "slim/slim": "2.*"
