@@ -234,18 +234,6 @@ module.exports = function (grunt) {
             '!partials/**'
           ]
         }, {
-          // Select2 files; the CSS file is built into lib/select2 with usemin
-          // in index.html
-          expand: true,
-          cwd: '<%= paths.app %>/bower_components',
-          dest: '<%= paths.dist %>/lib',
-          src: [
-            'select2/select2-spinner.gif',
-            'select2/select2.js',
-            'select2/select2.png',
-            'select2/select2x2.png'
-          ]
-        }, {
           // optional remote version of config.php
           expand: true,
           cwd: '<%= paths.app %>',
