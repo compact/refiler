@@ -1,0 +1,9 @@
+<ui-select multiple tagging tagging-label="(new tag)">
+  <ui-select-match placeholder="Select tags (optional)">
+    {{$item}}
+  </ui-select-match>
+  <ui-select-choices repeat="tagName in tagsInput.tagNames |
+      filter: $select.search">
+    {{tagName}}
+  </ui-select-choices>
+</ui-select>

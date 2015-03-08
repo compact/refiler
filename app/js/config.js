@@ -4,7 +4,7 @@ angular.module('app').config(function ($httpProvider) {
   // Use x-www-form-urlencoded Content-Type
   $httpProvider.defaults.headers.post['Content-Type'] =
     'application/x-www-form-urlencoded;charset=utf-8';
- 
+
   // Override $http service's default transformRequest
   $httpProvider.defaults.transformRequest = [function (data) {
     /**
@@ -261,4 +261,11 @@ angular.module('app').config(function (RefilerConfigProvider) {
   RefilerConfigProvider.defaultParentlessTagsInNav = true;
   RefilerConfigProvider.defaultParentlessDirsInNav = true;
   RefilerConfigProvider.highlightSearchText = false;
+});
+
+
+
+// set angular-ui-select theme
+angular.module('app').config(function(uiSelectConfig) {
+  uiSelectConfig.theme = 'bootstrap';
 });

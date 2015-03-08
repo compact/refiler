@@ -1,6 +1,6 @@
 /**
  * The modals defined here are opened in GalleryCtrl, its descendant MenuCtrl,
- *   and in the lightbox. 
+ *   and in the lightbox.
  */
 angular.module('app').service('RefilerModals', function ($location, $modal,
     $route, $timeout, _, Auth, FileUploader, RefilerAPI, RefilerFile,
@@ -45,7 +45,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       },
       {
         'label': 'New folder',
-        'control': '<dir-input ng-model="modal.model.dir"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.dirDisplayPath"></dir-input>'
       },
       {
         'label': 'New name',
@@ -72,7 +72,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     'open': function (ctrl, file) {
       ctrl.disabled = true;
 
-      ctrl.path = file.getPath();
+      ctrl.path = file.getPath(); // contains the dir's display path
 
       RefilerAPI.getTagsByFile(file.id).then(function (data) {
         ctrl.model.tagNames = _.pluck(data.tags, 'name');
@@ -80,10 +80,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       });
 
       ctrl.model.caption = file.caption;
-      ctrl.model.dir = {
-        'id': file.id,
-        'text': '/' + file.dirPath
-      };
+      ctrl.model.dirDisplayPath = RefilerGalleryModel.dir.displayPath;
       ctrl.model.name = file.name;
 
       // used for showing the thumb
@@ -112,7 +109,8 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       };
 
       // idiosyncratic: only POST the dir path and name if they have changed
-      newDirPath = ctrl.model.dir.text.substr(1); // remove leading slash
+      newDirPath = RefilerModel.getDirByDisplayPath(ctrl.model.dirDisplayPath)
+        .path;
       newName = ctrl.model.name;
       if (file.dirPath !== newDirPath || file.name !== newName) {
         data.dirPath = newDirPath;
@@ -175,7 +173,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<dir-input ng-model="modal.model.dir"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.dirDisplayPath"></dir-input>'
       },
       {
         'label': 'Tags',
@@ -245,18 +243,12 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       var uploadedFiles = [], failedFiles = [];
 
       // init
-      ctrl.model.dir = {
-        'id': 0,
-        'text': ''
-      };
+      ctrl.model.dir = {};
 
       if (RefilerGalleryModel.type === 'dir') {
         // if the user is currently viewing a dir, default to that dir for
         // upload
-        ctrl.model.dir = {
-          'id': RefilerGalleryModel.dir.id,
-          'text': RefilerGalleryModel.dir.displayPath
-        };
+        ctrl.model.dirDisplayPath = RefilerGalleryModel.dir.displayPath;
       } else if (RefilerGalleryModel.type === 'tag') {
         // likewise for a tag
         ctrl.model.tagNames = [RefilerGalleryModel.tag.name];
@@ -315,7 +307,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
 
       ctrl.uploader.onCompleteAll = function () {
         // the attempt to upload all files in the queue has completed
-        var dir = RefilerModel.getDir(ctrl.model.dir.id);
+        var dir = RefilerModel.getDirByDisplayPath(ctrl.model.dirDisplayPath);
 
         // update the model
         dir.fileCount += uploadedFiles.length;
@@ -366,7 +358,8 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
         _.each(ctrl.uploader.queue, function (item) {
           // item.formData is an array of plain objects, not a FormData object
           item.formData.push({
-            'dirId': ctrl.model.dir.id,
+            'dirId': RefilerModel.getDirByDisplayPath(ctrl.model.dirDisplayPath)
+              .id,
             'tagNames': JSON.stringify(ctrl.model.tagNames)
           });
         });
@@ -384,7 +377,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<dir-input ng-model="modal.model.dir"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.dirDisplayPath"></dir-input>'
       },
       {
         'label': 'Tags',
@@ -399,18 +392,12 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     ],
     'open': function (ctrl) {
       // init
-      ctrl.model.dir = {
-        'id': 0,
-        'text': ''
-      };
+      ctrl.model.dir = {};
 
       if (RefilerGalleryModel.type === 'dir') {
         // if the user is currently viewing a dir, default to that dir for
         // upload
-        ctrl.model.dir = {
-          'id': RefilerGalleryModel.dir.id,
-          'text': RefilerGalleryModel.dir.displayPath
-        };
+        ctrl.model.dirDisplayPath = RefilerGalleryModel.dir.displayPath;
       } else if (RefilerGalleryModel.type === 'tag') {
         // likewise for a tag
         ctrl.model.tagNames = [RefilerGalleryModel.tag.name];
@@ -422,8 +409,10 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       });
     },
     'submit': function (ctrl) {
+      var dir = RefilerModel.getDirByDisplayPath(ctrl.model.dirDisplayPath);
+
       RefilerAPI.curl({
-        'dirId': ctrl.model.dir.id,
+        'dirId': dir.id,
         'tagNames': ctrl.model.tagNames,
         'urls': ctrl.model.urls
       }).then(function (data) {
@@ -433,8 +422,6 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
             'dirPath': RefilerGalleryModel.dir.path
           }));
         }
-
-        var dir = RefilerModel.getDir(ctrl.model.dir.id);
 
         // update the dir model
         dir.fileCount += data.files.length;
@@ -589,7 +576,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     'formGroups': [
       {
         'label': 'Parent',
-        'control': '<dir-input ng-model="modal.model.parent"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.parentDisplayPath"></dir-input>'
       },
       {
         'label': 'Name',
@@ -598,10 +585,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       }
     ],
     'open': function (ctrl) {
-      ctrl.model.parent = {
-        'id': RefilerGalleryModel.dir.id,
-        'text': RefilerGalleryModel.dir.displayPath
-      };
+      ctrl.model.parentDisplayPath = RefilerGalleryModel.dir.displayPath;
       ctrl.model.name = '';
 
       // focus the name input
@@ -610,8 +594,8 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       });
     },
     'submit': function (ctrl) {
-      var path = ctrl.model.parent.text.substr(1); // remove leading slash
-      path += '/' + ctrl.model.name;
+      var path = RefilerModel.getDirByDisplayPath(ctrl.model.parentDisplayPath)
+        .path + '/' + ctrl.model.name;
 
       RefilerAPI.createDir(path).then(function (data) {
         ctrl.close();
@@ -631,12 +615,12 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<input type="text" value="{{modal.path}}"' +
+        'control': '<input type="text" value="{{modal.displayPath}}"' +
           ' class="form-control" disabled>'
       },
       {
         'label': 'New parent',
-        'control': '<dir-input ng-model="modal.model.parent"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.parentDisplayPath"></dir-input>'
       },
       {
         'label': 'New name',
@@ -647,16 +631,15 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     ],
     'open': function (ctrl) {
       // old path for display only
-      ctrl.path = RefilerGalleryModel.dir.displayPath;
+      ctrl.displayPath = RefilerGalleryModel.dir.displayPath;
 
       // model to set the new path
-      var parentPath = RefilerGalleryModel.dir.getParentPath();
-      ctrl.model.parent = {
-        'id': _.where(RefilerModel.dirs, {
-          'path': parentPath
-        })[0].id, // TODO: turn this into a method of RefilerModel
-        'text': '/' + parentPath
-      };
+      // TODO: handle unexpected dir not found error here
+      // TODO: maybe write RefilerDir.getParent() instead
+      ctrl.model.parentDisplayPath = RefilerModel.getDirByPath(
+        RefilerGalleryModel.dir.getParentPath()
+      ).displayPath;
+
       ctrl.model.name = RefilerGalleryModel.dir.getName();
 
       // focus the name input
@@ -665,8 +648,9 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       });
     },
     'submit': function (ctrl) {
-      var newPath = ctrl.model.parent.text.substr(1) + '/' +
-        ctrl.model.name;
+      var newPath = RefilerModel.getDirByDisplayPath(
+        ctrl.model.parentDisplayPath
+      ).path + '/' + ctrl.model.name;
 
       if (RefilerGalleryModel.dir.path === newPath) {
         ctrl.alerts.push({'message': 'No change.'});
@@ -694,12 +678,12 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<input type="text" value="{{modal.path}}"' +
+        'control': '<input type="text" value="{{modal.displayPath}}"' +
           ' class="form-control" disabled>'
       }
     ],
     'open': function (ctrl) {
-      ctrl.path = RefilerGalleryModel.dir.path;
+      ctrl.displayPath = RefilerGalleryModel.dir.displayPath;
 
       // focus the button
       $timeout(function () {
@@ -726,7 +710,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<input type="text" value="{{modal.dirPath}}"' +
+        'control': '<input type="text" value="{{modal.dirDisplayPath}}"' +
           ' class="form-control" disabled>'
       },
       {
@@ -745,7 +729,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       }
     ],
     'open': function (ctrl) {
-      ctrl.dirPath = RefilerGalleryModel.dir.path;
+      ctrl.dirDisplayPath = RefilerGalleryModel.dir.displayPath;
       ctrl.model.recursive = false;
       ctrl.model.overwrite = false;
     },
@@ -800,21 +784,13 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
     'formGroups': [
       {
         'label': 'Folder',
-        'control': '<dir-input ng-model="modal.model.dir"></dir-input>'
+        'control': '<dir-input ng-model="modal.model.dirDisplayPath"></dir-input>'
       }
     ],
     'open': function (ctrl) {
       // init
-      ctrl.model.dir = {
-        'id': 0,
-        'text': ''
-      };
-
       if (RefilerGalleryModel.type === 'dir') {
-        ctrl.model.dir = {
-          'id': RefilerGalleryModel.dir.id,
-          'text': RefilerGalleryModel.dir.displayPath
-        };
+        ctrl.model.dirDisplayPath = RefilerGalleryModel.dir.displayPath;
       }
     },
     'submit': function (ctrl) {
@@ -822,7 +798,7 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
 
       RefilerAPI.moveFilesByIds({
         'fileIds': fileIds,
-        'dirId': ctrl.model.dir.id
+        'dirId': RefilerModel.getDirByDisplayPath(ctrl.model.dirDisplayPath).id
       }).then(function () {
         ctrl.close();
 

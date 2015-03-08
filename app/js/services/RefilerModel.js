@@ -153,6 +153,14 @@ angular.module('app').service('RefilerModel', function ($q, _, RefilerAPI,
   };
 
   /**
+   * @param  {string}          displayPath
+   * @return {RefilerDir|null}
+   */
+  this.getDirByDisplayPath = function (displayPath) {
+    return _.where(this.dirs, {'displayPath': displayPath})[0] || null;
+  };
+
+  /**
    * Add the given dir to the model.
    * @param {object} data Does not have to be a RefilerDir.
    */

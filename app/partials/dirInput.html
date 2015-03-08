@@ -1,0 +1,9 @@
+<ui-select>
+  <ui-select-match placeholder="Select a folder">
+    {{$select.selected}}
+  </ui-select-match>
+  <ui-select-choices repeat="displayPath in dirInput.displayPaths |
+      filter: $select.search">
+    {{displayPath}}
+  </ui-select-choices>
+</ui-select>

@@ -7,7 +7,7 @@ angular.module('app', [
   'ngSanitize',
   'ui.bootstrap',
   'ui.highlight',
-  'ui.select2',
+  'ui.select',
   'chieffancypants.loadingBar',
   'angularFileUpload',
   'bootstrapLightbox'
