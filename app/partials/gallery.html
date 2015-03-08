@@ -10,13 +10,13 @@
   <div ng-show="gallery.tag.parents.length > 0">
     Parent tags:
     <span ng-repeat="tag in gallery.tag.parents">
-      <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>{{$last ? '' : ','}}
+      <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>{{$last ? '' : ', '}}
     </span>
   </div>
   <div ng-show="gallery.tag.children.length > 0">
     Child tags:
     <span ng-repeat="tag in gallery.tag.children">
-      <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>{{$last ? '' : ','}}
+      <a href="#!/tag/{{tag.url}}">{{tag.name}}</a>{{$last ? '' : ', '}}
     </span>
   </div>
 </div>
@@ -28,7 +28,7 @@
   <span ng-repeat="subdir in gallery.dir.subdirs">
     <a href="#!/dir/{{subdir.path}}">
       {{subdir.getName()}}
-    </a>{{$last ? '' : ','}}
+    </a>{{$last ? '' : ', '}}
   </span>
 </div>
 

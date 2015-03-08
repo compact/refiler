@@ -22,7 +22,6 @@ module.exports = function (grunt) {
   var htmlminOptions = {
     collapseBooleanAttributes: true,
     collapseWhitespace: true,
-    conservativeCollapse: true, // collapse to 1 space
     removeAttributeQuotes: true,
     removeComments: true,
     removeEmptyAttributes: false,
