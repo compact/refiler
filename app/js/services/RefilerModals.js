@@ -80,7 +80,8 @@ angular.module('app').service('RefilerModals', function ($location, $modal,
       });
 
       ctrl.model.caption = file.caption;
-      ctrl.model.dirDisplayPath = RefilerGalleryModel.dir.displayPath;
+      ctrl.model.dirDisplayPath = RefilerModel.getDirByPath(file.dirPath)
+        .displayPath;
       ctrl.model.name = file.name;
 
       // used for showing the thumb
