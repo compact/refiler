@@ -2,8 +2,10 @@
   <ui-select-match placeholder="Select a folder">
     {{$select.selected}}
   </ui-select-match>
+
+  <!-- show only 100 items at once because performance drops for big lists -->
   <ui-select-choices repeat="displayPath in dirInput.displayPaths |
-      filter: $select.search">
+      filter: $select.search | limitTo: 100">
     {{displayPath}}
   </ui-select-choices>
 </ui-select>

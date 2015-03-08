@@ -2,8 +2,10 @@
   <ui-select-match placeholder="Select tags (optional)">
     {{$item}}
   </ui-select-match>
+
+  <!-- show only 100 items at once because performance drops for big lists -->
   <ui-select-choices repeat="tagName in tagsInput.tagNames |
-      filter: $select.search">
+      filter: $select.search | limitTo: 100">
     {{tagName}}
   </ui-select-choices>
 </ui-select>
