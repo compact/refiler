@@ -57,7 +57,7 @@ $app->post('/dir/:id/files.json', function ($dir_id) use ($app, $config) {
   */
 
   // each url will have a corresponding element in one of these two arrays
-  $uploaded_file_rows = array(); // rows to insert
+  $uploaded_files = array(); // rows to insert
   $failed_urls = array(); // urls that failed to be saved by curl
 
   // curl the files
