@@ -52,11 +52,3 @@
     }
   }
 }
-
-
-
-// fix https://github.com/angular-ui/bootstrap/issues/2970
-.modal-backdrop {
-  position: fixed;
-  bottom: 0;
-}
