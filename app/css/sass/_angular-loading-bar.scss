@@ -1,9 +1,9 @@
 #loading-bar .bar {
-  height: 0.25em;
-  background: #8f8;
-  box-shadow: 0 0.125em 0.25em #8f8;
+  height: 0.2em;
+  background: #000;
+  box-shadow: 0 0.05em 0.1em #000;
 }
 
 #loading-bar .peg {
-  box-shadow: 0 0 1em #0f0;
+  display: none;
 }
